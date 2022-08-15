@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Free Web tutorials">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="John Doe">
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EBIDCO</title>
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Style_design/js/jquery-3.4.1.js"></script>
+    <!--===============================================================================================-->
+    <link rel="shortcut icon" href="~/NewStyle/img/logo.png">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/New_Design/Login_v1/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/New_Design/Login_v1/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/New_Design/Login_v1/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/New_Design/Login_v1/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/New_Design/Login_v1/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/New_Design/Login_v1/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/New_Design/Login_v1/css/main.css">
+    <!--===============================================================================================-->
+    <link href="~/New_Design/LodBut/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+    <script src="~/ClientApp/App.js"></script>
+    <script src="~/ClientApp/SystemTools.js"></script>
+    <script src="~/ClientApp/Entities.js"></script>
+    <script src="~/ClientApp/Shared.js"></script>
+    <script src="~/ClientApp/AjaxCaller.js"></script>
+
+    <div>
+        @RenderBody()
+    </div>
+
+    @*<script src="~/js/waitMe.js"></script>
+            <script type="text/javascript" src="~/login/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/login/js/login.js"></script>*@
+
+
+
+    <!--.............................clock...........................-->
+    <!--===============================================================================================-->
+    <script src="~/New_Design/Login_v1/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/New_Design/Login_v1/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/New_Design/Login_v1/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/New_Design/Login_v1/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/New_Design/Login_v1/vendor/tilt/tilt.jquery.min.js"></script>
+    <script>
+        $('.js-tilt').tilt({
+            scale: 1.1
+        })
+    </script>
+    <!--===============================================================================================-->
+    <script src="~/New_Design/Login_v1/js/main.js"></script>
+
+    <script src="~/New_Design/LodBut/Loder.js"></script>
+
+    @*<script src="~/login/js/rAF.js"></script>
+        <script src="~/login/js/demo-2.js"></script>*@
+
+    <input type="hidden" id="GetActionUrl" name="name" value="@Url.Action("GetActionUrl","ClientTools")" />
+</body>
+</html>

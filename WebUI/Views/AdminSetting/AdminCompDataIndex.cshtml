@@ -1,0 +1,461 @@
+﻿
+@using Inv.WebUI.Resources
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<style>
+
+    .disabledDiv {
+        pointer-events: none;
+        opacity: 0.4;
+    }
+
+    .display_none {
+        display: none !important;
+    }
+
+    .pading_2 {
+        padding: 6px 0px 0px 0px !important;
+    }
+
+    .col-lg-5 {
+        width: 39.666667%;
+    }
+
+    #divcompinformtion .col-lg-1 {
+        width: 10.333333%;
+    }
+
+    #col-9 .col-lg-1 {
+        width: 9.333333%;
+    }
+
+    #col3 .col-lg-3 {
+        width: 23%;
+    }
+
+    #col3_ .col-lg-3 {
+        width: 23%;
+    }
+
+    .borderred {
+        margin-left: 0%;
+    }
+
+    input[type=checkbox] {
+        margin: 10% 0 0 !important;
+    }
+
+    #checkbox_ input[type=checkbox] {
+        margin: 5% 0 0 !important;
+    }
+
+    input[class=checkbox]:checked:before {
+        right: 2.9em;
+    }
+
+    #btnInitialize {
+        background-color: orange !important;
+        font: 100px !important;
+        font-size: 25px !important;
+        border-radius: 25px !important;
+        width: 110px !important;
+        margin-top :0px !important;
+        margin-right: 70% !important;
+        right: 50% !important;
+        color: white !important;
+        height: 43px;
+    }
+        #btnInitialize:hover {
+            background-color: darkgoldenrod !important;
+            border :none;
+            border-bottom: 50px;
+            border-bottom-color : gray !important;
+            
+        }
+    
+</style>
+<div id="DivMassage" class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12  margingred  borderred display_none">
+    <h4 id="Text_Massage" style=""> رساله </h4>
+</div><br />
+<div id="divGrid" class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12    borderred">
+    <label id="lepcompinformtion" class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8  labeltitel "><span id="spanlepcompinformtion" class="ifontowsam fa fa-caret-left"></span>تهيئة بيانات شركة جديدة  </label>
+
+    <div class="col-lg-12 col-md-6 col-sm-6 col-xl-6 col-xs-6 ">
+
+        @*<div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 float_left_right">
+           <button id="btnSave" type="button" class="btn btn-success display_none  ">
+                    @SystemResource.App_save   <span class="glyphicon glyphicon-floppy-saved"></span>
+                </button>
+                <button id="btnBack" type="button" class="btn btn-warning  display_none ">
+                    <span class="glyphicon glyphicon-save"></span> @SystemResource.App_back
+                </button>
+                <button id="btnEdit" type="button" class="btn btn-primary    float_left_right">
+                    <span class="glyphicon glyphicon-save"></span> @SystemResource.App_Update
+                </button>
+            <button id="btnAdd" type="button" class="btn btn-success   float_left_right ">
+                    <span class="glyphicon glyphicon-plus"></span> @SystemResource.App_Add
+                </button>
+
+        </div>*@
+
+
+        <div class="display_none col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12" id="divShow">
+            @*<div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3">
+                    <input id="searchbutmemreport" name="" type="text" class="form-control input-sm  text_Display" placeholder="@SystemResource.Search">
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+                    <table id="divGridDetails"></table>
+                </div>*@
+        </div>
+
+    </div>
+
+
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 margingred  borderred">
+
+    <div id="divcompinformtion" class="col-lg-12  col-md-12 col-sm-12 col-xl-12 col-xs-12    ">
+        <div class="col-lg-12 col-md-6 col-sm-6 col-xl-6 col-xs-6 border_gridCont">
+            <label id="lepcompinformtion" class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8  labeltitel "><span id="spanlepcompinformtion" class="ifontowsam fa fa-caret-left"></span>الشركة جديدة  </label>
+
+
+            <div class="col-lg-5 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+                <label class="col-lg-2 col-md-1 col-sm-1 col-xl-1 col-xs-1 pading_2Processes2 "> الشركة	</label>
+                <div class="col-lg-6 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <select id="ddlCompFilter" class="form-control input-sm addable editable">
+                    <option value="null">اختر الشركة</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+                <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 pading_2Processes2 "> الفرع	</label>
+                <div class="col-lg-6 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <select id="ddlBraFilter" class="form-control input-sm addable editable">
+                       <option value="null">اختر الفرع</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        @*<div class="col-lg-6 col-md-6 col-sm-6 col-xl-6 col-xs-6 border_gridCont">
+          
+            <label id="lepcompinformtion" class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8  labeltitel "><span id="spanlepcompinformtion" class="ifontowsam fa fa-caret-left"></span>مصدر المعلومات   </label>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+                <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 pading_2Processes2 "> الشركة	</label>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <select id="ddlCompInforFilter" class="form-control input-sm addable editable"></select>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+                <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 pading_2Processes2 "> الفرع	</label>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <select id="ddlBraInforFilter" class="form-control input-sm addable editable">
+                        <option value="null">اختر الفرع</option>
+                    </select>
+                </div>
+            </div>
+
+
+        </div>*@
+        @*<div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 ">
+
+            <button id="btnInitialize" type="button" class="btn btn-primary  " >
+                <span class=""></span> تهيئة
+            </button>
+
+            </div>*@
+
+    </div>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 margingred  borderred">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 border_gridCont">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 float_left_right">
+            <button id="btnSave" type="button" class="btn btn-success display_none  ">
+                @SystemResource.App_save   <span class="glyphicon glyphicon-floppy-saved"></span>
+            </button>
+            <button id="btnBack" type="button" class="btn btn-warning  display_none ">
+                <span class="glyphicon glyphicon-save"></span> @SystemResource.App_back
+            </button>
+            <button id="btnEdit" type="button" class="btn btn-primary    float_left_right">
+                <span class="glyphicon glyphicon-save"></span> @SystemResource.App_Update
+            </button>
+            <button id="btnAdd" type="button" class="btn btn-success   float_left_right ">
+                <span class="glyphicon glyphicon-plus"></span> @SystemResource.App_Add
+            </button>
+
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+
+            @*<div id="col3" class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">*@
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-2 col-sm-2 col-xl-2 col-xs-2 pading_2Processes2  ">السنة المالية  </label>
+                <div class="col-lg-5 col-md-2 col-sm-2 col-xl-2 col-xs-2">
+                    <input type="number" class="form-control input-sm addable editable" name="FIN_YEAR" id="txt_FIN_YEAR">
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-2 col-sm-2 col-xl-2 col-xs-2 pading_2Processes2 ">تبدأ من:  </label>
+                <div class="col-lg-5 col-md-2 col-sm-2 col-xl-2 col-xs2">
+                    <input type="date" class="form-control input-sm addable editable" name="FirstDate" id="txt_FirstDate">
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-2 col-sm-2 col-xl-2 col-xs-2 pading_2Processes2 text-center">تنتهي في:</label>
+                <div class="col-lg-5 col-md-2 col-sm-2 col-xl-2 col-xs-2">
+                    <input type="date" class="form-control input-sm addable editable" name="LastDate" id="txt_LastDate">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+
+            <div class="col-lg-4 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                <label class="col-lg-3 col-md-1 col-sm-1 col-xl-1 col-xs-1 pading_2Processes2 "> نوع القيد الافتتاحي 	</label>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <select id="ddl_OpenAccVoucheNo" name="OpenAccVoucheNo" class="form-control input-sm addable editable">
+                        <option>اختر نوع القيد</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                <label class="col-lg-3 col-md-1 col-sm-1 col-xl-1 col-xs-1 pading_2Processes2 "> نوع التسوية الافتتاحية 	</label>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <select id="ddl_OpenInvAdjNo" name="OpenInvAdjNo" class="form-control input-sm addable editable"></select>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 margingred  borderred">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 border_gridCont">
+
+
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 float_left_right">
+            <button id="btnSave2" type="button" class="btn btn-success display_none  ">
+                @SystemResource.App_save   <span class="glyphicon glyphicon-floppy-saved"></span>
+            </button>
+            <button id="btnBack2" type="button" class="btn btn-warning  display_none ">
+                <span class="glyphicon glyphicon-save"></span> @SystemResource.App_back
+            </button>
+            <button id="btnEdit2" type="button" class="btn btn-primary    float_left_right">
+                <span class="glyphicon glyphicon-save"></span> @SystemResource.App_Update
+            </button>
+            <button id="btnAdd2" type="button" class="btn btn-success   float_left_right ">
+                <span class="glyphicon glyphicon-plus"></span> @SystemResource.App_Add
+            </button>
+
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+            @*<div id="col3" class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">*@
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+
+                <label class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 pading_2Processes2 ">السنة الضريبية  </label>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <input type="number" class="form-control input-sm addable editable" name="VAT_YEAR" id="txt_VAT_YEAR">
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 pading_2Processes2 ">تبدأ من:  </label>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <input type="date" class="form-control input-sm addable editable" name="VAT_START_DATE" id="txt_VAT_START_DATE">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 pading_2Processes2 text-center">تنتهي في:</label>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <input type="date" class="form-control input-sm addable editable" name="VAT_END_DATE" id="txt_VAT_END_DATE">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 pading_2Processes2 "> فترة التكرار كل 	</label>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <select id="ddl_VAT_PERIOD" name="VAT_PERIOD" class="form-control input-sm addable editable"></select>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+
+<div id="divSeCGrid" class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 margingred  borderred">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 border_gridCont">
+
+            <label id="lepcompinformtion" class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8  labeltitel "><span id="spanlepcompinformtion" class="ifontowsam fa fa-caret-left"></span>مصدر المعلومات   </label>
+        <div class="col-lg-12 col-md-6 col-sm-6 col-xl-6 col-xs-6 border_gridCont">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 ">
+
+
+            </div>
+
+            <div class="col-lg-5 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+                <label class="col-lg-2 col-md-1 col-sm-1 col-xl-1 col-xs-1 pading_2Processes2 "> الشركة	</label>
+                <div class="col-lg-6 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                    <select id="ddlCompInforFilter" class="form-control input-sm addable editable"></select>
+                </div>
+            </div>
+
+        <div class="col-lg-5 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+            <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 pading_2Processes2 "> الفرع	</label>
+            <div class="col-lg-6 col-md-5 col-sm-5 col-xl-5 col-xs-5">
+                <select id="ddlBraInforFilter" class="form-control input-sm addable editable">
+                    <option value="null">اختر الفرع</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+            <button id="btnInitialize" type="button" class="btn btn-primary  ">
+                <span class=""></span> تهيئة
+            </button>
+        </div>
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5 pading_2Processes2 ">نسخ شجرة الحسابات</label>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3  p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyAccount" id="Chk_CopyAccount">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">نعم</label>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyAccount" id="Chk_CopyAccount2">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">لا </label>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 pading_2Processes2 ">مراكز التكلفة</label>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3  p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyCoseCenter" id="Chk_CopyCoseCenter">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">نعم</label>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyCoseCenter" id="Chk_CopyCoseCenter2">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">لا </label>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 pading_2Processes2 ">الربط المحاسبي</label>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3  p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="copyAccLink" id="Chk_copyAccLink">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">نعم</label>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="copyAccLink" id="Chk_copyAccLink2">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">لا </label>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5 pading_2Processes2 ">الاضافات علي المشتريات</label>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3  p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyCharges" id="Chk_CopyCharges">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">نعم</label>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyCharges" id="Chk_CopyCharges2">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">لا </label>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 pading_2Processes2 ">الاصناف</label>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3  p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyItems" id="Chk_CopyItems">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">نعم</label>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyItems" id="Chk_CopyItems2">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">لا </label>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 pading_2Processes2 ">فئات الاصناف</label>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3  p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyStkCategory" id="Chk_CopyStkCategory">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">نعم</label>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyStkCategory" id="Chk_CopyStkCategory2">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">لا </label>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4">
+                <label class="col-lg-5 col-md-5 col-sm-5 col-xl-5 col-xs-5 pading_2Processes2 "> تصنبف العملاء و الموردين </label>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3  p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyCustVndCat" id="Chk_CopyCustVndCat">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">نعم</label>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3 col-xs-3 p-0">
+                    <input type="radio" class="form-control input-sm addable editable col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2" name="CopyCustVndCat" id="Chk_CopyCustVndCat2">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">  </div>
+                    <label class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8 pading_2Processes2 ">لا </label>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+
+
+<script src="~/ClientApp/Admin/AdminCompData.js"></script>

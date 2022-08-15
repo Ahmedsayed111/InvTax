@@ -1,0 +1,318 @@
+﻿@using Inv.WebUI.Resources
+@{
+
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<style>
+
+    .des {
+        width: 22% !important;
+    }
+
+    .uom {
+        width: 11% !important;
+    }
+
+    .Zero {
+        width: 0% !important;
+    }
+
+    .Price {
+        width: 9% !important;
+    }
+</style>
+<body class="materialdesign">
+    <div class="content-inner-all">
+
+
+        <div class="inbox-mailbox-area mg-b-15">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+
+                            <div class="col-lg-12">
+                                <div class="tab-content">
+                                    <div id="inbox" class="tab-pane fade in animated zoomInDown custom-inbox-message shadow-reset active">
+
+                                        <div class="wrapper-pro">
+
+
+                                            <!-- Breadcome start-->
+                                            <div class="breadcome-area mg-b-30 small-dn">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="admin-dashone-data-table-area mg-b-15">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="sparkline8-list shadow-reset">
+                                                                <div class="sparkline8-hd">
+                                                                    <div class="main-sparkline8-hd">
+                                                                        <h1 style="text-align: center;">Add Quotation</h1>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Date</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtDate" type="date" class="form-control" placeholder="dd/mm/yyyy">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Presented to</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="col-lg-1" style=" width: 25%!important;">
+                                                                                <button id="btnCustSrch" type="button" class="btn btn-custon-four btn-primary">
+                                                                                    <i>Search</i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="col-lg-10" style=" width: 69%!important;">
+                                                                                <div class="input-mark-inner mg-b-22">
+                                                                                    <input id="txtCompanyname" type="text" class="form-control" placeholder="Company name">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mask-title">
+                                                                                <label>RFQ</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtRFQ" type="text" class="form-control" placeholder="RFQ">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Attention</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtCompanysales" type="text" class="form-control" placeholder="company salesman">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mask-title">
+                                                                                <label class="display_none">Quotation no</label> 
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22 display_none">
+                                                                                <input id="txtQutationNo" disabled="disabled" type="text" class="form-control" placeholder="QutationNo">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="sparkline8-graph" style="margin-left:2%!important;">
+                                                                    <div class="datatable-dashv1-list custom-datatable-overright">
+                                                                        <div class="button-ap-list responsive-btn">
+                                                                            <button id="btnprint" type="button" class="btn btn-custon-four btn-primary display_none"><i class="fa fa-print"></i>print</button>
+                                                                            <button id="btnsave" type="button" class="btn btn-custon-four btn-success"><i class="fa fa-save"></i>&nbsp; save</button>
+                                                                            <button id="btnClean" type="button" class="btn btn-custon-four btn-danger"><i class="fa fa-empty"></i>clear data</button>
+                                                                        </div>
+                                                                        <div id="DivMassage" class="col-lg-12  margingred  borderred display_none"> 
+                                                                            <h4 id="Text_Massage">Message</h4> 
+                                                                        </div>
+                                                                        <div class="sparkline8-graph">
+                                                                            <div class="datatable-dashv1-list custom-datatable-overright">
+                                                                                <table id="table" data-toggle="table" data-pagination="true"     data-resizable="true" data-cookie="true" data-cookie-id-table="saveId" data-show-export="false" data-click-to-select="true" data-toolbar="#toolbar">
+                                                                                    <thead>
+                                                                                        <tr>
+
+                                                                                            <th data-field=""></th>
+                                                                                            <th data-field="id">SR</th>
+                                                                                            <th data-field="" data-editable="true">QTY</th>
+                                                                                            <th class="des" data-field="description" data-editable="true">Description</th>
+                                                                                            <th data-field="" class="uom" data-editable="true"> Type Unit</th>
+                                                                                            <th data-field="number" class="Price"   data-editable="true">Unit Price</th>
+                                                                                            <th data-field="number"  class="Price"  data-editable="true">Total price</th>
+                                                                                            <th data-field="number" class="Zero" data-editable="true">Discount%</th>
+                                                                                            <th data-field="number" data-editable="true">Discount Amount</th>
+                                                                                            <th data-field="number" data-editable="true">Net</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody id="Table_Data">
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div><br />
+                                                                            <div class="btn-group project-list-action">
+                                                                                <button id="btnAddDetails" class="btn btn-custon-four btn-success oo"><i class="fa fa-plus"></i></button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br />
+                                                                    <div class="row">
+                                                                        <div class="col-lg-2">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Total Quotation</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtNetBefore" disabled="disabled" type="number" name="TotalAmount" class="form-control" placeholder="">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Discount</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtAllDiscount" type="number" name="RoundingAmount" class="form-control" placeholder="">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Net</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtNetAfterVat" disabled="disabled" name="NetAfterVat" type="number" class="form-control" placeholder="">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Remarks</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <textarea id="txtRemark" maxlength="200" name="Remark" type="text" class="form-control" placeholder="Remark"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="sparkline8-hd">
+                                                                        <div class="main-sparkline8-hd">
+                                                                            <h1 style="text-align: center;"><b>Terms and Conditions:</b></h1>
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="row">
+                                                                            <div class="col-lg-3">
+                                                                                <label>Price quoted are in EGP.</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <label>
+                                                                            <div class="pull-left pagination-detail">
+                                                                                <span class="pagination-info">
+                                                                                    All price
+                                                                                    <span>
+                                                                                        <span class="btn-group dropup">
+                                                                                            <input id="txtsalesVAT" type="text" class="form-control" placeholder="Include or not include">
+                                                                                        </span> sales VAT.
+                                                                                    </span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </label>
+                                                                    </div>
+                                                                                        <div class="sparkline8-hd">
+                                                                                            <label>
+                                                                                                <div class="pull-left pagination-detail">
+                                                                                                    <span class="pagination-info">
+                                                                                                        Payment with in
+                                                                                                        <span>
+                                                                                                            <span class="btn-group dropup">
+                                                                                                                <input id="txtfirstdays" type="text" class="form-control" placeholder="Number of days">
+                                                                                                            </span>days starting from the delivery date.
+                                                                                                        </span>
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                        <div class="sparkline8-hd">
+                                                                                            <label>
+                                                                                                <div class="pull-left pagination-detail">
+                                                                                                    <span class="pagination-info">
+                                                                                                        Offer validity
+                                                                                                        <span>
+                                                                                                            <span class="btn-group dropup">
+                                                                                                                <input id="txtsecounddays" type="text" class="form-control" placeholder="Number of days">
+                                                                                                            </span>days from offer date.
+                                                                                                        </span>
+
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                        <div class="sparkline8-hd">
+                                                                                            <label>
+                                                                                                <div class="pull-left pagination-detail">
+                                                                                                    <span class="pagination-info">
+                                                                                                        The delivery will be
+                                                                                                        <span>
+                                                                                                            <span class="btn-group dropup">
+                                                                                                                <input id="txtlastdays" type="text" class="form-control" placeholder="Number of days">
+                                                                                                            </span>days from purchase order.
+                                                                                                        </span>
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                        <div class="sparkline8-hd">
+                                                                                            <label>
+                                                                                                <div class="pull-left pagination-detail">
+                                                                                                    <span class="pagination-info">
+                                                                                                        Place of delivery
+                                                                                                        <span>
+                                                                                                            <span class="btn-group dropup">
+                                                                                                                <input id="txtPlacedeliv" style="width:235%;" type="text" class="form-control" placeholder="Place of delivery ">
+                                                                                                            </span>
+                                                                                                        </span>
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                            </label>
+                                                                                            <div class="row">
+                                                                                                <div class="col-lg-12">
+                                                                                                    <label>Thank you and assuring you of our best attention and services at all time.</label>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="~/ClientApp/Quotation/Quotation.js"></script>

@@ -1,0 +1,179 @@
+﻿@using Inv.WebUI.Resources
+@{
+
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<body class="materialdesign">
+    <div class="content-inner-all">
+
+
+        <div class="inbox-mailbox-area mg-b-15">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <div class="inbox-email-menu-list compose-b-mg-30 shadow-reset">
+
+                                    <ul class="nav nav-tabs">
+
+
+                                        <li>
+                                            <a id="add" data-toggle="tab" href="#inbox"><span class="inbox-icon"><i class="fa fa fa-plus "></i></span>Add</a>
+                                        </li>
+                                        <li>
+                                            <a id="view"  data-toggle="tab" href="#viewmail"><span class="inbox-icon"><i class="fa fa fa-inbox "></i></span>View</a>
+                                        </li>
+                                       
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-10">
+                                <div class="tab-content">
+                                    <div id="inbox" class="tab-pane fade in animated zoomInDown custom-inbox-message shadow-reset active">
+
+                                        <div class="wrapper-pro">
+
+
+                                            <!-- Breadcome start-->
+                                            <div class="breadcome-area mg-b-30 small-dn">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="admin-dashone-data-table-area mg-b-15">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="sparkline8-list shadow-reset">
+                                                                <div class="sparkline8-hd">
+                                                                    <div class="main-sparkline8-hd">
+                                                                        <h1 style="text-align: center;">User</h1>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Name</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="USER_NAME" name="USERNAME" type="text" class="form-control" placeholder="Name">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Phone</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input type="tel" name="Tel" id="Tel" class="form-control" placeholder="PHONE">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mask-title">
+                                                                                <label>User name</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="USER_CODE" name="USER_CODE" type="text" class="form-control" placeholder="Username">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Password</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input type="password" id="USER_PASSWORD" name="USER_PASSWORD" class="form-control" placeholder="Password">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="sparkline8-graph">
+                                                                    <div class="datatable-dashv1-list custom-datatable-overright">
+                                                                        <table id="table" data-toggle="table" data-pagination="false" data-resizable="true" data-cookie="true" data-cookie-id-table="saveId" data-show-export="false" data-click-to-select="true" data-toolbar="#toolbar">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th data-field="" data-editable="false">User Permissions</th>
+                                                                                    <th data-field="" data-editable="false">Give</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody id="Table_Data">
+                                                                                <tr>
+                                                                                    <td class="bs-checkbox ">
+                                                                                        <input data-index="0" name="btSelectItem" type="checkbox">
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="interested-input-area state-success">
+                                                                                            <select name="interestedcategory" class="valid">
+                                                                                                <option value="none" selected="" disabled="">Interested in</option>
+                                                                                                <option value="design">Web Design</option>
+                                                                                                <option value="development">Web Development</option>
+                                                                                                <option value="illustration">Wordpress Pro</option>
+                                                                                                <option value="branding">Joomla Pro</option>
+                                                                                                <option value="video">Video Marketing</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="btn-group project-list-action">
+                                                                        <button id="Create" class="btn btn-custon-four btn-success"><i class="fa fa-create"></i>create</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="viewmail" class="tab-pane fade in animated zoomInDown shadow-reset custom-inbox-message">
+                                        <div class="admin-dashone-data-table-area mg-b-15">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="sparkline8-list shadow-reset">
+                                                            <div class="sparkline8-hd">
+                                                                <div class="main-sparkline8-hd">
+                                                                    <h1>User</h1>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="sparkline8-graph">
+                                                                <table id="ReportGrid">
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="~/ClientApp/USERS/Users.js"></script>

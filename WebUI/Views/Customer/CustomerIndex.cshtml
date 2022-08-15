@@ -1,0 +1,172 @@
+﻿@using Inv.WebUI.Resources
+@{
+
+    Layout = "~/Views/Shared/Layout.cshtml";
+} 
+<body class="materialdesign">
+    <div class="content-inner-all"> 
+        <div class="inbox-mailbox-area mg-b-15">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <div class="inbox-email-menu-list compose-b-mg-30 shadow-reset"> 
+                                    <ul class="nav nav-tabs"> 
+                                        <li id="aa">
+                                            <a id="a" data-toggle="tab" href="#viewmail"><span class="inbox-icon"><i class="fa fa fa-plus "></i></span> Add </a>
+                                        </li>
+                                        <li id="dd">
+                                            <a id="b" data-toggle="tab" href="#composemail"><span class="inbox-icon"><i class="fa fa fa-inbox "></i></span> View</a>
+                                        </li> 
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-10">
+                                <div class="tab-content">
+                                    <div id="viewmail" class="tab-pane fade in animated zoomInDown shadow-reset custom-inbox-message">
+
+                                        <div class="wrapper-pro">
+
+
+                                            <!-- Breadcome start-->
+                                            <div class="breadcome-area mg-b-30 small-dn">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="admin-dashone-data-table-area mg-b-15">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="sparkline8-list shadow-reset">
+                                                                <div class="sparkline8-hd">
+                                                                    <div class="main-sparkline8-hd">
+                                                                        <h1 style="text-align: center;">Company</h1>
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Name</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtNameComp" type="text" class="form-control" placeholder="Company name">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Mail</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-2 text-center"style="width: 21%;">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtmailComp" type="email" class="form-control" placeholder="Enter email">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-1"style="width: 0%;">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Vat</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="chkvat" type="checkbox" class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-1 text-center">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Address</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtAddressComp" type="text" class="form-control" placeholder="Enter address">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Mobile</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <input id="txtMobile" type="text" class="form-control" placeholder="Enter Mobile">
+                                                                        </div>
+
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Telephone</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <input id="txtTelephone" type="text" class="form-control" placeholder="Enter Telephone">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                       
+                                                                    </div> 
+                                                                    <div class="row">
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Remarks</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <textarea id="txtRemark" name="Remark" type="text" class="form-control" placeholder="Remark"></textarea>
+                                                                            </div>
+                                                                        </div> 
+                                                                    </div>
+                                                                    <div class="col-lg-9"></div>
+                                                                    <div class="btn-group project-list-action">
+                                                                        <button id="btnsave" class="btn btn-custon-four btn-success"><i class="fa fa-create"></i>Create</button>
+                                                                    </div>
+                                                                </div> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="composemail" class="tab-pane fade animated zoomInDown shadow-reset custom-inbox-message">
+                                        <div class="admin-dashone-data-table-area mg-b-15">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="sparkline8-list shadow-reset">
+                                                            <div class="sparkline8-hd">
+                                                                <div class="main-sparkline8-hd">
+                                                                    <h1>Companies</h1>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="sparkline8-graph">
+                                                                <table id="ReportGrid">
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="~/ClientApp/Customer/CustomerCompany.js"></script>
