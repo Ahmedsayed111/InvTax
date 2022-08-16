@@ -59,5 +59,7 @@ namespace Inv.DAL.Domain
         public Nullable<decimal> UnitpriceWithVat { get; set; }
         public Nullable<decimal> NetUnitPriceWithVat { get; set; }
         public string Itemdesc { get; set; }
+        public Nullable<int> TaxID { get; set; }
+        public Nullable<int> unitValueID { get; set; }
     }
 }

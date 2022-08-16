@@ -96,5 +96,9 @@ namespace Inv.DAL.Domain
         public Nullable<decimal> ItemDiscountTotal { get; set; }
         public Nullable<decimal> ItemVatTotal { get; set; }
         public Nullable<decimal> RoundingAmount { get; set; }
+        public string DocType { get; set; }
+        public string UUID { get; set; }
+        public Nullable<System.DateTime> TimeUpload { get; set; }
+        public string VersionInv { get; set; }
     }
 }
