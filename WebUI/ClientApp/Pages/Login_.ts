@@ -97,6 +97,7 @@ var Login_;
     }
     Login_.checkBrowser = checkBrowser;
     function Login() { 
+        debugger
          var userName = txtUserName.value;
         var userPassword = txtUserPassword.value;
         var user = new G_USERS();

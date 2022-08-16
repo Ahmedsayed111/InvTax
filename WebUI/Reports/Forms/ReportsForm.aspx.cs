@@ -20,7 +20,7 @@ using Inv.WebUI.Reports.Forms;
 
 
 using System.Net.Http;
-using OnBarcode.Barcode;
+//using OnBarcode.Barcode;
 using QRCoder;
 using Inv.DAL.Repository;
 using Inv.API.Tools;

@@ -622,7 +622,6 @@
     <Content Include="login\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
-    <Content Include="Reports\Forms\ReportsForm.aspx" />
     <Content Include="Views\Login\HomePage1.cshtml" />
     <Content Include="NewStyle\fonts\adminpro-icon.ttf" />
     <Content Include="NewStyle\fonts\adminpro-icon.woff" />
@@ -975,12 +974,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ClientToolsController.cs" />
-    <Compile Include="Controllers\GeneralRepController.cs" />
-    <Compile Include="Controllers\GeneralReportsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
-    <Compile Include="Controllers\ReportsPagePrintController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Filter\AuthorizeUserAttribute.cs" />
@@ -993,15 +989,6 @@
     <Compile Include="Models\CustomModels\SessionRecord.cs" />
     <Compile Include="Models\CustomModels\UserPrivilege.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reports\Forms\ClassPrint.cs" />
-    <Compile Include="Reports\Forms\ReportsDetails.cs" />
-    <Compile Include="Reports\Forms\ReportsForm.aspx.cs">
-      <DependentUpon>ReportsForm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Reports\Forms\ReportsForm.aspx.designer.cs">
-      <DependentUpon>ReportsForm.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reports\Models\ReportParameters.cs" />
     <Compile Include="Reports\Models\ReportService.cs" />
     <Compile Include="Reports\Models\SessionRecord.cs" />
@@ -1058,6 +1045,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ClientApp\Component\" />
+    <Folder Include="Reports\Forms\" />
     <Folder Include="Reports\Report\Reports\" />
     <Folder Include="Reports\Report\Slip\" />
     <Folder Include="Views\Site\UnderConstruction\" />
