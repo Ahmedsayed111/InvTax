@@ -164,7 +164,7 @@ namespace Inv.API.Controllers
                       ,[TaxCurrencyID] ,[InvoiceCurrenyID] ,[ContractNo] ,[PurchaseorderNo] ,[GlobalInvoiceCounter] ,[PrevInvoiceHash]  ,[QRCode]
                       ,[CryptographicStamp]  ,[DeliveryDate]  ,CONVERT(varchar, DeliveryEndDate, 103) as CustomerMobileNo ,[PaymentMeansTypeCode],[CRDBReasoncode],[PaymentTerms],[PaymentTermsID],[AllowAmount],[AllowPrc]
                       ,[AllowBase]      ,[AllowVatNatID],[AllowVatPrc],[AllowAfterVat],[AllowReason],[AllowCode],[ChargeAmount],[ChargePrc],[ChargeBase],[ChargeVatNatID]
-                      ,[ChargeVatPrc],[ChargeAfterVat],[ChargeReason],[ChargeCode],[ItemTotal],[ItemAllowTotal],[ItemDiscountTotal],[ItemVatTotal],[RoundingAmount]
+                      ,[ChargeVatPrc],[ChargeAfterVat],[ChargeReason],[ChargeCode],[ItemTotal],[ItemAllowTotal],[ItemDiscountTotal],[ItemVatTotal],[RoundingAmount],DocType,UUID,TimeUpload,VersionInv
                       FROM  Sls_Ivoice where   ";
 
             string condition = "";
