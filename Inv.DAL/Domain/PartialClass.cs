@@ -22,6 +22,7 @@ namespace Inv.DAL.Domain
         public char StatusFlag { get; set; }
         public string UserCode { get; set; }
         public string Token { get; set; }
+        public bool StatusItem { get; set; }
     }
     public class SecurityandUpdateFlagClass_FIN_YEAR
     {
@@ -56,7 +57,10 @@ namespace Inv.DAL.Domain
        
     }
   
-    public partial class Items : SecurityandUpdateFlagClass
+    public partial class receiver : SecurityandUpdateFlagClass
+    {
+
+    }   public partial class Items : SecurityandUpdateFlagClass
     {
 
     } 

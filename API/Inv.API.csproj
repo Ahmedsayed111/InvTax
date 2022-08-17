@@ -177,6 +177,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\Shared\ETax.cs" />
     <Compile Include="Controllers\Shared\G_RoleController.cs" />
     <Compile Include="Controllers\Shared\G_RoleUsersController.cs" />

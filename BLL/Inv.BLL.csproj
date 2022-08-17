@@ -59,6 +59,8 @@
     <Compile Include="Services\G_Control\IG_ControlService.cs" />
     <Compile Include="Services\IControl\II_ControlService.cs" />
     <Compile Include="Services\IControl\I_ControlService.cs" />
+    <Compile Include="Services\Customer\CustomerService.cs" />
+    <Compile Include="Services\Customer\ICustomerService.cs" />
     <Compile Include="Services\IItems\ItemsService.cs" />
     <Compile Include="Services\IItems\IItemsService.cs" />
     <Compile Include="Services\ISlsTRInvoice\IISlsTRInvoiceService.cs" />

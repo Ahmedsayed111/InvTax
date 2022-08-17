@@ -1082,6 +1082,7 @@ var Items = /** @class */ (function (_super) {
         _this.UnitCode = "";
         _this.StatusCode = 0;
         _this.StatusFlag = "";
+        _this.StatusItem = false;
         return _this;
     }
     return Items;
