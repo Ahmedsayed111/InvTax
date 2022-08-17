@@ -21,6 +21,7 @@ var Login_;
     var compData = Array();
     var SystemEnv = new SystemEnvironment();
     var G_BRANCHService = new Array();
+    var issuerService = new Array();
     function InitalizeComponent() {
         txtUserName = document.getElementById("txtUserName");
         txtUserPassword = document.getElementById("txtUserPassword");
@@ -220,28 +221,45 @@ var Login_;
                                             SystemEnv.StartDate = CompanyStatus.FirstDate.substr(0, 10);
                                             SystemEnv.EndDate = CompanyStatus.LastDate.substr(0, 10);
                                             SystemEnv.NationalityID = CompanyService[0].NationalityID;
+                                            //Ajax.Callsyncstart({
+                                            //    type: "GET",
+                                            //    url: sys.apiUrl("GBranch", "GetBranch"),
+                                            //    data: { CompCode: Number(compCode), BRA_CODE: Number(braCode) },
+                                            //    async: false,
+                                            //    success: (d) => {
+                                            //        let res = d as BaseResponse;
+                                            //        if (res.IsSuccess) {
+                                            //            G_BRANCHService = res.Response as Array<G_BRANCH>;
+                                            //            if (G_BRANCHService != null) { 
+                                            //                SystemEnv.SlsInvType = G_BRANCHService[0].SlsInvType;
+                                            //                SystemEnv.WholeInvoiceTransCode = G_BRANCHService[0].WholeInvoiceTransCode;
+                                            //                SystemEnv.RetailInvoicePayment = G_BRANCHService[0].RetailInvoicePayment;
+                                            //                SystemEnv.WholeInvoicePayment = G_BRANCHService[0].WholeInvoicePayment;
+                                            //                SystemEnv.ServiceInvoiceTransCode = G_BRANCHService[0].ServiceInvoiceTransCode;
+                                            //                SystemEnv.ReturnTypeCode = G_BRANCHService[0].ReturnTypeCode;
+                                            //                SystemEnv.InvoiceTypeCode = G_BRANCHService[0].InvoiceTypeCode;
+                                            //                SystemEnv.RetailInvoiceTransCode = G_BRANCHService[0].RetailInvoiceTransCode; 
+                                            //            } else {
+                                            //                var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول الفرع" : "You are not allowed to login";
+                                            //                MessageBox.Show(msg, "");
+                                            //            }
+                                            //        }
+                                            //    }
+                                            //});
                                             Ajax.Callsyncstart({
                                                 type: "GET",
-                                                url: sys.apiUrl("GBranch", "GetBranch"),
-                                                data: { CompCode: Number(compCode), BRA_CODE: Number(braCode) },
+                                                url: sys.apiUrl("I_Control", "GetIssuer"),
+                                                data: { Compcode: compCode },
                                                 async: false,
                                                 success: function (d) {
                                                     var res = d;
                                                     if (res.IsSuccess) {
-                                                        G_BRANCHService = res.Response;
-                                                        if (G_BRANCHService != null) {
-                                                            SystemEnv.SlsInvType = G_BRANCHService[0].SlsInvType;
-                                                            SystemEnv.WholeInvoiceTransCode = G_BRANCHService[0].WholeInvoiceTransCode;
-                                                            SystemEnv.RetailInvoicePayment = G_BRANCHService[0].RetailInvoicePayment;
-                                                            SystemEnv.WholeInvoicePayment = G_BRANCHService[0].WholeInvoicePayment;
-                                                            SystemEnv.ServiceInvoiceTransCode = G_BRANCHService[0].ServiceInvoiceTransCode;
-                                                            SystemEnv.ReturnTypeCode = G_BRANCHService[0].ReturnTypeCode;
-                                                            SystemEnv.InvoiceTypeCode = G_BRANCHService[0].InvoiceTypeCode;
-                                                            SystemEnv.RetailInvoiceTransCode = G_BRANCHService[0].RetailInvoiceTransCode;
+                                                        issuerService = res.Response;
+                                                        if (issuerService.length > 0) {
+                                                            SystemEnv.issuer = issuerService[0];
                                                         }
                                                         else {
-                                                            var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول الفرع" : "You are not allowed to login";
-                                                            MessageBox.Show(msg, "");
+                                                            SystemEnv.issuer = new issuer;
                                                         }
                                                     }
                                                 }

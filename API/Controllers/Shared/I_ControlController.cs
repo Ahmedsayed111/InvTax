@@ -45,6 +45,18 @@ namespace Inv.API.Controllers
                
         }
 
+        [HttpGet, AllowAnonymous]
+        public IHttpActionResult GetIssuer(string CompCode)
+        {
+            if (ModelState.IsValid)
+            {
+                int compcod = Convert.ToInt32(CompCode);
+                var documents = db.issuers.Where(x => x.CompCode == compcod).ToList();
+                return Ok(new BaseResponse(documents));
+            }
+            return BadRequest(ModelState);
+        }
+
 
     }
 }

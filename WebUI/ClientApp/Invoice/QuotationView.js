@@ -1,43 +1,36 @@
-﻿
-$(document).ready(() => {
+$(document).ready(function () {
     QuotationView.InitalizeComponent();
-})
-
-namespace QuotationView {
-
-    var sys: SystemTools = new SystemTools();
+});
+var QuotationView;
+(function (QuotationView) {
+    var sys = new SystemTools();
     //var sys: _shared = new _shared();
-    var SysSession: SystemSession = GetSystemSession(Modules.QuotationView);
-
-    var InvItemsDetailsModel: Array<Sls_InvoiceDetail> = new Array<Sls_InvoiceDetail>();
-
-    var Selected_Data: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
-    var InvoiceDisplay: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
-    var Selecteditem: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
-    var Invoice: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
-    var InvQuotation: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
-    var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>();
-
-    var btnCustSrchFilter: HTMLButtonElement;
-    var btnFilter: HTMLButtonElement;
-    var btnRefrash: HTMLButtonElement;
-    var FromDate: HTMLInputElement;
-    var ToDate: HTMLInputElement;
-    var txtCompanynameFilter: HTMLInputElement;
-    var txtRFQFilter: HTMLInputElement;
-    var ReportGrid: JsGrid = new JsGrid();
-    var ReportGridInv: JsGrid = new JsGrid();
+    var SysSession = GetSystemSession(Modules.QuotationView);
+    var InvItemsDetailsModel = new Array();
+    var Selected_Data = new Array();
+    var InvoiceDisplay = new Array();
+    var Selecteditem = new Array();
+    var Invoice = new Array();
+    var InvQuotation = new Array();
+    var I_D_UOMDetails = new Array();
+    var btnCustSrchFilter;
+    var btnFilter;
+    var btnRefrash;
+    var FromDate;
+    var ToDate;
+    var txtCompanynameFilter;
+    var txtRFQFilter;
+    var ReportGrid = new JsGrid();
+    var ReportGridInv = new JsGrid();
     var CustomerId = 0;
-    var compcode: number;//SharedSession.CurrentEnvironment.CompCode;
-    var BranchCode: number;//SharedSession.CurrentEnvironment.CompCode;
+    var compcode; //SharedSession.CurrentEnvironment.CompCode;
+    var BranchCode; //SharedSession.CurrentEnvironment.CompCode;
     var GlobalinvoiceID = 0;
     var RFQFilter;
     var FromDat;
     var ToDat;
-    export function InitalizeComponent() {
-
-        debugger
-    
+    function InitalizeComponent() {
+        debugger;
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
         InitalizeControls();
@@ -46,21 +39,18 @@ namespace QuotationView {
         InitializeGridInvoice();
         FromDate.value = DateStartMonth();
         ToDate.value = ConvertToDateDash(GetDate()) <= ConvertToDateDash(SysSession.CurrentEnvironment.EndDate) ? GetDate() : SysSession.CurrentEnvironment.EndDate;
-
-
         Display();
-
         FillddlUom();
-
     }
+    QuotationView.InitalizeComponent = InitalizeComponent;
     function InitalizeControls() {
-        btnCustSrchFilter = document.getElementById("btnCustSrchFilter") as HTMLButtonElement;
-        btnFilter = document.getElementById("btnFilter") as HTMLButtonElement;
-        btnRefrash = document.getElementById("btnRefrash") as HTMLButtonElement;
-        txtCompanynameFilter = document.getElementById("txtCompanynameFilter") as HTMLInputElement;
-        txtRFQFilter = document.getElementById("txtRFQFilter") as HTMLInputElement;
-        ToDate = document.getElementById("ToDate") as HTMLInputElement;
-        FromDate = document.getElementById("FromDate") as HTMLInputElement;
+        btnCustSrchFilter = document.getElementById("btnCustSrchFilter");
+        btnFilter = document.getElementById("btnFilter");
+        btnRefrash = document.getElementById("btnRefrash");
+        txtCompanynameFilter = document.getElementById("txtCompanynameFilter");
+        txtRFQFilter = document.getElementById("txtRFQFilter");
+        ToDate = document.getElementById("ToDate");
+        FromDate = document.getElementById("FromDate");
     }
     function InitalizeEvents() {
         btnCustSrchFilter.onclick = btnCust_onClick;
@@ -78,62 +68,48 @@ namespace QuotationView {
         txtRFQFilter.value = '';
         FromDate.value = DateStartMonth();
         ToDate.value = ConvertToDateDash(GetDate()) <= ConvertToDateDash(SysSession.CurrentEnvironment.EndDate) ? GetDate() : SysSession.CurrentEnvironment.EndDate;
-
         Display();
     }
     function btnFilter_onclick() {
-
-
         Display();
-
     }
-
     function FillddlUom() {
-
         Ajax.Callsync({
             type: "Get",
-            url: sys.apiUrl("SlsTrSales", "GetAllUOM"), 
-            success: (d) => {
-                let result = d as BaseResponse;
+            url: sys.apiUrl("SlsTrSales", "GetAllUOM"),
+            success: function (d) {
+                var result = d;
                 if (result.IsSuccess) {
-                    I_D_UOMDetails = result.Response as Array<I_D_UOM>;
+                    I_D_UOMDetails = result.Response;
                 }
             }
         });
     }
     function Display() {
-
         RFQFilter = txtRFQFilter.value;
         FromDat = FromDate.value;
         ToDat = ToDate.value;
-
         $("#ReportGrid").jsGrid("option", "pageIndex", 1);
         Ajax.Callsync({
             type: "GET",
             url: sys.apiUrl("SlsTrSales", "GetAllSlsInvoice"),
             data: { CompCode: compcode, BranchCode: BranchCode, CustomerId: CustomerId, RFQFilter: RFQFilter, StartDate: FromDat, EndDate: ToDat },
-            success: (d) => {
+            success: function (d) {
                 debugger;
-                let result = d as BaseResponse;
+                var result = d;
                 if (result.IsSuccess) {
-                    InvoiceDisplay = result.Response as Array<Sls_Ivoice>;
+                    InvoiceDisplay = result.Response;
                     //InvQuotation = InvoiceDisplay.filter(x => x.TrType == 0);
-                    Invoice = new Array<Sls_Ivoice>();
-                    InvQuotation = new Array<Sls_Ivoice>();
-
+                    Invoice = new Array();
+                    InvQuotation = new Array();
                     InvQuotation = InvoiceDisplay;
-
-
-                    Invoice = InvoiceDisplay.filter(x => x.TrType == 1 && x.CashBoxID != null).sort(function (a, b) { return b.CashBoxID - a.CashBoxID; });
+                    Invoice = InvoiceDisplay.filter(function (x) { return x.TrType == 1 && x.CashBoxID != null; }).sort(function (a, b) { return b.CashBoxID - a.CashBoxID; });
                     ReportGrid.DataSource = InvQuotation;
                     ReportGrid.Bind();
-
                     ReportGridInv.DataSource = Invoice;
                     ReportGridInv.Bind();
-
-
-                    let TotalAmount = 0;
-                    let TotalQty = 0;
+                    var TotalAmount = 0;
+                    var TotalQty = 0;
                     $('#txtTotalAmount').val("");
                     $('#txtTotalQty').val("");
                     for (var i = 0; i < Invoice.length; i++) {
@@ -142,22 +118,17 @@ namespace QuotationView {
                         TotalQty++;
                     }
                     $('#txtTotalQty').val(TotalQty);
-
                     $('#txtCreatedBy').prop("value", '');
                     $('#txtCreatedAt').prop("value", '');
                     $('#txtUpdatedBy').prop("value", '');
                     $('#txtUpdatedAt').prop("value", '');
-
                     //$('.Done').addClass("display_none");
                 }
             }
         });
-
-
     }
     function InitializeGridQuotation() {
         $("#ReportGrid").jsGrid("option", "pageIndex", 1);
-
         //let res: any = GetResourceList("");
         //$("#id_ReportGrid").attr("style", "");
         ReportGrid.OnRowDoubleClicked = DoubleClickGridQuotation;
@@ -171,7 +142,7 @@ namespace QuotationView {
         ReportGrid.Inserting = false;
         ReportGrid.SelectedIndex = 1;
         ReportGrid.SwitchingLanguageEnabled = false;
-        ReportGrid.OnItemEditing = () => { };
+        ReportGrid.OnItemEditing = function () { };
         ReportGrid.Columns = [
             { title: "الرقم", name: "InvoiceID", type: "text", width: "5%", visible: false },
             { title: "Quot.No", name: "TrNo", type: "text", width: "5%" },
@@ -181,34 +152,27 @@ namespace QuotationView {
             {
                 title: "PurNo",
                 width: "8%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
-                    let txt: HTMLInputElement = document.createElement("input");
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("input");
                     txt.type = "text";
-                     
-
                     txt.placeholder = ("PurNo");
                     txt.id = "PurNo" + item.InvoiceID;
                     txt.className = "form-control ";
-
                     if (item.TaxNotes != '' && item.TaxNotes != null) {
                         txt.disabled = true;
                         txt.value = item.TaxNotes;
                     }
-
-                    txt.onchange = (e) => {
+                    txt.onchange = function (e) {
                         ComfirmPurNo(item.InvoiceID, txt.value);
                     };
-
                     return txt;
                 }
             },
-
-
             {
                 title: "Review",
                 width: "4%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLButtonElement => {
-                    let txt: HTMLButtonElement = document.createElement("button");
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("button");
                     txt.type = "button";
                     txt.innerText = ("Review");
                     txt.id = "butPrint" + item.InvoiceID;
@@ -216,30 +180,25 @@ namespace QuotationView {
                     //if (item.TaxNotes == '' || item.TaxNotes == null) {
                     //    txt.classList.add("display_none")
                     //}
-
-                    txt.onclick = (e) => {
+                    txt.onclick = function (e) {
                         PrintQuotation(item.InvoiceID);
                     };
                     return txt;
                 }
             },
-
             {
                 title: "DelivNote",
                 width: "5%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLButtonElement => {
-                    let txt: HTMLButtonElement = document.createElement("button");
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("button");
                     txt.type = "button";
                     txt.innerText = ("DelivNote");
                     txt.id = "butDelivNote" + item.InvoiceID;
                     txt.className = "btn btn-custon-four btn-primary Done";
-
                     if (item.TaxNotes == '' || item.TaxNotes == null) {
-                        txt.classList.add("display_none")
+                        txt.classList.add("display_none");
                     }
-
-
-                    txt.onclick = (e) => {
+                    txt.onclick = function (e) {
                         DelivNoteQuotation(item.InvoiceID);
                     };
                     return txt;
@@ -248,69 +207,50 @@ namespace QuotationView {
             {
                 title: "Eidt",
                 width: "3%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLButtonElement => {
-                    let txt: HTMLButtonElement = document.createElement("button");
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("button");
                     txt.type = "button";
                     txt.innerText = ("Eidt");
                     txt.id = "butEidt" + item.InvoiceID;
                     txt.className = "dis src-btn btn btn-warning input-sm Inv Done";
-
                     //if (item.TaxNotes == '' || item.TaxNotes == null) {
                     //    txt.classList.add("display_none")
                     //}
-
                     if (item.TrType == 1) {
-                        txt.classList.add("display_none")
+                        txt.classList.add("display_none");
                     }
-                    txt.onclick = (e) => {
-
+                    txt.onclick = function (e) {
                         $('#title_Edit').html('Eidt Quotation');
                         EidtQuotation(item.InvoiceID);
                     };
                     return txt;
                 }
             },
-
             {
                 title: "Comfirm",
                 width: "5%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLButtonElement => {
-                    let txt: HTMLButtonElement = document.createElement("button");
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("button");
                     txt.type = "button";
                     txt.innerText = ("comfirm");
                     txt.id = "butComfirm" + item.InvoiceID;
                     txt.className = "btn btn-custon-four btn-success Inv Done";
-
                     if (item.TaxNotes == '' || item.TaxNotes == null) {
-                        txt.classList.add("display_none")
+                        txt.classList.add("display_none");
                     }
-
                     if (item.TrType == 1) {
-                        txt.classList.add("display_none")
+                        txt.classList.add("display_none");
                     }
-                    txt.onclick = (e) => {
+                    txt.onclick = function (e) {
                         ComfirmQuotation(item.InvoiceID);
-
-
                     };
                     return txt;
                 }
             },
-
-
-
-
-
-
         ];
         ReportGrid.Bind();
-
-         
     }
     function InitializeGridInvoice() {
-
-
-
         //let res: any = GetResourceList("");
         //$("#id_ReportGrid").attr("style", "");
         ReportGridInv.OnRowDoubleClicked = DoubleClickGridInvoice;
@@ -324,7 +264,7 @@ namespace QuotationView {
         ReportGridInv.Inserting = false;
         ReportGridInv.SelectedIndex = 1;
         ReportGridInv.SwitchingLanguageEnabled = false;
-        ReportGridInv.OnItemEditing = () => { };
+        ReportGridInv.OnItemEditing = function () { };
         ReportGridInv.Columns = [
             { title: "الرقم", name: "InvoiceID", type: "text", width: "5%", visible: false },
             { title: "INV.No", name: "CashBoxID", type: "text", width: "5%" },
@@ -335,146 +275,111 @@ namespace QuotationView {
             {
                 title: "Review",
                 width: "5%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
-                    let txt: HTMLInputElement = document.createElement("input");
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("input");
                     txt.type = "button";
                     txt.value = ("Review");
                     txt.id = "butPrint" + item.InvoiceID;
                     txt.className = "dis src-btn btn btn-warning input-sm";
-
-                    txt.onclick = (e) => {
+                    txt.onclick = function (e) {
                         PrintInvoice(item.InvoiceID);
                     };
                     return txt;
                 }
             },
-
             {
                 title: "Eidt",
                 width: "3%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
-                    let txt: HTMLInputElement = document.createElement("input");
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("input");
                     txt.type = "button";
                     txt.value = ("Eidt");
                     txt.id = "butEidt" + item.InvoiceID;
                     txt.className = "btn btn-custon-four btn-success input-sm Inv Done";
-
-                    txt.onclick = (e) => {
+                    txt.onclick = function (e) {
                         $('#title_Edit').html('Eidt Invoice');
-
                         EidtQuotation(item.InvoiceID);
                     };
                     return txt;
                 }
             },
-
-
             {
                 title: "Delete",
                 width: "5%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
-                    let txt: HTMLInputElement = document.createElement("input");
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("input");
                     txt.type = "button";
                     txt.value = ("Delete");
                     txt.id = "butDelete" + item.InvoiceID;
                     txt.className = "btn btn-custon-four btn-danger ";
-
-                    txt.onclick = (e) => {
+                    txt.onclick = function (e) {
                         DeleteInvoice(item.InvoiceID);
                     };
                     return txt;
                 }
             },
-
-
-
-
         ];
         ReportGridInv.Bind();
     }
-
     function DoubleClickGridQuotation() {
-
-        Selecteditem = new Array<Sls_Ivoice>();
-        Selecteditem = InvoiceDisplay.filter(x => x.InvoiceID == Number(ReportGrid.SelectedKey));
-
+        Selecteditem = new Array();
+        Selecteditem = InvoiceDisplay.filter(function (x) { return x.InvoiceID == Number(ReportGrid.SelectedKey); });
         $('#txtCreatedBy').prop("value", Selecteditem[0].CreatedBy);
         $('#txtCreatedAt').prop("value", Selecteditem[0].CreatedAt);
-
         $('#txtUpdatedBy').prop("value", Selecteditem[0].UpdatedBy);
         $('#txtUpdatedAt').prop("value", Selecteditem[0].UpdatedAt);
     }
-
-
     function DoubleClickGridInvoice() {
-
-        Selecteditem = new Array<Sls_Ivoice>();
-        Selecteditem = InvoiceDisplay.filter(x => x.InvoiceID == Number(ReportGridInv.SelectedKey));
-
+        Selecteditem = new Array();
+        Selecteditem = InvoiceDisplay.filter(function (x) { return x.InvoiceID == Number(ReportGridInv.SelectedKey); });
         $('#txtCreatedBy').prop("value", Selecteditem[0].CreatedBy);
         $('#txtCreatedAt').prop("value", Selecteditem[0].CreatedAt);
-
         $('#txtUpdatedBy').prop("value", Selecteditem[0].UpdatedBy);
         $('#txtUpdatedAt').prop("value", Selecteditem[0].UpdatedAt);
     }
-
-    function ComfirmPurNo(btnId: number, PurNo: string) {
-
-
-
+    function ComfirmPurNo(btnId, PurNo) {
         Ajax.Callsync({
             type: "Get",
             url: sys.apiUrl("SlsTrSales", "UpdatePurNo"),
             data: { InvoiceID: btnId, PurNo: PurNo },
-            success: (d) => {
-                let result = d as BaseResponse;
+            success: function (d) {
+                var result = d;
                 if (result.IsSuccess == true) {
-
                     Display();
-
-
-                } else {
+                }
+                else {
                     DisplayMassage("Please refresh the page and try again", "Please refresh the page and try again", MessageType.Error);
-
                 }
             }
         });
-
     }
-    function ComfirmQuotation(btnId: number) {
+    function ComfirmQuotation(btnId) {
         var InvDate = GetDate();
         Ajax.Callsync({
             type: "Get",
             url: sys.apiUrl("SlsTrSales", "UpdateInvoice"),
             data: { InvoiceID: btnId, InvDate: InvDate },
-            success: (d) => {
-                let result = d as BaseResponse;
+            success: function (d) {
+                var result = d;
                 if (result.IsSuccess == true) {
-
                     Display();
                     $('#viewmail').removeClass('active in');
                     $('#sendmail').addClass('active in');
-
                     $('#btnQuotations').removeClass('active');
                     $('#btnInvoice').addClass('active');
-
-                } else {
+                }
+                else {
                     DisplayMassage("Please refresh the page and try again", "Please refresh the page and try again", MessageType.Error);
-
                 }
             }
         });
-
     }
-    function DelivNoteQuotation(btnId: number) {
-        if (!SysSession.CurrentPrivileges.PrintOut) return;
-
+    function DelivNoteQuotation(btnId) {
+        if (!SysSession.CurrentPrivileges.PrintOut)
+            return;
         window.open(Url.Action("ReportsPopup", "Home"), "blank");
         localStorage.setItem("result", '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
-
-
-        let rp: ReportParameters = new ReportParameters();
-
+        var rp = new ReportParameters();
         rp.CompCode = SysSession.CurrentEnvironment.CompCode;
         rp.BranchCode = SysSession.CurrentEnvironment.BranchCode;
         rp.CompNameA = SysSession.CurrentEnvironment.CompanyNameAr;
@@ -487,7 +392,6 @@ namespace QuotationView {
         rp.BraNameA = SysSession.CurrentEnvironment.BranchName;
         rp.BraNameE = SysSession.CurrentEnvironment.BranchName;
         if (rp.BraNameA == null || rp.BraNameE == null) {
-
             rp.BraNameA = " ";
             rp.BraNameE = " ";
         }
@@ -495,31 +399,26 @@ namespace QuotationView {
         rp.Repdesign = 2;
         rp.TRId = btnId;
         rp.slip = 0;
-        rp.stat = 1
-
-        debugger
+        rp.stat = 1;
+        debugger;
         Ajax.CallAsync({
             url: Url.Action("PrintQuotation", "GeneralRep"),
             data: rp,
-            success: (d) => {
-                let result = d as BaseResponse;
+            success: function (d) {
+                var result = d;
                 localStorage.setItem("result", "" + result + "");
                 window.open(Url.Action("ReportsPopup", "Home"), "blank");
-
                 //let result = d.result as string;    
                 //window.open(result, "_blank");
             }
-        })
+        });
     }
-    function PrintQuotation(btnId: number) {
-        if (!SysSession.CurrentPrivileges.PrintOut) return;
-
+    function PrintQuotation(btnId) {
+        if (!SysSession.CurrentPrivileges.PrintOut)
+            return;
         window.open(Url.Action("ReportsPopup", "Home"), "blank");
         localStorage.setItem("result", '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
-
-
-        let rp: ReportParameters = new ReportParameters();
-
+        var rp = new ReportParameters();
         rp.CompCode = SysSession.CurrentEnvironment.CompCode;
         rp.BranchCode = SysSession.CurrentEnvironment.BranchCode;
         rp.CompNameA = SysSession.CurrentEnvironment.CompanyNameAr;
@@ -532,7 +431,6 @@ namespace QuotationView {
         rp.BraNameA = SysSession.CurrentEnvironment.BranchName;
         rp.BraNameE = SysSession.CurrentEnvironment.BranchName;
         if (rp.BraNameA == null || rp.BraNameE == null) {
-
             rp.BraNameA = " ";
             rp.BraNameE = " ";
         }
@@ -540,57 +438,41 @@ namespace QuotationView {
         rp.Repdesign = 1;
         rp.TRId = btnId;
         rp.slip = 0;
-        rp.stat = 1
-
-        debugger
+        rp.stat = 1;
+        debugger;
         Ajax.CallAsync({
             url: Url.Action("PrintQuotation", "GeneralRep"),
             data: rp,
-            success: (d) => {
-                let result = d as BaseResponse;
+            success: function (d) {
+                var result = d;
                 localStorage.setItem("result", "" + result + "");
                 window.open(Url.Action("ReportsPopup", "Home"), "blank");
-
                 //let result = d.result as string;    
                 //window.open(result, "_blank");
             }
-        })
+        });
     }
-    function EidtQuotation(btnId: number) {
-
-        debugger
+    function EidtQuotation(btnId) {
+        debugger;
         $('#viewmail').removeClass('active in');
         $('#sendmail').removeClass('active in');
         $('#composemail').addClass('active in');
-
         $('#btnQuotations').removeClass('active');
         $('#btnInvoice').removeClass('active');
-
-
-
         InitalizeComponentInvoice();
-
-
-        Selected_Data = new Array<Sls_Ivoice>();
-
-        Selected_Data = InvoiceDisplay.filter(x => x.InvoiceID == Number(btnId));
-
+        Selected_Data = new Array();
+        Selected_Data = InvoiceDisplay.filter(function (x) { return x.InvoiceID == Number(btnId); });
         DisplayData(Selected_Data);
-
     }
-    function DisplayData(Selected_Data: Array<Sls_Ivoice>) {
-        debugger
-
+    function DisplayData(Selected_Data) {
+        debugger;
         DocumentActions.RenderFromModel(Selected_Data[0]);
-
         if (Selected_Data[0].TrType == 1) {
             txtDate.value = DateFormat(Selected_Data[0].DeliveryEndDate);
         }
         else {
             txtDate.value = DateFormat(Selected_Data[0].TrDate);
         }
-
-
         GlobalinvoiceID = Selected_Data[0].InvoiceID;
         CustomerId = Selected_Data[0].CustomerId;
         txtQutationNo.value = Selected_Data[0].TrNo.toString();
@@ -607,18 +489,17 @@ namespace QuotationView {
         txtsecounddays.value = Selected_Data[0].ChargeVatPrc.toString(); //----------------- days from offer date.
         txtlastdays.value = Selected_Data[0].ChargeAfterVat.toString(); //----------------- days from purchase order.
         txtPlacedeliv.value = Selected_Data[0].PrevInvoiceHash.toString(); //----------------- Place of delivery.
-
         Ajax.Callsync({
             type: "Get",
             url: sys.apiUrl("SlsTrSales", "GetSlsInvoiceItem"),
             data: { invoiceID: GlobalinvoiceID },
-            success: (d) => {//(int CompCode, string StartDate, string EndDate, int Status, int? CustId, string SalesUser, string UserCode, string Token)
-                let result = d as BaseResponse;
+            success: function (d) {
+                var result = d;
                 if (result.IsSuccess) {
-                    InvItemsDetailsModel = result.Response as Array<Sls_InvoiceDetail>;
+                    InvItemsDetailsModel = result.Response;
                     CountGrid = 0;
                     $("#Table_Data").html("");
-                    for (let i = 0; i < InvItemsDetailsModel.length; i++) {
+                    for (var i = 0; i < InvItemsDetailsModel.length; i++) {
                         BuildControls(i);
                         Display_GridConrtol(i);
                     }
@@ -626,17 +507,16 @@ namespace QuotationView {
                 }
             }
         });
-
     }
     function GetCustomer() {
         Ajax.Callsync({
             type: "Get",
             url: sys.apiUrl("SlsTrSales", "GetCustomer"),
             data: { ID: Selected_Data[0].CustomerId },
-            success: (d) => {
-                let result = d as BaseResponse;
+            success: function (d) {
+                var result = d;
                 if (result.IsSuccess) {
-                    CustomerDetailnew = result.Response as Array<Customer>;
+                    CustomerDetailnew = result.Response;
                     txtCompanyname.value = CustomerDetailnew[0].NAMEE;
                     $('#btnCustSrch').attr('disabled', 'disabled');
                     $('#txtCompanyname').attr('disabled', 'disabled');
@@ -645,10 +525,7 @@ namespace QuotationView {
         });
     }
     function Display_GridConrtol(cnt) {
-
-
         $("#txt_StatusFlag" + cnt).val("");
-
         $("#InvoiceItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].InvoiceItemID);
         $("#txt_ItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].ItemID);
         $("#serial" + cnt).prop("value", InvItemsDetailsModel[cnt].Serial);
@@ -660,17 +537,13 @@ namespace QuotationView {
         $("#DiscountPrc" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountPrc);
         $("#DiscountAmount" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountAmount);
         $("#Net" + cnt).prop("value", InvItemsDetailsModel[cnt].NetAfterVat);
-
     }
-    function PrintInvoice(btnId: number) {
-        if (!SysSession.CurrentPrivileges.PrintOut) return;
-
+    function PrintInvoice(btnId) {
+        if (!SysSession.CurrentPrivileges.PrintOut)
+            return;
         window.open(Url.Action("ReportsPopup", "Home"), "blank");
         localStorage.setItem("result", '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
-
-
-        let rp: ReportParameters = new ReportParameters();
-
+        var rp = new ReportParameters();
         rp.CompCode = SysSession.CurrentEnvironment.CompCode;
         rp.BranchCode = SysSession.CurrentEnvironment.BranchCode;
         rp.CompNameA = SysSession.CurrentEnvironment.CompanyNameAr;
@@ -683,7 +556,6 @@ namespace QuotationView {
         rp.BraNameA = SysSession.CurrentEnvironment.BranchName;
         rp.BraNameE = SysSession.CurrentEnvironment.BranchName;
         if (rp.BraNameA == null || rp.BraNameE == null) {
-
             rp.BraNameA = " ";
             rp.BraNameE = " ";
         }
@@ -691,48 +563,42 @@ namespace QuotationView {
         rp.Repdesign = 3;
         rp.TRId = btnId;
         rp.slip = 0;
-        rp.stat = 1
-
-        debugger
+        rp.stat = 1;
+        debugger;
         Ajax.CallAsync({
             url: Url.Action("PrintQuotation", "GeneralRep"),
             data: rp,
-            success: (d) => {
-                let result = d as BaseResponse;
+            success: function (d) {
+                var result = d;
                 localStorage.setItem("result", "" + result + "");
                 window.open(Url.Action("ReportsPopup", "Home"), "blank");
-
                 //let result = d.result as string;    
                 //window.open(result, "_blank");
             }
-        })
+        });
     }
-    function DeleteInvoice(btnId: number) {
-
+    function DeleteInvoice(btnId) {
         Ajax.Callsync({
             type: "Get",
             url: sys.apiUrl("SlsTrSales", "DeleteInvoice"),
             data: { InvoiceID: btnId },
-            success: (d) => {
-                let result = d as BaseResponse;
+            success: function (d) {
+                var result = d;
                 if (result.IsSuccess == true) {
-
                     Display();
                     $('#viewmail').removeClass('active in');
                     $('#sendmail').addClass('active in');
-
                     $('#btnQuotations').removeClass('active');
                     $('#btnInvoice').addClass('active');
-
-                } else {
+                }
+                else {
                     DisplayMassage("Please refresh the page and try again", "Please refresh the page and try again", MessageType.Error);
-
                 }
             }
         });
     }
     function btnCust_onClick() {
-        sys.FindKey(Modules.Quotation, "btnCustSrch", "", () => {
+        sys.FindKey(Modules.Quotation, "btnCustSrch", "", function () {
             CustomerDetail = SearchGrid.SearchDataGrid.SelectedKey;
             console.log(CustomerDetail);
             CustomerId = Number(CustomerDetail[0]);
@@ -740,81 +606,73 @@ namespace QuotationView {
             include = String(CustomerDetail[3]);
         });
     }
-
     /*@* ---------------------------------------Eidt Invoice------------------------------------------*@*/
-
-    var InvoiceItemsDetailsModel: Array<Sls_InvoiceDetail> = new Array<Sls_InvoiceDetail>();
-    var invoiceItemSingleModel: Sls_InvoiceDetail = new Sls_InvoiceDetail();
-    var InvoiceModel: Sls_Ivoice = new Sls_Ivoice();
-    var MasterDetailsModel: SlsInvoiceMasterDetails = new SlsInvoiceMasterDetails();
-    var CustomerDetail: Array<Customer> = new Array<Customer>();
-    var CustomerDetailnew: Array<Customer> = new Array<Customer>();
-
+    var InvoiceItemsDetailsModel = new Array();
+    var invoiceItemSingleModel = new Sls_InvoiceDetail();
+    var InvoiceModel = new Sls_Ivoice();
+    var MasterDetailsModel = new SlsInvoiceMasterDetails();
+    var CustomerDetail = new Array();
+    var CustomerDetailnew = new Array();
     var CountGrid = 0;
-    var btnAddDetails: HTMLButtonElement;
-    var btnsave: HTMLButtonElement;
-    var btnClean: HTMLButtonElement;
-    var CustomerId: number = 0;
-    var btnCustSrch: HTMLButtonElement;
-    var invoiceID: number = 0;
-    var txtDate: HTMLInputElement;
-    var txtRFQ: HTMLInputElement;
-    var txtCompanysales: HTMLInputElement;
-    var txtCompanyname: HTMLInputElement;
-    var txtQutationNo: HTMLInputElement;
-    var txtsalesVAT: HTMLInputElement;
-    var txtfirstdays: HTMLInputElement;
-    var txtsecounddays: HTMLInputElement;
-    var txtlastdays: HTMLInputElement;
-    var txtPlacedeliv: HTMLInputElement;
-    var txtRemark: HTMLInputElement;
-    var txtNetBefore: HTMLInputElement;
-    var txtAllDiscount: HTMLInputElement;
-    var txtNetAfterVat: HTMLInputElement;
+    var btnAddDetails;
+    var btnsave;
+    var btnClean;
+    var CustomerId = 0;
+    var btnCustSrch;
+    var invoiceID = 0;
+    var txtDate;
+    var txtRFQ;
+    var txtCompanysales;
+    var txtCompanyname;
+    var txtQutationNo;
+    var txtsalesVAT;
+    var txtfirstdays;
+    var txtsecounddays;
+    var txtlastdays;
+    var txtPlacedeliv;
+    var txtRemark;
+    var txtNetBefore;
+    var txtAllDiscount;
+    var txtNetAfterVat;
     var include = "";
-
-    export function InitalizeComponentInvoice() {
-
-
+    function InitalizeComponentInvoice() {
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
         InitalizeControlsInvoice();
         InitalizeEventsInvoice();
-
     }
+    QuotationView.InitalizeComponentInvoice = InitalizeComponentInvoice;
     function InitalizeControlsInvoice() {
         // ;
-        btnAddDetails = document.getElementById("btnAddDetails") as HTMLButtonElement;
-        btnCustSrch = document.getElementById("btnCustSrch") as HTMLButtonElement;
-        btnsave = document.getElementById("btnsave") as HTMLButtonElement;
-        btnClean = document.getElementById("btnClean") as HTMLButtonElement;
+        btnAddDetails = document.getElementById("btnAddDetails");
+        btnCustSrch = document.getElementById("btnCustSrch");
+        btnsave = document.getElementById("btnsave");
+        btnClean = document.getElementById("btnClean");
         // inputs
-        txtDate = document.getElementById("txtDate") as HTMLInputElement;
-        txtRFQ = document.getElementById("txtRFQ") as HTMLInputElement;
-        txtCompanysales = document.getElementById("txtCompanysales") as HTMLInputElement;
-        txtCompanyname = document.getElementById("txtCompanyname") as HTMLInputElement;
-        txtQutationNo = document.getElementById("txtQutationNo") as HTMLInputElement;
-        txtsalesVAT = document.getElementById("txtsalesVAT") as HTMLInputElement;
-        txtfirstdays = document.getElementById("txtfirstdays") as HTMLInputElement;
-        txtsecounddays = document.getElementById("txtsecounddays") as HTMLInputElement;
-        txtlastdays = document.getElementById("txtlastdays") as HTMLInputElement;
-        txtPlacedeliv = document.getElementById("txtPlacedeliv") as HTMLInputElement;
-        txtRemark = document.getElementById("txtRemark") as HTMLInputElement;
-        txtNetBefore = document.getElementById("txtNetBefore") as HTMLInputElement;
-        txtAllDiscount = document.getElementById("txtAllDiscount") as HTMLInputElement;
-        txtNetAfterVat = document.getElementById("txtNetAfterVat") as HTMLInputElement;
+        txtDate = document.getElementById("txtDate");
+        txtRFQ = document.getElementById("txtRFQ");
+        txtCompanysales = document.getElementById("txtCompanysales");
+        txtCompanyname = document.getElementById("txtCompanyname");
+        txtQutationNo = document.getElementById("txtQutationNo");
+        txtsalesVAT = document.getElementById("txtsalesVAT");
+        txtfirstdays = document.getElementById("txtfirstdays");
+        txtsecounddays = document.getElementById("txtsecounddays");
+        txtlastdays = document.getElementById("txtlastdays");
+        txtPlacedeliv = document.getElementById("txtPlacedeliv");
+        txtRemark = document.getElementById("txtRemark");
+        txtNetBefore = document.getElementById("txtNetBefore");
+        txtAllDiscount = document.getElementById("txtAllDiscount");
+        txtNetAfterVat = document.getElementById("txtNetAfterVat");
     }
     function InitalizeEventsInvoice() {
-
-        btnAddDetails.onclick = AddNewRow;//
+        btnAddDetails.onclick = AddNewRow; //
         btnCustSrch.onclick = btnCustSrch_onClick;
         btnsave.onclick = btnsave_onclick;
         btnClean.onclick = success_insert;
         txtAllDiscount.onkeyup = computeTotal;
     }
     function btnCustSrch_onClick() {
-        sys.FindKey(Modules.Quotation, "btnCustSrch", "", () => {
-
+        sys.FindKey(Modules.Quotation, "btnCustSrch", "", function () {
             CustomerDetail = SearchGrid.SearchDataGrid.SelectedKey;
             console.log(CustomerDetail);
             CustomerId = Number(CustomerDetail[0]);
@@ -823,26 +681,21 @@ namespace QuotationView {
             include = String(CustomerDetail[3]);
             if (include == "true") {
                 txtsalesVAT.value = "include";
-            } else {
+            }
+            else {
                 txtsalesVAT.value = "not include";
             }
             computeTotal();
         });
     }
-    function BuildControls(cnt: number) {
+    function BuildControls(cnt) {
         var html;
-
         html = '<tr id= "No_Row' + cnt + '" class="  animated zoomIn ">' +
-
             '<td><button id="btn_minus' + cnt + '" type="button" class="btn btn-custon-four btn-danger"><i class="fa fa-minus-circle"></i></button></td>' +
             '<td><input  id="serial' + cnt + '" disabled="disabled"  type="text" class="form-control" placeholder="SR"></td>' +
             '<td><input  id="QTY' + cnt + '" type="number" class="form-control" placeholder="QTY"></td>' +
             '<td> <textarea id="Description' + cnt + '" name="Description" type="text" class="form-control" style="height:34px" placeholder="Description" spellcheck="false"></textarea></td>' +
-
-
             '<td><select id="ddlTypeUom' + cnt + '" class="form-control"> <option value="null"> Choose Uom </option></select></td>' +
-
-
             '<td><input  id="UnitPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="Unit Price"></td>' +
             '<td><input  id="Totalprice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="Total price"></td>' +
             '<td><input  id="DiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountPrc%"></td>' +
@@ -853,24 +706,16 @@ namespace QuotationView {
             ' <input  id="txt_ItemID' + cnt + '" type="hidden" class="form-control"> ' +
             '</tr>';
         $("#Table_Data").append(html);
-
-
         for (var i = 0; i < I_D_UOMDetails.length; i++) {
-
             $('#ddlTypeUom' + cnt + '').append('<option  value="' + I_D_UOMDetails[i].UomID + '">' + I_D_UOMDetails[i].DescE + '</option>');
-
         }
-
-
         $("#Description" + cnt).on('keyup', function (e) {
             if ($("#txt_StatusFlag" + cnt).val() != "i")
                 $("#txt_StatusFlag" + cnt).val("u");
-
         });
         $("#ddlTypeUom" + cnt).on('change', function (e) {
             if ($("#txt_StatusFlag" + cnt).val() != "i")
                 $("#txt_StatusFlag" + cnt).val("u");
-
         });
         $("#UnitPrice" + cnt).on('keyup', function (e) {
             if ($("#txt_StatusFlag" + cnt).val() != "i")
@@ -890,7 +735,6 @@ namespace QuotationView {
         $("#DiscountPrc" + cnt).on('keyup', function (e) {
             if ($("#txt_StatusFlag" + cnt).val() != "i")
                 $("#txt_StatusFlag" + cnt).val("u");
-
             if (Number($("#DiscountPrc" + cnt).val()) < 0 || $("#DiscountPrc" + cnt).val().trim() == "") {
                 $("#DiscountPrc" + cnt).val("0");
             }
@@ -898,26 +742,23 @@ namespace QuotationView {
                 $("#DiscountPrc" + cnt).val("100");
             }
             computeRows(cnt);
-
         });
         $("#btn_minus" + cnt).click(function (e) {
             if ($("#txt_StatusFlag" + cnt).val() != "i")
                 $("#txt_StatusFlag" + cnt).val("u");
             DeleteRow(cnt);
         });
-
         return;
     }
-    function computeRows(cnt: number) {
-
+    function computeRows(cnt) {
         $("#Totalprice" + cnt).val(Number($("#UnitPrice" + cnt).val()) * (Number($("#QTY" + cnt).val())));
         $("#DiscountAmount" + cnt).val(Number($("#DiscountPrc" + cnt).val()) * Number($("#Totalprice" + cnt).val()) / 100);
         $("#Net" + cnt).val(Number($("#Totalprice" + cnt).val()) - (Number($("#DiscountAmount" + cnt).val())));
         computeTotal();
     }
     function computeTotal() {
-        let NetCount = 0;
-        for (let i = 0; i < CountGrid; i++) {
+        var NetCount = 0;
+        for (var i = 0; i < CountGrid; i++) {
             if ($("#txt_StatusFlag" + i).val() != 'm' && $("#txt_StatusFlag" + i).val() != 'd') {
                 NetCount += Number($("#Net" + i).val());
                 NetCount = Number(NetCount.toFixed(2).toString());
@@ -927,16 +768,13 @@ namespace QuotationView {
             NetCount = NetCount + ((NetCount * 14) / 100);
         }
         txtNetBefore.value = NetCount.toString();
-
-
-        let Net = (Number(txtNetBefore.value) - Number(txtAllDiscount.value)).toFixed(2);
+        var Net = (Number(txtNetBefore.value) - Number(txtAllDiscount.value)).toFixed(2);
         txtNetAfterVat.value = Net.toString();
     }
     function AddNewRow() {
         $('paginationSwitch').addClass("display_none");
         $('.no-records-found').addClass("display_none");
-
-        let CanAdd: boolean = true;
+        var CanAdd = true;
         if (CountGrid > 0) {
             for (var i = 0; i < CountGrid; i++) {
                 CanAdd = validationgrid(i);
@@ -946,16 +784,13 @@ namespace QuotationView {
             }
         }
         if (CanAdd) {
-
             BuildControls(CountGrid);
             $("#txt_StatusFlag" + CountGrid).val("i"); //In Insert mode 
             CountGrid++;
             Insert_Serial();
         }
-
     }
-    function validationgrid(rowcount: number) {
-
+    function validationgrid(rowcount) {
         if ($("#QTY" + rowcount).val().trim() == "" || Number($("#QTY" + rowcount).val()) <= 0) {
             Errorinput($("#QTY" + rowcount));
             DisplayMassage('Item quantity must be entered', 'Item quantity must be entered', MessageType.Error);
@@ -966,7 +801,6 @@ namespace QuotationView {
             DisplayMassage('Item Describtion must be entered', 'Item Describtion must be entered', MessageType.Error);
             return false;
         }
-
         if ($("#ddlTypeUom" + rowcount).val().trim() == "null") {
             Errorinput($("#ddlTypeUom" + rowcount));
             DisplayMassage('Item Describtion must be entered', 'Item Describtion must be entered', MessageType.Error);
@@ -977,12 +811,10 @@ namespace QuotationView {
         //    DisplayMassage('Item Price must be entered', 'Item Price must be entered', MessageType.Error);
         //    return false;
         //}
-
         return true;
     }
-    function DeleteRow(RecNo: number) {
-
-        WorningMessage("Do you want to delete?", "Do you want to delete?", "warning", "warning", () => {
+    function DeleteRow(RecNo) {
+        WorningMessage("Do you want to delete?", "Do you want to delete?", "warning", "warning", function () {
             $("#txt_StatusFlag" + RecNo).val() == 'i' ? $("#txt_StatusFlag" + RecNo).val('m') : $("#txt_StatusFlag" + RecNo).val('d');
             computeRows(RecNo);
             computeTotal();
@@ -994,16 +826,12 @@ namespace QuotationView {
             $("#DiscountPrc" + RecNo).val("199");
             $("#DiscountAmount" + RecNo).val("199");
             $("#No_Row" + RecNo).attr("hidden", "true");
-
             Insert_Serial();
-
         });
     }
     function Insert_Serial() {
-
-
-        let Ser = 1;
-        for (let i = 0; i < CountGrid; i++) {
+        var Ser = 1;
+        for (var i = 0; i < CountGrid; i++) {
             if ($("#txt_StatusFlag" + i).val() != 'm' && $("#txt_StatusFlag" + i).val() != 'd') {
                 $("#serial" + i).val(Ser);
                 Ser++;
@@ -1012,14 +840,11 @@ namespace QuotationView {
                 $("#txt_StatusFlag" + i).val('u');
             }
         }
-
     }
     function Assign() {
         //var StatusFlag: String;
         InvoiceModel = new Sls_Ivoice();
-        InvoiceItemsDetailsModel = new Array<Sls_InvoiceDetail>();
-
-
+        InvoiceItemsDetailsModel = new Array();
         InvoiceModel.CustomerId = CustomerId == 0 ? null : CustomerId;
         InvoiceModel.InvoiceID = GlobalinvoiceID;
         InvoiceModel.Status = 1;
@@ -1030,21 +855,17 @@ namespace QuotationView {
         InvoiceModel.CreatedAt = Selected_Data[0].CreatedAt;
         InvoiceModel.CreatedBy = Selected_Data[0].CreatedBy;
         InvoiceModel.TaxNotes = Selected_Data[0].TaxNotes;
-        InvoiceModel.TrType = Selected_Data[0].TrType == null ? 0 : Selected_Data[0].TrType //0 invoice 1 return    
-        InvoiceModel.CashBoxID = Selected_Data[0].CashBoxID == null ? 0 : Selected_Data[0].CashBoxID //0 TrNo invoice 1 return  
-
-
+        InvoiceModel.TrType = Selected_Data[0].TrType == null ? 0 : Selected_Data[0].TrType; //0 invoice 1 return    
+        InvoiceModel.CashBoxID = Selected_Data[0].CashBoxID == null ? 0 : Selected_Data[0].CashBoxID; //0 TrNo invoice 1 return  
         if (Selected_Data[0].TrType == 1) {
-
             InvoiceModel.DeliveryEndDate = txtDate.value;
-            InvoiceModel.TrDate = Selected_Data[0].TrDate == null ? '' : Selected_Data[0].TrDate // DeliveryEndDate  return
+            InvoiceModel.TrDate = Selected_Data[0].TrDate == null ? '' : Selected_Data[0].TrDate; // DeliveryEndDate  return
         }
         else {
-            InvoiceModel.DeliveryEndDate = Selected_Data[0].DeliveryEndDate == null ? '' : Selected_Data[0].DeliveryEndDate // DeliveryDate  return
+            InvoiceModel.DeliveryEndDate = Selected_Data[0].DeliveryEndDate == null ? '' : Selected_Data[0].DeliveryEndDate; // DeliveryDate  return
             InvoiceModel.TrDate = txtDate.value;
         }
         //InvoiceModel.DeliveryDate = Selected_Data[0].DeliveryDate == null ? '' : Selected_Data[0].DeliveryDate // DeliveryDate  return
-
         InvoiceModel.RefNO = txtRFQ.value;
         InvoiceModel.SalesmanId = 1;
         InvoiceModel.ChargeReason = txtCompanysales.value;
@@ -1053,22 +874,19 @@ namespace QuotationView {
         InvoiceModel.RoundingAmount = Number(txtAllDiscount.value);
         InvoiceModel.NetAfterVat = Number(txtNetAfterVat.value);
         //-------------------------(T E R M S & C O N D I T I O N S)-----------------------------------------------     
-        InvoiceModel.ContractNo = txtsalesVAT.value;       //----------------- include sales VAT.
-        InvoiceModel.PurchaseorderNo = txtfirstdays.value;      //----------------- days starting from the delivery date.
-        InvoiceModel.ChargeVatPrc = Number(txtsecounddays.value);    //----------------- days from offer date.
-        InvoiceModel.ChargeAfterVat = Number(txtlastdays.value);       //----------------- days from purchase order.
-        InvoiceModel.PrevInvoiceHash = txtPlacedeliv.value;//----------------- Place of delivery.
-
+        InvoiceModel.ContractNo = txtsalesVAT.value; //----------------- include sales VAT.
+        InvoiceModel.PurchaseorderNo = txtfirstdays.value; //----------------- days starting from the delivery date.
+        InvoiceModel.ChargeVatPrc = Number(txtsecounddays.value); //----------------- days from offer date.
+        InvoiceModel.ChargeAfterVat = Number(txtlastdays.value); //----------------- days from purchase order.
+        InvoiceModel.PrevInvoiceHash = txtPlacedeliv.value; //----------------- Place of delivery.
         InvoiceModel.UpdatedBy = SysSession.CurrentEnvironment.UserCode;
         InvoiceModel.UpdatedAt = DateTimeFormat(Date().toString());
-
         // Details
         for (var i = 0; i < CountGrid; i++) {
-            let StatusFlag = $("#txt_StatusFlag" + i).val();
+            var StatusFlag = $("#txt_StatusFlag" + i).val();
             if (StatusFlag == "i") {
                 invoiceItemSingleModel = new Sls_InvoiceDetail();
-
-                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val()
+                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val();
                 invoiceItemSingleModel.InvoiceItemID = Number($("#InvoiceItemID" + i).val());
                 invoiceItemSingleModel.Serial = Number($("#serial" + i).val());
                 invoiceItemSingleModel.SoldQty = Number($('#QTY' + i).val());
@@ -1081,13 +899,10 @@ namespace QuotationView {
                 invoiceItemSingleModel.NetAfterVat = Number($("#Net" + i).val());
                 invoiceItemSingleModel.StatusFlag = StatusFlag;
                 InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
-
             }
-
             if (StatusFlag == "u") {
                 invoiceItemSingleModel = new Sls_InvoiceDetail();
-
-                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val()
+                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val();
                 invoiceItemSingleModel.InvoiceItemID = Number($("#InvoiceItemID" + i).val());
                 invoiceItemSingleModel.Serial = Number($("#serial" + i).val());
                 invoiceItemSingleModel.SoldQty = Number($('#QTY' + i).val());
@@ -1099,11 +914,8 @@ namespace QuotationView {
                 invoiceItemSingleModel.DiscountAmount = Number($("#DiscountAmount" + i).val());
                 invoiceItemSingleModel.NetAfterVat = Number($("#Net" + i).val());
                 invoiceItemSingleModel.StatusFlag = StatusFlag;
-
                 InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
-
             }
-
             if (StatusFlag == "d") {
                 invoiceItemSingleModel = new Sls_InvoiceDetail();
                 invoiceItemSingleModel.InvoiceItemID = Number($("#InvoiceItemID" + i).val());
@@ -1115,52 +927,42 @@ namespace QuotationView {
         MasterDetailsModel.Sls_InvoiceDetail = InvoiceItemsDetailsModel;
     }
     function Update() {
-        if (!validation()) return;
+        if (!validation())
+            return;
         Assign();
         Ajax.Callsync({
             type: "POST",
             url: sys.apiUrl("SlsTrSales", "updateInvoiceMasterDetail"),
             data: JSON.stringify(MasterDetailsModel),
-            success: (d) => {
-                let result = d as BaseResponse;
+            success: function (d) {
+                var result = d;
                 if (result.IsSuccess == true) {
-
-                    let res = result.Response as Sls_Ivoice;
+                    var res = result.Response;
                     invoiceID = res.InvoiceID;
                     DisplayMassage("An invoice number has been issued " + res.TrNo + "", "An invoice number has been issued " + res.TrNo + "", MessageType.Succeed);
-
                     success_insert();
-
-
-                } else {
+                }
+                else {
                     DisplayMassage("Please refresh the page and try again", "Please refresh the page and try again", MessageType.Error);
-
                 }
             }
         });
-
     }
     function success_insert() {
         //InitializeGridQuotation();
-
         CustomerId = 0;
         Display();
         $('#viewmail').addClass('active in');
         $('#sendmail').removeClass('active in');
         $('#composemail').removeClass('active in');
-
         $('#btnQuotations').addClass('active');
         $('#btnInvoice').removeClass('active');
-
-
         $('#txtCreatedBy').prop("value", Selected_Data[0].CreatedBy);
         $('#txtCreatedAt').prop("value", Selected_Data[0].CreatedAt);
-
         $('#txtUpdatedBy').prop("value", SysSession.CurrentEnvironment.UserCode);
         $('#txtUpdatedAt').prop("value", DateTimeFormat(Date().toString()));
     }
     function validation() {
-
         if (txtDate.value.trim() == "") {
             Errorinput(txtDate);
             DisplayMassage('Date must be entered', 'Date must be entered', MessageType.Error);
@@ -1206,23 +1008,6 @@ namespace QuotationView {
     function btnsave_onclick() {
         Update();
     }
-
     //----------------------------------------------------------------------------------------------------
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
+})(QuotationView || (QuotationView = {}));
+//# sourceMappingURL=QuotationView.js.map

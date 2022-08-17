@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    Quotation.InitalizeComponent();
+    InvoiceTax.InitalizeComponent();
 });
-var Quotation;
-(function (Quotation) {
+var InvoiceTax;
+(function (InvoiceTax) {
     var sys = new SystemTools();
     //var sys: _shared = new _shared();
     var SysSession = GetSystemSession(Modules.Quotation);
@@ -38,6 +38,7 @@ var Quotation;
     var txtNetAfterVat;
     var include = "";
     function InitalizeComponent() {
+        alert(SysSession.CurrentEnvironment.issuer.buildingNumber);
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
         InitalizeControls();
@@ -46,7 +47,7 @@ var Quotation;
         AddNewRow();
         txtDate.value = GetDate();
     }
-    Quotation.InitalizeComponent = InitalizeComponent;
+    InvoiceTax.InitalizeComponent = InitalizeComponent;
     function InitalizeControls() {
         // ;
         btnAddDetails = document.getElementById("btnAddDetails");
@@ -378,5 +379,5 @@ var Quotation;
     function btnsave_onclick() {
         insert();
     }
-})(Quotation || (Quotation = {}));
-//# sourceMappingURL=Quotation.js.map
+})(InvoiceTax || (InvoiceTax = {}));
+//# sourceMappingURL=InvoiceTax.js.map
