@@ -61,7 +61,7 @@ var Column = /** @class */ (function () {
         this.style = "width: 100%";
         this.title = "";
         this.Name = "";
-        this.value = "";
+        this.value = "0";
         this.Type = "text";
         this.visible = true;
         this.Edit = true;
@@ -299,7 +299,7 @@ function BindGridControl(Grid) {
         $("#tr_" + NameTable).append(thead);
     }
     //------------------------------------------------------------تنظيم الجريد
-    Resizable();
+    Resizable(NameTable);
     //----------------------------------------------------------------------------------
     $('.' + NameTable + '_Delete').attr('style', 'width: 4% !important;');
     $('.' + NameTable + '_Copy').attr('style', 'width: 4% !important;');
@@ -353,6 +353,8 @@ function BindGridControl(Grid) {
     $('.fixed-table-body').attr('style', 'height: 460px; overflow: scroll;');
 }
 function DisplayDataGridControl(List, Grid) {
+    Grid.ESG.LastCounter = 0;
+    Grid.ESG.LastCounterAdd = 0;
     flagBack = true;
     BindGridControl(Grid);
     var NameTable = Grid.ESG.NameTable;
@@ -371,6 +373,7 @@ function DisplayDataGridControl(List, Grid) {
     //$('#main-menu').append(x);
 }
 function DisplayData(List, Grid) {
+    debugger;
     var NameTable = Grid.ESG.NameTable;
     var cnt = Grid.ESG.LastCounter - 1;
     var _Delete = $('.' + NameTable + '_Delete');
@@ -382,19 +385,31 @@ function DisplayData(List, Grid) {
     var btn_Copy = $('#td_btn_Copy_' + NameTable + cnt);
     btn_Copy.attr('style', 'display:none !important;');
     for (var u = 0; u < Grid.Column.length; u++) {
+        debugger;
         try {
-            var values = Object["values"](List);
+            //var values: Array<any> = Object["values"](List);
             if (Grid.Column[u].ColumnType.NameType == 'Input') {
-                $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(values[u]);
+                //$('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(values[u]);
+                if (Grid.Column[u].Type == 'date' || Grid.Column[u].Type == 'Date') {
+                    var date = DateFormat(List['' + Grid.Column[u].Name + '']);
+                    $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(date);
+                }
+                else {
+                    $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(List['' + Grid.Column[u].Name + '']);
+                }
             }
             if (Grid.Column[u].ColumnType.NameType == 'Dropdown') {
-                $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(values[u]);
+                //$('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(values[u]);
+                $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(List['' + Grid.Column[u].Name + '']);
             }
             if (Grid.Column[u].ColumnType.NameType == 'Button') {
-                $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(values[u]);
+                //$('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(values[u]);
+                $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val(List['' + Grid.Column[u].Name + '']);
             }
             if (Grid.Column[u].ColumnType.NameType == 'checkbox') {
-                if (values[u] == 1 || values[u] == true) {
+                var value = List['' + Grid.Column[u].Name + ''];
+                //if (values[u] == 1 || values[u] == true) {
+                if (value == 1 || value == true) {
                     $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').prop('checked', true);
                 }
                 else {
@@ -403,6 +418,7 @@ function DisplayData(List, Grid) {
             }
         }
         catch (e) {
+            alert(Grid.Column[u].ColumnType.NameType);
         }
     }
 }
@@ -469,6 +485,11 @@ function BuildGridControl(flagDisplay, Grid) {
         if (Grid.Column[u].ColumnType.NameType == 'Input') {
             td = '<td id="td_' + NameTable + '_' + Grid.Column[u].Name + cnt + '" ><input  disabled="disabled" id="' + NameTable + '_' + Grid.Column[u].Name + cnt + '" value="' + Grid.Column[u].value + '" type="' + Grid.Column[u].Type + '" class="form-control ' + classEdit + '" placeholder="' + Grid.Column[u].value + '" /></td>';
             $('#No_Row_' + NameTable + cnt + '').append(td);
+            debugger;
+            if (Grid.Column[u].Type == 'date') {
+                var d = GetDate();
+                $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').val("" + d + "");
+            }
         }
         if (Grid.Column[u].ColumnType.NameType == 'Dropdown') {
             td = '<td id="td_' + NameTable + '_' + Grid.Column[u].Name + cnt + '" ><select disabled="disabled"  id="' + NameTable + '_' + Grid.Column[u].Name + cnt + '" class="form-control ' + classEdit + '">  </select></td>';
@@ -490,17 +511,23 @@ function BuildGridControl(flagDisplay, Grid) {
         $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').click(function () {
             if ($("#StatusFlag_" + NameTable + '_' + cnt).val() != "i")
                 $("#StatusFlag_" + NameTable + '_' + cnt).val("u");
-            Grid.Column[u].ColumnType.onclick();
+            if (Grid.Column[u].ColumnType.onclick != null) {
+                Grid.Column[u].ColumnType.onclick();
+            }
         });
         $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').on('keyup', function (e) {
             if ($("#StatusFlag_" + NameTable + '_' + cnt).val() != "i")
                 $("#StatusFlag_" + NameTable + '_' + cnt).val("u");
-            Grid.Column[u].ColumnType.onkeyup();
+            if (Grid.Column[u].ColumnType.onkeyup != null) {
+                Grid.Column[u].ColumnType.onkeyup();
+            }
         });
         $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').on('change', function (e) {
             if ($("#StatusFlag_" + NameTable + '_' + cnt).val() != "i")
                 $("#StatusFlag_" + NameTable + '_' + cnt).val("u");
-            Grid.Column[u].ColumnType.onchange();
+            if (Grid.Column[u].ColumnType.onchange != null) {
+                Grid.Column[u].ColumnType.onchange();
+            }
             ComputeTotalGridControl(Grid, Grid.ESG.object);
         });
         //--------------------------------------------اضافة style -----------------------------------
@@ -554,6 +581,10 @@ function BuildGridControl(flagDisplay, Grid) {
     debugger;
     $('#No_Row_' + NameTable + (Grid.ESG.LastCounterAdd - 1) + '').before($('#No_Row_' + NameTable + (cnt) + ''));
     $('#btn_minus_' + NameTable + (cnt) + '').focus();
+    debugger;
+    if (flagDisplay == true) {
+        $("#StatusFlag_" + NameTable + '_' + cnt).val('i');
+    }
     Grid.ESG.LastCounter++;
     Grid.ESG.LastCounterAdd++;
 }
@@ -645,50 +676,59 @@ function ValidationGrid(Grid, Newobject) {
                 var Con_Value = Model.Validation.Con_Value;
                 var Mess = Model.Validation.Mess;
                 if (Model.ColumnType.NameType == 'Input') {
-                    if (con[0] == '>') {
-                        if (Number(element.value) > Number(Con_Value)) {
-                            ErrorinputGrid(element, NameTable, Mess);
-                            FlagValid = false;
-                            break;
+                    if (con != null) {
+                        if (con[0] == '>') {
+                            if (Number(element.value) > Number(Con_Value)) {
+                                ErrorinputGrid(element, NameTable, Mess);
+                                FlagValid = false;
+                                break;
+                            }
                         }
-                    }
-                    else if (con[0] == '>=') {
-                        if (Number(element.value) >= Number(Con_Value)) {
-                            ErrorinputGrid(element, NameTable, Mess);
-                            FlagValid = false;
-                            break;
+                        else if (con[0] == '>=') {
+                            if (Number(element.value) >= Number(Con_Value)) {
+                                ErrorinputGrid(element, NameTable, Mess);
+                                FlagValid = false;
+                                break;
+                            }
                         }
-                    }
-                    else if (con[0] == '<=') {
-                        if (Number(element.value) <= Number(Con_Value)) {
-                            ErrorinputGrid(element, NameTable, Mess);
-                            FlagValid = false;
-                            break;
+                        else if (con[0] == '<=') {
+                            if (Number(element.value) <= Number(Con_Value)) {
+                                ErrorinputGrid(element, NameTable, Mess);
+                                FlagValid = false;
+                                break;
+                            }
                         }
-                    }
-                    else if (con[0] == '<') {
-                        if (Number(element.value) < Number(Con_Value)) {
-                            ErrorinputGrid(element, NameTable, Mess);
-                            FlagValid = false;
-                            break;
+                        else if (con[0] == '<') {
+                            if (Number(element.value) < Number(Con_Value)) {
+                                ErrorinputGrid(element, NameTable, Mess);
+                                FlagValid = false;
+                                break;
+                            }
                         }
-                    }
-                    else if (con[0] == '==') {
-                        if (element.value == Con_Value) {
-                            ErrorinputGrid(element, NameTable, Mess);
-                            FlagValid = false;
-                            break;
+                        else if (con[0] == '==') {
+                            if (element.value == Con_Value) {
+                                ErrorinputGrid(element, NameTable, Mess);
+                                FlagValid = false;
+                                break;
+                            }
                         }
-                    }
-                    else if (con[0] == '=') {
-                        if (element.value == Con_Value) {
-                            ErrorinputGrid(element, NameTable, Mess);
-                            FlagValid = false;
-                            break;
+                        else if (con[0] == '=') {
+                            if (element.value == Con_Value) {
+                                ErrorinputGrid(element, NameTable, Mess);
+                                FlagValid = false;
+                                break;
+                            }
+                        }
+                        else {
+                            if (Number(element.value) >= 0) {
+                                ErrorinputGrid(element, NameTable, Mess);
+                                FlagValid = false;
+                                break;
+                            }
                         }
                     }
                     else {
-                        if (Number(element.value) >= 0) {
+                        if (Number(element.value) < 0) {
                             ErrorinputGrid(element, NameTable, Mess);
                             FlagValid = false;
                             break;
@@ -751,7 +791,7 @@ function EditGridControl(Grid) {
     $('#btnClean_' + NameTable).attr('style', '');
     $('#btnAdd_' + NameTable).attr('style', '');
     $('#btnEdit_' + NameTable).attr('style', 'display:none !important;');
-    Resizable();
+    Resizable(NameTable);
 }
 function CopyRow(Grid, index) {
     var obj = Grid.ESG.object;
@@ -770,7 +810,7 @@ function CopyRow(Grid, index) {
             BuildGridControl(true, Grid);
             BuildCopy(Grid, CopyModel, LastCountGrid);
             RowCopy = LastCountGrid;
-            $("#StatusFlag_" + NameTable + '_' + cnt).val('i');
+            //$("#StatusFlag_" + NameTable + '_' + cnt).val('i');
             //Grid.ESG.LastCounter++; 
             Grid.ESG.LastCounterAdd = Grid.ESG.LastCounterAdd - 1;
             break;
@@ -865,73 +905,9 @@ function pageSize() {
         pageList: [5, 10, 25, 50, 100, 200] //list can be specified here
     });
 }
-function Resizable() {
-    //$('#table_Grad1').DataTable({
-    //    dom: 'Bfrtip',
-    //    lengthMenu: [
-    //        [10, 25, 50, -1],
-    //        ['10 rows', '25 rows', '50 rows', 'Show all']
-    //    ],
-    //    buttons: [
-    //        'pageLength'
-    //    ]
-    //});
-    //return
-    'use strict';
-    var initResizable = function (that) {
-        //Deletes the plugin to re-create it
-        that.$el.colResizable({ disable: true });
-        //Creates the plugin
-        that.$el.colResizable({
-            liveDrag: that.options.liveDrag,
-            fixed: that.options.fixed,
-            headerOnly: that.options.headerOnly,
-            minWidth: that.options.minWidth,
-            hoverCursor: that.options.hoverCursor,
-            dragCursor: that.options.dragCursor,
-            onResize: that.onResize,
-            onDrag: that.options.onResizableDrag
-        });
-    };
-    $.extend($.fn.bootstrapTable.defaults, {
-        resizable: false,
-        liveDrag: false,
-        fixed: true,
-        headerOnly: false,
-        minWidth: 15,
-        hoverCursor: 'e-resize',
-        dragCursor: 'e-resize',
-        PageSize: 3,
-        onResizableResize: function (e) {
-            return false;
-        },
-        onResizableDrag: function (e) {
-            return false;
-        }
-    });
-    var BootstrapTable = $.fn.bootstrapTable.Constructor, _toggleView = BootstrapTable.prototype.toggleView, _resetView = BootstrapTable.prototype.resetView;
-    BootstrapTable.prototype.toggleView = function () {
-        _toggleView.apply(this, Array.prototype.slice.apply(arguments));
-        if (this.options.resizable && this.options.cardView) {
-            //Deletes the plugin
-            $(this.$el).colResizable({ disable: true });
-        }
-    };
-    BootstrapTable.prototype.resetView = function () {
-        var that = this;
-        _resetView.apply(this, Array.prototype.slice.apply(arguments));
-        if (this.options.resizable) {
-            // because in fitHeader function, we use setTimeout(func, 100);
-            setTimeout(function () {
-                initResizable(that);
-            }, 300);
-        }
-    };
-    BootstrapTable.prototype.onResize = function (e) {
-        var that = $(e.currentTarget);
-        that.bootstrapTable('resetView');
-        that.data('bootstrap.table').options.onResizableResize.apply(e);
-    };
+function Resizable(NameTable) {
+    $('.' + NameTable + '_Delete').attr('style', 'width: 1% !important;');
+    $('.' + NameTable + '_Copy').attr('style', 'width: 1% !important;');
     $('[data-toggle="table"]').bootstrapTable();
 }
 //# sourceMappingURL=EslamGrid.js.map

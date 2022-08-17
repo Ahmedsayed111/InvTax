@@ -25,7 +25,7 @@ var StockDef;
         debugger;
         Ajax.Callsync({
             type: "Get",
-            url: sys.apiUrl("SlsTrSales", "GetAllItem"),
+            url: sys.apiUrl("Items", "GetAllItem"),
             data: { CompCode: compcode },
             success: function (d) {
                 var result = d;
@@ -40,7 +40,7 @@ var StockDef;
     function InitializeGridControl() {
         Grid.ESG.NameTable = 'Grad1';
         Grid.ESG.PrimaryKey = 'ItemID';
-        Grid.ESG.Right = true;
+        Grid.ESG.Right = false;
         Grid.ESG.Edit = true;
         Grid.ESG.Add = true;
         Grid.ESG.DeleteRow = true;
@@ -53,23 +53,35 @@ var StockDef;
         Grid.ESG.object = new Items();
         Grid.Column = [
             { title: "ID", Name: "ItemID", Type: "text", style: "width: 10%", Edit: false, visible: false, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "codeType", Name: "codeType", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
-            { title: "parentCode", Name: "parentCode", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
-            { title: "itemCode", Name: "itemCode", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
-            { title: "codeName", Name: "codeName", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
-            { title: "activeFrom", Name: "activeFrom", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "activeTo", Name: "activeTo", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "description", Name: "description", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "UnitCode", Name: "UnitCode", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "StatusCode", Name: "StatusCode", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "CompCode", Name: "CompCode", Type: "text", value: compcode.toString(), style: "width: 10%", Edit: false, visible: false, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "codeType", Name: "codeType", Type: "text", value: "", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
+            { title: "parentCode", Name: "parentCode", Type: "text", value: "", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "itemCode", Name: "itemCode", Type: "text", value: "", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "codeName", Name: "codeName", Type: "text", value: "", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "activeFrom", Name: "activeFrom", Type: "date", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "activeTo", Name: "activeTo", Type: "date", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "description", Name: "description", Type: "text", value: "", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "UnitCode", Name: "UnitCode", Type: "text", value: "", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "StatusCode", Name: "StatusCode", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
         ];
         BindGridControl(Grid);
         DisplayDataGridControl(I_ItemDetails, Grid);
     }
     function SaveNew() {
-        debugger;
-        alert(Grid.ESG.Model);
         console.log(Grid.ESG.Model);
+        var data = JSON.stringify(Grid.ESG.Model);
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("Items", "UpdateItems"),
+            data: { data: data },
+            success: function (d) {
+                var result = d;
+                if (result.IsSuccess) {
+                    GetAllItem();
+                    DisplayDataGridControl(I_ItemDetails, Grid);
+                }
+            }
+        });
     }
     function computeTotal() {
         console.log(Grid.ESG.TotalModel);

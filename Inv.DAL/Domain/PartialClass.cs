@@ -56,6 +56,10 @@ namespace Inv.DAL.Domain
        
     }
   
+    public partial class Items : SecurityandUpdateFlagClass
+    {
+
+    } 
     public partial class Sls_InvoiceDetail : SecurityandUpdateFlagClass
     {
 

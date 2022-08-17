@@ -15,6 +15,8 @@ using Inv.BLL.Services.SlsTrSales;
 using Inv.BLL.Services.IControl; 
 using Inv.BLL.Services.SlsInvoiceItems;
 using Inv.BLL.Services.ISlsTRInvoice;
+using Inv.BLL.Services.IItems;
+
 namespace Inv.API.Infrastructure
 {
     public static class IocConfigurator
@@ -43,6 +45,7 @@ namespace Inv.API.Infrastructure
             container.RegisterType<ISlsTrSalesServices, SlsTrSalesServices>();
             container.RegisterType<ISlsInvoiceItemsService, SlsInvoiceItemsService>();
             container.RegisterType<IISlsTRInvoiceService, ISlsTRInvoiceService>();
+            container.RegisterType<ItemsService, IItemsService >();
         }
     }
 }

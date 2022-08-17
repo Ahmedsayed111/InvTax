@@ -22,6 +22,7 @@ var Login_;
     var compData = Array();
     var SystemEnv: SystemEnvironment = new SystemEnvironment();
     var G_BRANCHService: Array<G_BRANCH> = new Array<G_BRANCH>();
+    var issuerService: Array<issuer> = new Array<issuer>();
 
 
     function InitalizeComponent() {
@@ -227,32 +228,58 @@ var Login_;
                                                 SystemEnv.UserCode = txtUserName.value;
                                                 SystemEnv.StartDate = CompanyStatus.FirstDate.substr(0, 10);
                                                 SystemEnv.EndDate = CompanyStatus.LastDate.substr(0, 10);                                               
-                                                SystemEnv.NationalityID = CompanyService[0].NationalityID; 
+                                                SystemEnv.NationalityID = CompanyService[0].NationalityID;
+
+
+                                                //Ajax.Callsyncstart({
+                                                //    type: "GET",
+                                                //    url: sys.apiUrl("GBranch", "GetBranch"),
+                                                //    data: { CompCode: Number(compCode), BRA_CODE: Number(braCode) },
+                                                //    async: false,
+                                                //    success: (d) => {
+                                                //        let res = d as BaseResponse;
+                                                //        if (res.IsSuccess) {
+                                                //            G_BRANCHService = res.Response as Array<G_BRANCH>;
+                                                //            if (G_BRANCHService != null) { 
+                                                //                SystemEnv.SlsInvType = G_BRANCHService[0].SlsInvType;
+                                                //                SystemEnv.WholeInvoiceTransCode = G_BRANCHService[0].WholeInvoiceTransCode;
+                                                //                SystemEnv.RetailInvoicePayment = G_BRANCHService[0].RetailInvoicePayment;
+                                                //                SystemEnv.WholeInvoicePayment = G_BRANCHService[0].WholeInvoicePayment;
+                                                //                SystemEnv.ServiceInvoiceTransCode = G_BRANCHService[0].ServiceInvoiceTransCode;
+                                                //                SystemEnv.ReturnTypeCode = G_BRANCHService[0].ReturnTypeCode;
+                                                //                SystemEnv.InvoiceTypeCode = G_BRANCHService[0].InvoiceTypeCode;
+                                                //                SystemEnv.RetailInvoiceTransCode = G_BRANCHService[0].RetailInvoiceTransCode; 
+                                                //            } else {
+                                                //                var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول الفرع" : "You are not allowed to login";
+                                                //                MessageBox.Show(msg, "");
+                                                //            }
+                                                //        }
+                                                //    }
+                                                //});
+
+
+
                                                 Ajax.Callsyncstart({
                                                     type: "GET",
-                                                    url: sys.apiUrl("GBranch", "GetBranch"),
-                                                    data: { CompCode: Number(compCode), BRA_CODE: Number(braCode) },
+                                                    url: sys.apiUrl("I_Control", "GetIssuer"),
+                                                    data: { Compcode: compCode },
                                                     async: false,
                                                     success: (d) => {
                                                         let res = d as BaseResponse;
                                                         if (res.IsSuccess) {
-                                                            G_BRANCHService = res.Response as Array<G_BRANCH>;
-                                                            if (G_BRANCHService != null) { 
-                                                                SystemEnv.SlsInvType = G_BRANCHService[0].SlsInvType;
-                                                                SystemEnv.WholeInvoiceTransCode = G_BRANCHService[0].WholeInvoiceTransCode;
-                                                                SystemEnv.RetailInvoicePayment = G_BRANCHService[0].RetailInvoicePayment;
-                                                                SystemEnv.WholeInvoicePayment = G_BRANCHService[0].WholeInvoicePayment;
-                                                                SystemEnv.ServiceInvoiceTransCode = G_BRANCHService[0].ServiceInvoiceTransCode;
-                                                                SystemEnv.ReturnTypeCode = G_BRANCHService[0].ReturnTypeCode;
-                                                                SystemEnv.InvoiceTypeCode = G_BRANCHService[0].InvoiceTypeCode;
-                                                                SystemEnv.RetailInvoiceTransCode = G_BRANCHService[0].RetailInvoiceTransCode; 
-                                                            } else {
-                                                                var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول الفرع" : "You are not allowed to login";
-                                                                MessageBox.Show(msg, "");
+                                                            issuerService = res.Response as Array<issuer>;
+                                                            if (issuerService.length > 0 ) {
+                                                                SystemEnv.issuer = issuerService[0];
+                                                             
+                                                            }
+                                                            else {
+                                                                SystemEnv.issuer = new issuer;
                                                             }
                                                         }
                                                     }
                                                 });
+
+
                                                  
                                                 document.cookie = "Inv1_systemProperties=" + JSON.stringify(SystemEnv).toString() + ";expires=Fri, 31 Dec 2030 23:59:59 GMT;path=/";
                                                 OnLogged();

@@ -166,8 +166,8 @@ var Quotation;
         //}
         txtNetBefore.value = NetCount.toString();
         if (Number(txtAllDiscount.value) > 0) {
-            var Discount_1 = ((Number(txtAllDiscount.value) * Number(txtNetBefore.value)) / 100).toFixed(2);
-            txtNetAfterVat.value = (NetCount - Number(Discount_1)).toString();
+            var Discount = ((Number(txtAllDiscount.value) * Number(txtNetBefore.value)) / 100).toFixed(2);
+            txtNetAfterVat.value = (NetCount - Number(Discount)).toString();
         }
         else {
             txtNetAfterVat.value = txtNetBefore.value;

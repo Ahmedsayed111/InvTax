@@ -57,7 +57,6 @@ namespace Inv.DAL.Domain
         public virtual DbSet<G_USERS> G_USERS { get; set; }
         public virtual DbSet<I_D_UOM> I_D_UOM { get; set; }
         public virtual DbSet<issuer> issuers { get; set; }
-        public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<receiver> receivers { get; set; }
         public virtual DbSet<Salesman> Salesmen { get; set; }
         public virtual DbSet<Sls_InvoiceDetail> Sls_InvoiceDetail { get; set; }
@@ -72,6 +71,7 @@ namespace Inv.DAL.Domain
         public virtual DbSet<GQ_ReportWebSetting> GQ_ReportWebSetting { get; set; }
         public virtual DbSet<I_VW_GetCompStatus> I_VW_GetCompStatus { get; set; }
         public virtual DbSet<I_Control> I_Control { get; set; }
+        public virtual DbSet<Items> Items1 { get; set; }
     
         [DbFunction("TaxEntities", "GFun_Companies")]
         public virtual IQueryable<GFun_Companies_Result> GFun_Companies(string userCode)

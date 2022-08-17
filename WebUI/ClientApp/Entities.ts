@@ -1770,6 +1770,7 @@ class Items extends SecurityClass {
     constructor() {
         super();
         this.ItemID = 0;
+        this.CompCode = "";
         this.codeType = "";
         this.parentCode = "";
         this.itemCode = "";
@@ -1782,6 +1783,7 @@ class Items extends SecurityClass {
         this.StatusFlag = "";
     }
     public ItemID: number;
+    public CompCode: string;
     public codeType: string;
     public parentCode: string;
     public itemCode: string;
@@ -1824,7 +1826,253 @@ class I_D_UOM {
     public Cheack: boolean;
 }
 
+class issuer {
+    constructor() {
+        this.issuerID = 0;
+        this.branchID = 0;
+        this.country = "";
+        this.governate = "";
+        this.regionCity = "";
+        this.street = "";
+        this.buildingNumber = "";
+        this.postalCode = "";
+        this.floor = "";
+        this.room = "";
+        this.landmark = "";
+        this.additionalInformation = "";
+        this.type = "";
+        this.id = "";
+        this.name = "";
+        this.CompCode = 0;
+    }
+    public issuerID: number;
+    public branchID: number;
+    public country: string;
+    public governate: string;
+    public regionCity: string;
+    public street: string;
+    public buildingNumber: string;
+    public postalCode: string;
+    public floor: string;
+    public room: string;
+    public landmark: string;
+    public additionalInformation: string;
+    public type: string;
+    public id: string;
+    public name: string;
+    public CompCode: number;
+}
+
+class receiver {
+    constructor() {
+        this.receiverID = 0;
+        this.branchID = 0;
+        this.country = "";
+        this.governate = "";
+        this.regionCity = "";
+        this.street = "";
+        this.buildingNumber = "";
+        this.postalCode = "";
+        this.floor = "";
+        this.room = "";
+        this.landmark = "";
+        this.additionalInformation = "";
+        this.type = "";
+        this.id = "";
+        this.name = "";
+        this.CompCode = 0;
+    }
+    public receiverID: number;
+    public branchID: number;
+    public country: string;
+    public governate: string;
+    public regionCity: string;
+    public street: string;
+    public buildingNumber: string;
+    public postalCode: string;
+    public floor: string;
+    public room: string;
+    public landmark: string;
+    public additionalInformation: string;
+    public type: string;
+    public id: string;
+    public name: string;
+    public CompCode: number;
+}
 
 
 
+class Documente {
+    constructor() {
+        this.issuer = new issuer();
+        this.receiver = new receiver();
+        this.documentType = "";
+        this.documentTypeVersion = "";
+        this.dateTimeIssued = "";
+        this.taxpayerActivityCode = "";
+        this.internalID = "";
+        this.purchaseOrderReference = "";
+        this.purchaseOrderDescription = "";
+        this.salesOrderReference = "";
+        this.salesOrderDescription = "";
+        this.proformaInvoiceNumber = "";
+        this.payment = new Payment();
+        this.delivery = new Delivery();
+        this.invoiceLines = new Array<InvoiceLine>();
+        this.totalDiscountAmount = 0;
+        this.totalSalesAmount = 0;
+        this.netAmount = 0;
+        this.taxTotals = new Array<TaxTotal>();
+        this.totalAmount = 0;
+        this.extraDiscountAmount = 0;
+        this.totalItemsDiscountAmount = 0;
+
+
+    }
+    public issuer: issuer;
+    public receiver: receiver;
+    public documentType: string;
+    public documentTypeVersion: string;
+    public dateTimeIssued: string;
+    public taxpayerActivityCode: string;
+    public internalID: string;
+    public purchaseOrderReference: string;
+    public purchaseOrderDescription: string;
+    public salesOrderReference: string;
+    public salesOrderDescription: string;
+    public proformaInvoiceNumber: string;
+    public payment: Payment;
+    public delivery: Delivery;
+    public invoiceLines: Array<InvoiceLine>;
+    public totalDiscountAmount: number;
+    public totalSalesAmount: number;
+    public netAmount: number;
+    public taxTotals: Array<TaxTotal>;
+    public totalAmount: number;
+    public extraDiscountAmount: number;
+    public totalItemsDiscountAmount: number;
+
+
+}
+ 
+
+
+class Payment {
+    constructor() {
+        this.bankName = "";
+        this.bankAddress = "";
+        this.bankAccountNo = "";
+        this.bankAccountIBAN = "";
+        this.swiftCode = "";
+        this.terms = "";
+    }
+    public bankName: string;
+    public bankAddress: string;
+    public bankAccountNo: string;
+    public bankAccountIBAN: string;
+    public swiftCode: string;
+    public terms: string;
+}
+
+class Delivery {
+    constructor() {
+        this.approach = "";
+        this.packaging = "";
+        this.dateValidity = "";
+        this.exportPort = "";
+        this.grossWeight = 0;
+        this.netWeight = 0;
+        this.terms = "";
+
+    }
+    public approach: string;
+    public packaging: string;
+    public dateValidity: string;
+    public exportPort: string;
+    public grossWeight: number;
+    public netWeight: number;
+    public terms: string;
+
+}
+
+class TaxTotal {
+    constructor() {
+        this.taxType = "";
+        this.amount = 0;
+
+    }
+    public taxType: string;
+    public amount: number;
+
+}
+
+
+
+
+class InvoiceLine {
+    constructor() {
+        this.description = "";
+        this.itemType = "";
+        this.itemCode = "";
+        this.unitType = "";
+        this.quantity = 0;
+        this.internalCode = "";
+        this.salesTotal = 0;
+        this.total = 0;
+        this.valueDifference = 0;
+        this.totalTaxableFees = 0;
+        this.netTotal = 0;
+        this.itemsDiscount = 0;
+        this.unitValue = new UnitValue();
+        this.discount = new Discount();
+        this.taxableItems = new Array<TaxableItem>();
+    }
+    public description: string;
+    public itemType: string;
+    public itemCode: string;
+    public unitType: string;
+    public quantity: number;
+    public internalCode: string;
+    public salesTotal: number;
+    public total: number;
+    public valueDifference: number;
+    public totalTaxableFees: number;
+    public netTotal: number;
+    public itemsDiscount: number;
+    public unitValue: UnitValue;
+    public discount: Discount;
+    public taxableItems: Array<TaxableItem>;
+}
+
+
+class UnitValue {
+    constructor() {
+        this.currencySold = "";
+        this.amountEGP = 0;
+    }
+    public currencySold: string;
+    public amountEGP: number;
+}
+
+class Discount {
+    constructor() {
+        this.rate = 0;
+        this.amount = 0;
+    }
+    public rate: number;
+    public amount: number;
+}
+
+class TaxableItem {
+    constructor() {
+        this.taxType = "";
+        this.amount = 0;
+        this.subType = "";
+        this.rate = 0;
+    }
+    public taxType: string;
+    public amount: number;
+    public subType: string;
+    public rate: number;
+}
 
