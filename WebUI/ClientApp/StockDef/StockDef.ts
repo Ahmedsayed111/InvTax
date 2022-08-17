@@ -7,7 +7,7 @@ namespace StockDef {
 
     var sys: SystemTools = new SystemTools();
     var SysSession: SystemSession = GetSystemSession(Modules.Quotation);
-    var I_ItemDetails: Array<I_Item> = new Array<I_Item>();
+    var I_ItemDetails: Array<Items> = new Array<Items>();
     var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>();
     var compcode: number;//SharedSession.CurrentEnvironment.CompCode;
     var BranchCode: number;//SharedSession.CurrentEnvironment.CompCode; 
@@ -20,31 +20,26 @@ namespace StockDef {
     export function InitalizeComponent() {
         debugger
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
-        BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
-
-                
-
-        InitializeGridControl();
+        BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);          
         GetAllItem();
         GetAllUnit();
     }
     function InitalizeControls() {
 
-	}
-                 
-
-
+	}                 
     function GetAllItem() {
         debugger
         Ajax.Callsync({
             type: "Get",
-            url: sys.apiUrl("SlsTrSales", "GetI_Item"),
+            url: sys.apiUrl("SlsTrSales", "GetAllItem"),
+            data: { CompCode: compcode },
             success: (d) => {
                 let result = d as BaseResponse;
                 if (result.IsSuccess) {
                     debugger
 
-                    I_ItemDetails = result.Response as Array<I_Item>;
+                    I_ItemDetails = result.Response as Array<Items>;
+                    InitializeGridControl();
                 }
             }
         }); 
@@ -63,14 +58,19 @@ namespace StockDef {
         Grid.ESG.OnfunctionSave = SaveNew;
         Grid.ESG.OnfunctionTotal = computeTotal;
         Grid.ESG.OnRowDoubleClicked = DoubleClicked;
-        Grid.ESG.object = new I_Item();
+        Grid.ESG.object = new Items();
         Grid.Column = [
-            { title: "ID", Name: "ItemID", value: "0", Type: "text", style: "width: 10%", Edit: false, visible: false, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "Code", Name: "ItemCode", value: "0", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
-            { title: "Describtion Ar", Name: "DescA", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "Describtion En", Name: "DescL", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "Unit", Name: "UomID", value: "1", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Dropdown(I_D_UOMDetails,"Choose") },
-
+            { title: "ID", Name: "ItemID", Type: "text", style: "width: 10%", Edit: false, visible: false, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "codeType", Name: "codeType", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
+            { title: "parentCode", Name: "parentCode", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
+            { title: "itemCode", Name: "itemCode", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
+            { title: "codeName", Name: "codeName", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Input() },
+            { title: "activeFrom", Name: "activeFrom", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "activeTo", Name: "activeTo", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "description", Name: "description", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "UnitCode", Name: "UnitCode", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "StatusCode", Name: "StatusCode",style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+           
         ]
 
         BindGridControl(Grid);

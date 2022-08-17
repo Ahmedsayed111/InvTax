@@ -148,15 +148,6 @@ var SlsInvoiceMasterDetails = /** @class */ (function (_super) {
     }
     return SlsInvoiceMasterDetails;
 }(SecurityClass));
-var Customcustomer = /** @class */ (function (_super) {
-    __extends(Customcustomer, _super);
-    function Customcustomer() {
-        var _this = _super.call(this) || this;
-        _this.Customer = new Customer();
-        return _this;
-    }
-    return Customcustomer;
-}(SecurityClass));
 var EntityContext = /** @class */ (function () {
     function EntityContext() {
     }
@@ -234,130 +225,6 @@ var G_BRANCH = /** @class */ (function (_super) {
         return _this;
     }
     return G_BRANCH;
-}(SecurityClass));
-var G_LnkVarBranch = /** @class */ (function (_super) {
-    __extends(G_LnkVarBranch, _super);
-    function G_LnkVarBranch() {
-        var _this = _super.call(this) || this;
-        _this.CompCode = 0;
-        _this.BraCode = 0;
-        _this.Lnktype = "";
-        _this.Ser = 0;
-        _this.LnkCode = "";
-        _this.GLAccountCode = "";
-        _this.CC_Code = "";
-        return _this;
-    }
-    return G_LnkVarBranch;
-}(SecurityClass));
-var Customer = /** @class */ (function (_super) {
-    __extends(Customer, _super);
-    function Customer() {
-        var _this = _super.call(this) || this;
-        _this.CustomerId = 0;
-        _this.CustomerCODE = "";
-        _this.CatID = 0;
-        _this.GroupId = 0;
-        _this.NAMEA = "";
-        _this.NAMEE = "";
-        _this.SHORTNAME = "";
-        _this.TEL = "";
-        _this.FAX = "";
-        _this.EMAIL = "";
-        _this.CURCODE = "";
-        _this.REMARKS = "";
-        _this.STATUS = false;
-        _this.MOBILE = "";
-        _this.Bank = "";
-        _this.AccountNo = "";
-        _this.ManagerName = "";
-        _this.NationalityID = 0;
-        _this.BranchCode = 0;
-        _this.CompCode = 0;
-        _this.CREATED_BY = "";
-        _this.CREATED_AT = "";
-        _this.UPDATED_AT = "";
-        _this.UPDATED_BY = "";
-        _this.Employer = "";
-        _this.JobName = "";
-        _this.WorkTel = "";
-        _this.WorkAddress = "";
-        _this.VATType = 0;
-        _this.AddDedType = 0;
-        _this.AddDedNo = "";
-        _this.VatNo = "";
-        _this.Isactive = false;
-        _this.IsAuthorized = false;
-        _this.CreditLimit = 0;
-        _this.CreditLimitFC = 0;
-        _this.CreditPeriod = 0;
-        _this.OpenBalanceFC = 0;
-        _this.Openbalance = 0;
-        _this.Debit = 0;
-        _this.DebitFC = 0;
-        _this.Credit = 0;
-        _this.CreditFC = 0;
-        _this.PaymentType = 0;
-        _this.FCRate = 0;
-        _this.CreditExpiryDate = "";
-        _this.RefCode2 = "";
-        _this.RefCode1 = "";
-        _this.IsCreditCustomer = false;
-        _this.DiscountplanID = 0;
-        _this.SalesmanId = 0;
-        _this.Address_postal = "";
-        _this.Address_Province = "";
-        _this.GroupVatNo = "";
-        _this.Address_Street = "";
-        _this.Address_Str_Additional = "";
-        _this.Address_BuildingNo = "";
-        _this.Address_Build_Additional = "";
-        _this.Address_City = "";
-        _this.Address_District = "";
-        return _this;
-    }
-    return Customer;
-}(SecurityClass));
-var GQ_GetLnkVarBranch = /** @class */ (function (_super) {
-    __extends(GQ_GetLnkVarBranch, _super);
-    function GQ_GetLnkVarBranch() {
-        var _this = _super.call(this) || this;
-        _this.CompCode = 0;
-        _this.BraCode = 0;
-        _this.Lnktype = "";
-        _this.Ser = 0;
-        _this.LnkCode = "";
-        _this.GLAccountCode = "";
-        _this.Acc_DescA = "";
-        _this.Acc_DescE = "";
-        _this.CC_Code = "";
-        _this.GSt_DescA = "";
-        _this.GSt_DescE = "";
-        _this.GLAcc_DescA = "";
-        _this.GLAcc_DescE = "";
-        return _this;
-    }
-    return GQ_GetLnkVarBranch;
-}(SecurityClass));
-var I_VW_GetCompStatus = /** @class */ (function (_super) {
-    __extends(I_VW_GetCompStatus, _super);
-    function I_VW_GetCompStatus() {
-        var _this = _super.call(this) || this;
-        _this.CompCode = 0;
-        _this.AddAble = false;
-        _this.Editable = false;
-        _this.CompStatus = 0;
-        _this.LoginMsg;
-        _this.LastDate = "";
-        _this.FirstDate = "";
-        _this.INV_STATUS = 0;
-        _this.ACC_STATUS = 0;
-        _this.ProfitAcc_Code = "";
-        _this.OpenAccVoucheNo = 0;
-        _this.OpenInvAdjNo = 0;
-        return _this;
-    }
-    return I_VW_GetCompStatus;
 }(SecurityClass));
 var G_COMPANY = /** @class */ (function (_super) {
     __extends(G_COMPANY, _super);
@@ -961,25 +828,93 @@ var G_Nationality = /** @class */ (function (_super) {
     }
     return G_Nationality;
 }(SecurityClass));
-var A_RecPay_D_Group = /** @class */ (function (_super) {
-    __extends(A_RecPay_D_Group, _super);
-    function A_RecPay_D_Group() {
+var I_VW_GetCompStatus = /** @class */ (function (_super) {
+    __extends(I_VW_GetCompStatus, _super);
+    function I_VW_GetCompStatus() {
         var _this = _super.call(this) || this;
-        _this.GroupID = 0;
-        _this.AccountType = 0;
         _this.CompCode = 0;
-        _this.GroupCode = "";
-        _this.Group_DescA = "";
-        _this.Group_DescE = "";
-        _this.Remarks = "";
-        _this.CreatedAt = "";
-        _this.CreatedBy = "";
-        _this.UpdatedAt = "";
-        _this.UpdatedBy = "";
-        _this.StatusFlag = "";
+        _this.AddAble = false;
+        _this.Editable = false;
+        _this.CompStatus = 0;
+        _this.LoginMsg;
+        _this.LastDate = "";
+        _this.FirstDate = "";
+        _this.INV_STATUS = 0;
+        _this.ACC_STATUS = 0;
+        _this.ProfitAcc_Code = "";
+        _this.OpenAccVoucheNo = 0;
+        _this.OpenInvAdjNo = 0;
         return _this;
     }
-    return A_RecPay_D_Group;
+    return I_VW_GetCompStatus;
+}(SecurityClass));
+var Customer = /** @class */ (function (_super) {
+    __extends(Customer, _super);
+    function Customer() {
+        var _this = _super.call(this) || this;
+        _this.CustomerId = 0;
+        _this.CustomerCODE = "";
+        _this.CatID = 0;
+        _this.GroupId = 0;
+        _this.NAMEA = "";
+        _this.NAMEE = "";
+        _this.SHORTNAME = "";
+        _this.TEL = "";
+        _this.FAX = "";
+        _this.EMAIL = "";
+        _this.CURCODE = "";
+        _this.REMARKS = "";
+        _this.STATUS = false;
+        _this.MOBILE = "";
+        _this.Bank = "";
+        _this.AccountNo = "";
+        _this.ManagerName = "";
+        _this.NationalityID = 0;
+        _this.BranchCode = 0;
+        _this.CompCode = 0;
+        _this.CREATED_BY = "";
+        _this.CREATED_AT = "";
+        _this.UPDATED_AT = "";
+        _this.UPDATED_BY = "";
+        _this.Employer = "";
+        _this.JobName = "";
+        _this.WorkTel = "";
+        _this.WorkAddress = "";
+        _this.VATType = 0;
+        _this.AddDedType = 0;
+        _this.AddDedNo = "";
+        _this.VatNo = "";
+        _this.Isactive = false;
+        _this.IsAuthorized = false;
+        _this.CreditLimit = 0;
+        _this.CreditLimitFC = 0;
+        _this.CreditPeriod = 0;
+        _this.OpenBalanceFC = 0;
+        _this.Openbalance = 0;
+        _this.Debit = 0;
+        _this.DebitFC = 0;
+        _this.Credit = 0;
+        _this.CreditFC = 0;
+        _this.PaymentType = 0;
+        _this.FCRate = 0;
+        _this.CreditExpiryDate = "";
+        _this.RefCode2 = "";
+        _this.RefCode1 = "";
+        _this.IsCreditCustomer = false;
+        _this.DiscountplanID = 0;
+        _this.SalesmanId = 0;
+        _this.Address_postal = "";
+        _this.Address_Province = "";
+        _this.GroupVatNo = "";
+        _this.Address_Street = "";
+        _this.Address_Str_Additional = "";
+        _this.Address_BuildingNo = "";
+        _this.Address_Build_Additional = "";
+        _this.Address_City = "";
+        _this.Address_District = "";
+        return _this;
+    }
+    return Customer;
 }(SecurityClass));
 var Sls_Ivoice = /** @class */ (function (_super) {
     __extends(Sls_Ivoice, _super);
@@ -1130,113 +1065,25 @@ var Sls_InvoiceDetail = /** @class */ (function (_super) {
     }
     return Sls_InvoiceDetail;
 }(SecurityClass));
-var I_D_Category = /** @class */ (function (_super) {
-    __extends(I_D_Category, _super);
-    function I_D_Category() {
+var Items = /** @class */ (function (_super) {
+    __extends(Items, _super);
+    function Items() {
         var _this = _super.call(this) || this;
-        _this.CatID = 0;
-        _this.CompCode = 0;
-        _this.CatCode = "";
-        _this.DescA = "";
-        _this.DescL = "";
-        _this.ParentCatId = 0;
-        _this.CatLevel = 0;
-        _this.IsDetail = false;
-        _this.UnitGrpID = 0;
-        _this.IsAutoGenerateItem = false;
-        _this.ItemFormatFix = "";
-        _this.ItemFormatSerial = "";
-        _this.ItemTypeID = 0;
-        _this.CostMethodID = 0;
-        _this.StockMethodID = 0;
-        _this.IssueFromCenteralStore = false;
-        _this.CenteralStoreCode = 0;
-        _this.IsAdditionalSpecs = false;
-        _this.AdditionalspcsDescA = "";
-        _this.AdditionalspcsDescL = "";
-        _this.ISSales = false;
-        _this.IsStock = false;
-        _this.IsProduct = false;
-        _this.IsIssuetoCC = false;
-        _this.IsIssueToProd = false;
-        _this.IsPurchase = false;
-        _this.Remarks = "";
-        _this.CreatedAt = "";
-        _this.CreatedBy = "";
-        _this.UpdatedAt = "";
-        _this.UpdatedBy = "";
-        _this.VatNatID = 0;
-        _this.StatusFlag = "";
-        return _this;
-    }
-    return I_D_Category;
-}(SecurityClass));
-var I_Item = /** @class */ (function (_super) {
-    __extends(I_Item, _super);
-    function I_Item() {
-        var _this = _super.call(this) || this;
+        _this.StatusCode = 0;
         _this.ItemID = 0;
-        _this.ItemCode = "";
-        _this.CompCode = 0;
-        _this.DescA = "";
-        _this.DescL = "";
-        _this.TechDescA = "";
-        _this.TechDescL = "";
-        _this.UnitGrpID = 0;
-        _this.UomID = 0;
-        _this.ItemFamilyID = 0;
-        _this.RefItemCode = "";
-        _this.OldItemCode = "";
-        _this.VndItemCode = "";
-        _this.BarCode1 = "";
-        _this.BarCode2 = "";
-        _this.FirstEntryDate = "";
-        _this.Remarks = "";
-        _this.CreatedAt = "";
-        _this.CreatedBy = "";
-        _this.UpdatedAt = "";
-        _this.UpdatedBy = "";
-        _this.LastBarCodeSeq = 0;
-        _this.BarCodePrefix = "";
-        _this.FirstYear = 0;
-        _this.CatID = 0;
-        _this.OnhandQty = 0;
-        _this.FirstYear = 0;
+        _this.codeType = "";
+        _this.parentCode = "";
+        _this.itemCode = "";
+        _this.codeName = "";
+        _this.activeFrom = "";
+        _this.activeTo = "";
+        _this.description = "";
+        _this.UnitCode = "";
+        _this.StatusCode = 0;
         _this.StatusFlag = "";
         return _this;
     }
-    return I_Item;
-}(SecurityClass));
-var I_ItemFamily = /** @class */ (function (_super) {
-    __extends(I_ItemFamily, _super);
-    function I_ItemFamily() {
-        var _this = _super.call(this) || this;
-        _this.ItemFamilyID = 0;
-        _this.FamilyCode = "";
-        _this.CompCode = 0;
-        _this.DescA = "";
-        _this.DescL = "";
-        _this.TechDescA = "";
-        _this.TechDescL = "";
-        _this.CatID = 0;
-        _this.ItemTypeID = 0;
-        _this.RefItemCode = "";
-        _this.BarCode1 = "";
-        _this.FirstEntryDate = "";
-        _this.UnitPrice = 0;
-        _this.StarGlobalCost = 0;
-        _this.GlobalCost = 0;
-        _this.Remarks = "";
-        _this.CreatedAt = "";
-        _this.CreatedBy = "";
-        _this.UpdatedAt = "";
-        _this.UpdatedBy = "";
-        _this.LastBarCodeSeq = 0;
-        _this.BarCodePrefix = "";
-        _this.StatusFlag = "";
-        return _this;
-    }
-    return I_ItemFamily;
+    return Items;
 }(SecurityClass));
 var I_D_UOM = /** @class */ (function () {
     function I_D_UOM() {

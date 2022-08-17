@@ -110,19 +110,8 @@ class SlsInvoiceMasterDetails extends SecurityClass {
         this.Sls_InvoiceDetail = new Array<Sls_InvoiceDetail>();
     }
     public Sls_Ivoice: Sls_Ivoice;
-    public Sls_InvoiceDetail: Array<Sls_InvoiceDetail>;
-
-
-}
-class Customcustomer extends SecurityClass {
-    constructor() {
-        super();
-        this.Customer = new Customer();                        
-    }
-    public Customer: Customer;
-
-
-}
+    public Sls_InvoiceDetail: Array<Sls_InvoiceDetail>;         
+}          
 
 abstract class EntityContext {
     public RowIndex: number;
@@ -375,219 +364,7 @@ class G_BRANCH extends SecurityClass {
     public RetailInvoicePayment: number;
     public WholeInvoicePayment: number;
     public ServiceInvoiceTransCode: number;
-}
-class G_LnkVarBranch extends SecurityClass {
-    constructor() {
-        super();
-        this.CompCode = 0;
-        this.BraCode = 0;
-        this.Lnktype = "";
-        this.Ser = 0;
-        this.LnkCode = "";
-        this.GLAccountCode = "";
-        this.CC_Code = "";
-    }
-    public CompCode: number;
-    public BraCode: number;
-    public Lnktype: string;
-    public Ser: number;
-    public LnkCode: string;
-    public GLAccountCode: string;
-    public CC_Code: string;
-
-}
-
-class Customer extends SecurityClass {
-    constructor() {
-        super();
-        this.CustomerId = 0;
-        this.CustomerCODE = "";
-        this.CatID = 0;
-        this.GroupId = 0;
-        this.NAMEA = "";
-        this.NAMEE = "";
-        this.SHORTNAME = "";
-        this.TEL = "";
-        this.FAX = "";
-        this.EMAIL = "";
-        this.CURCODE = "";
-        this.REMARKS = "";
-        this.STATUS = false;
-        this.MOBILE = "";
-        this.Bank = "";
-        this.AccountNo = "";
-        this.ManagerName = "";
-        this.NationalityID = 0;
-        this.BranchCode = 0;
-        this.CompCode = 0;
-        this.CREATED_BY = "";
-        this.CREATED_AT = "";
-        this.UPDATED_AT = "";
-        this.UPDATED_BY = "";
-        this.Employer = "";
-        this.JobName = "";
-        this.WorkTel = "";
-        this.WorkAddress = "";
-        this.VATType = 0;
-        this.AddDedType = 0;
-        this.AddDedNo = "";
-        this.VatNo = "";
-        this.Isactive = false;
-        this.IsAuthorized = false;
-        this.CreditLimit = 0;
-        this.CreditLimitFC = 0;
-        this.CreditPeriod = 0;
-        this.OpenBalanceFC = 0;
-        this.Openbalance = 0;
-        this.Debit = 0;
-        this.DebitFC = 0;
-        this.Credit = 0;
-        this.CreditFC = 0;
-        this.PaymentType = 0;
-        this.FCRate = 0;
-        this.CreditExpiryDate = "";
-        this.RefCode2 = "";
-        this.RefCode1 = "";
-        this.IsCreditCustomer = false;
-        this.DiscountplanID = 0;
-        this.SalesmanId = 0;
-        this.Address_postal = "";
-        this.Address_Province = "";
-        this.GroupVatNo = "";
-        this.Address_Street = "";
-        this.Address_Str_Additional = "";
-        this.Address_BuildingNo = "";
-        this.Address_Build_Additional = "";
-        this.Address_City = "";
-        this.Address_District = "";
-    }
-    public CustomerId: number;
-    public CustomerCODE: string;
-    public CatID: number;
-    public GroupId: number;
-    public NAMEA: string;
-    public NAMEE: string;
-    public SHORTNAME: string;
-    public TEL: string;
-    public FAX: string;
-    public EMAIL: string;
-    public CURCODE: string;
-    public REMARKS: string;
-    public STATUS: boolean;
-    public MOBILE: string;
-    public Bank: string;
-    public AccountNo: string;
-    public ManagerName: string;
-    public NationalityID: number;
-    public BranchCode: number;
-    public CompCode: number;
-    public CREATED_BY: string;
-    public CREATED_AT: string;
-    public UPDATED_AT: string;
-    public UPDATED_BY: string;
-    public Employer: string;
-    public JobName: string;
-    public WorkTel: string;
-    public WorkAddress: string;
-    public VATType: number;
-    public AddDedType: number;
-    public AddDedNo: string;
-    public VatNo: string;
-    public Isactive: boolean;
-    public IsAuthorized: boolean;
-    public CreditLimit: number;
-    public CreditLimitFC: number;
-    public CreditPeriod: number;
-    public OpenBalanceFC: number;
-    public Openbalance: number;
-    public Debit: number;
-    public DebitFC: number;
-    public Credit: number;
-    public CreditFC: number;
-    public PaymentType: number;
-    public FCRate: number;
-    public CreditExpiryDate: string;
-    public RefCode2: string;
-    public RefCode1: string;
-    public IsCreditCustomer: boolean;
-    public DiscountplanID: number;
-    public SalesmanId: number;
-    public Address_postal: string;
-    public Address_Province: string;
-    public GroupVatNo: string;
-    public Address_Street: string;
-    public Address_Str_Additional: string;
-    public Address_BuildingNo: string;
-    public Address_Build_Additional: string;
-    public Address_City: string;
-    public Address_District: string;
-}
-class GQ_GetLnkVarBranch extends SecurityClass {
-    constructor() {
-        super();
-        this.CompCode = 0;
-        this.BraCode = 0;
-        this.Lnktype = "";
-        this.Ser = 0;
-        this.LnkCode = "";
-        this.GLAccountCode = "";
-        this.Acc_DescA = "";
-        this.Acc_DescE = "";
-        this.CC_Code = "";
-        this.GSt_DescA = "";
-        this.GSt_DescE = "";
-        this.GLAcc_DescA = "";
-        this.GLAcc_DescE = "";
-
-
-    }
-    public CompCode: number;
-    public BraCode: number;
-    public Lnktype: string;
-    public Ser: number;
-    public LnkCode: string;
-    public GLAccountCode: string;
-    public Acc_DescA: string;
-    public Acc_DescE: string;
-    public CC_Code: string;
-    public GSt_DescA: string;
-    public GSt_DescE: string;
-    public GLAcc_DescA: string;
-    public GLAcc_DescE: string;
-
-}
-       
-class I_VW_GetCompStatus extends SecurityClass {
-    constructor() {
-        super();
-        this.CompCode = 0;
-        this.AddAble = false;
-        this.Editable = false;
-        this.CompStatus = 0;
-        this.LoginMsg;
-        this.LastDate = "";
-        this.FirstDate = "";
-        this.INV_STATUS = 0;
-        this.ACC_STATUS = 0;
-        this.ProfitAcc_Code = "";
-        this.OpenAccVoucheNo = 0;
-        this.OpenInvAdjNo = 0;
-    }
-    public CompCode: number;
-    public AddAble: boolean;
-    public Editable: boolean;
-    public CompStatus: number;
-    public LoginMsg: any;
-    public FIN_YEAR: number;
-    public ACC_STATUS: number;
-    public INV_STATUS: number;
-    public FirstDate: string;
-    public LastDate: string;
-    public ProfitAcc_Code: string;
-    public OpenAccVoucheNo: number;
-    public OpenInvAdjNo: number;
-}
-
+}      
 
 class G_COMPANY extends SecurityClass {
     constructor() {
@@ -1557,36 +1334,161 @@ class G_Nationality extends SecurityClass {
     public StatusFlag: string;
 }        
 
-
-class A_RecPay_D_Group extends SecurityClass {
+class I_VW_GetCompStatus extends SecurityClass {
     constructor() {
         super();
-        this.GroupID = 0;
-        this.AccountType = 0;
         this.CompCode = 0;
-        this.GroupCode = "";
-        this.Group_DescA = "";
-        this.Group_DescE = "";
-        this.Remarks = "";
-        this.CreatedAt = "";
-        this.CreatedBy = "";
-        this.UpdatedAt = "";
-        this.UpdatedBy = "";
-        this.StatusFlag = "";
+        this.AddAble = false;
+        this.Editable = false;
+        this.CompStatus = 0;
+        this.LoginMsg;
+        this.LastDate = "";
+        this.FirstDate = "";
+        this.INV_STATUS = 0;
+        this.ACC_STATUS = 0;
+        this.ProfitAcc_Code = "";
+        this.OpenAccVoucheNo = 0;
+        this.OpenInvAdjNo = 0;
     }
-    public GroupID: number;
-    public AccountType: number;
     public CompCode: number;
-    public GroupCode: string;
-    public Group_DescA: string;
-    public Group_DescE: string;
-    public Remarks: string;
-    public CreatedAt: string;
-    public CreatedBy: string;
-    public UpdatedAt: string;
-    public UpdatedBy: string;
-    public StatusFlag: string;
+    public AddAble: boolean;
+    public Editable: boolean;
+    public CompStatus: number;
+    public LoginMsg: any;
+    public FIN_YEAR: number;
+    public ACC_STATUS: number;
+    public INV_STATUS: number;
+    public FirstDate: string;
+    public LastDate: string;
+    public ProfitAcc_Code: string;
+    public OpenAccVoucheNo: number;
+    public OpenInvAdjNo: number;
 }
+class Customer extends SecurityClass {
+    constructor() {
+        super();
+        this.CustomerId = 0;
+        this.CustomerCODE = "";
+        this.CatID = 0;
+        this.GroupId = 0;
+        this.NAMEA = "";
+        this.NAMEE = "";
+        this.SHORTNAME = "";
+        this.TEL = "";
+        this.FAX = "";
+        this.EMAIL = "";
+        this.CURCODE = "";
+        this.REMARKS = "";
+        this.STATUS = false;
+        this.MOBILE = "";
+        this.Bank = "";
+        this.AccountNo = "";
+        this.ManagerName = "";
+        this.NationalityID = 0;
+        this.BranchCode = 0;
+        this.CompCode = 0;
+        this.CREATED_BY = "";
+        this.CREATED_AT = "";
+        this.UPDATED_AT = "";
+        this.UPDATED_BY = "";
+        this.Employer = "";
+        this.JobName = "";
+        this.WorkTel = "";
+        this.WorkAddress = "";
+        this.VATType = 0;
+        this.AddDedType = 0;
+        this.AddDedNo = "";
+        this.VatNo = "";
+        this.Isactive = false;
+        this.IsAuthorized = false;
+        this.CreditLimit = 0;
+        this.CreditLimitFC = 0;
+        this.CreditPeriod = 0;
+        this.OpenBalanceFC = 0;
+        this.Openbalance = 0;
+        this.Debit = 0;
+        this.DebitFC = 0;
+        this.Credit = 0;
+        this.CreditFC = 0;
+        this.PaymentType = 0;
+        this.FCRate = 0;
+        this.CreditExpiryDate = "";
+        this.RefCode2 = "";
+        this.RefCode1 = "";
+        this.IsCreditCustomer = false;
+        this.DiscountplanID = 0;
+        this.SalesmanId = 0;
+        this.Address_postal = "";
+        this.Address_Province = "";
+        this.GroupVatNo = "";
+        this.Address_Street = "";
+        this.Address_Str_Additional = "";
+        this.Address_BuildingNo = "";
+        this.Address_Build_Additional = "";
+        this.Address_City = "";
+        this.Address_District = "";
+    }
+    public CustomerId: number;
+    public CustomerCODE: string;
+    public CatID: number;
+    public GroupId: number;
+    public NAMEA: string;
+    public NAMEE: string;
+    public SHORTNAME: string;
+    public TEL: string;
+    public FAX: string;
+    public EMAIL: string;
+    public CURCODE: string;
+    public REMARKS: string;
+    public STATUS: boolean;
+    public MOBILE: string;
+    public Bank: string;
+    public AccountNo: string;
+    public ManagerName: string;
+    public NationalityID: number;
+    public BranchCode: number;
+    public CompCode: number;
+    public CREATED_BY: string;
+    public CREATED_AT: string;
+    public UPDATED_AT: string;
+    public UPDATED_BY: string;
+    public Employer: string;
+    public JobName: string;
+    public WorkTel: string;
+    public WorkAddress: string;
+    public VATType: number;
+    public AddDedType: number;
+    public AddDedNo: string;
+    public VatNo: string;
+    public Isactive: boolean;
+    public IsAuthorized: boolean;
+    public CreditLimit: number;
+    public CreditLimitFC: number;
+    public CreditPeriod: number;
+    public OpenBalanceFC: number;
+    public Openbalance: number;
+    public Debit: number;
+    public DebitFC: number;
+    public Credit: number;
+    public CreditFC: number;
+    public PaymentType: number;
+    public FCRate: number;
+    public CreditExpiryDate: string;
+    public RefCode2: string;
+    public RefCode1: string;
+    public IsCreditCustomer: boolean;
+    public DiscountplanID: number;
+    public SalesmanId: number;
+    public Address_postal: string;
+    public Address_Province: string;
+    public GroupVatNo: string;
+    public Address_Street: string;
+    public Address_Str_Additional: string;
+    public Address_BuildingNo: string;
+    public Address_Build_Additional: string;
+    public Address_City: string;
+    public Address_District: string;
+}   
 class Sls_Ivoice extends SecurityClass {
     constructor() {
         super();
@@ -1756,7 +1658,6 @@ class Sls_Ivoice extends SecurityClass {
     public ItemVatTotal: number;
     public RoundingAmount: number;
 }
-
 class Sls_InvoiceDetail extends SecurityClass {
     constructor() {
         super();
@@ -1864,192 +1765,35 @@ class Sls_InvoiceDetail extends SecurityClass {
     public OnhandQty: number;
     public StatusFlag: string;
     public Itemdesc: string;
-}
-class I_D_Category extends SecurityClass {
-    constructor() {
-        super();
-        this.CatID = 0;
-        this.CompCode = 0;
-        this.CatCode = "";
-        this.DescA = "";
-        this.DescL = "";
-        this.ParentCatId = 0;
-        this.CatLevel = 0;
-        this.IsDetail = false;
-        this.UnitGrpID = 0;
-        this.IsAutoGenerateItem = false;
-        this.ItemFormatFix = "";
-        this.ItemFormatSerial = "";
-        this.ItemTypeID = 0;
-        this.CostMethodID = 0;
-        this.StockMethodID = 0;
-        this.IssueFromCenteralStore = false;
-        this.CenteralStoreCode = 0;
-        this.IsAdditionalSpecs = false;
-        this.AdditionalspcsDescA = "";
-        this.AdditionalspcsDescL = "";
-        this.ISSales = false;
-        this.IsStock = false;
-        this.IsProduct = false;
-        this.IsIssuetoCC = false;
-        this.IsIssueToProd = false;
-        this.IsPurchase = false;
-        this.Remarks = "";
-        this.CreatedAt = "";
-        this.CreatedBy = "";
-        this.UpdatedAt = "";
-        this.UpdatedBy = "";
-        this.VatNatID = 0;
-        this.StatusFlag = "";
-
-    }
-    public CatID: number;
-    public CompCode: number;
-    public CatCode: string;
-    public DescA: string;
-    public DescL: string;
-    public ParentCatId: number;
-    public CatLevel: number;
-    public IsDetail: boolean;
-    public UnitGrpID: number;
-    public IsAutoGenerateItem: boolean;
-    public ItemFormatFix: string;
-    public ItemFormatSerial: string;
-    public ItemTypeID: number;
-    public CostMethodID: number;
-    public StockMethodID: number;
-    public IssueFromCenteralStore: boolean;
-    public CenteralStoreCode: number;
-    public IsAdditionalSpecs: boolean;
-    public AdditionalspcsDescA: string;
-    public AdditionalspcsDescL: string;
-    public ISSales: boolean;
-    public IsStock: boolean;
-    public IsProduct: boolean;
-    public IsIssuetoCC: boolean;
-    public IsIssueToProd: boolean;
-    public IsPurchase: boolean;
-    public Remarks: string;
-    public CreatedAt: string;
-    public CreatedBy: string;
-    public UpdatedAt: string;
-    public UpdatedBy: string;
-    public VatNatID: number;
-    public StatusFlag: string;
-}
-class I_Item extends SecurityClass {
+}  
+class Items extends SecurityClass {
     constructor() {
         super();
         this.ItemID = 0;
-        this.ItemCode = "";
-        this.CompCode = 0;
-        this.DescA = "";
-        this.DescL = "";
-        this.TechDescA = "";
-        this.TechDescL = "";
-        this.UnitGrpID = 0;
-        this.UomID = 0;
-        this.ItemFamilyID = 0;
-        this.RefItemCode = "";
-        this.OldItemCode = "";
-        this.VndItemCode = "";
-        this.BarCode1 = "";
-        this.BarCode2 = "";
-        this.FirstEntryDate = "";
-        this.Remarks = "";
-        this.CreatedAt = "";
-        this.CreatedBy = "";
-        this.UpdatedAt = "";
-        this.UpdatedBy = "";
-        this.LastBarCodeSeq = 0;
-        this.BarCodePrefix = "";
-        this.FirstYear = 0;
-        this.CatID = 0;
-        this.OnhandQty = 0;
-        this.FirstYear = 0;
+        this.codeType = "";
+        this.parentCode = "";
+        this.itemCode = "";
+        this.codeName = "";    
+        this.activeFrom = "";    
+        this.activeTo = "";    
+        this.description = "";    
+        this.UnitCode = "";    
+        this.StatusCode = 0;   
         this.StatusFlag = "";
     }
     public ItemID: number;
-    public ItemCode: string;
-    public CompCode: number;
-    public DescA: string;
-    public DescL: string;
-    public TechDescA: string;
-    public TechDescL: string;
-    public UnitGrpID: number;
-    public UomID: number;
-    public ItemFamilyID: number;
-    public RefItemCode: string;
-    public OldItemCode: string;
-    public VndItemCode: string;
-    public BarCode1: string;
-    public BarCode2: string;
-    public FirstEntryDate: string;
-    public Remarks: string;
-    public CreatedAt: string;
-    public CreatedBy: string;
-    public UpdatedAt: string;
-    public UpdatedBy: string;
-    public LastBarCodeSeq: number;
-    public BarCodePrefix: string;
-    public FirstYear: number;
-    public CatID: number;
-    public OnhandQty: number;
+    public codeType: string;
+    public parentCode: string;
+    public itemCode: string;
+    public codeName: string;
+    public codeNameAr: string;  
+    public activeFrom: string; 
+    public activeTo: string; 
+    public description: string; 
+    public UnitCode: string; 
+    public StatusCode = 0;  
     public StatusFlag: string;
-}
-
-class I_ItemFamily extends SecurityClass {
-    constructor() {
-        super();
-        this.ItemFamilyID = 0;
-        this.FamilyCode = "";
-        this.CompCode = 0;
-        this.DescA = "";
-        this.DescL = "";
-        this.TechDescA = "";
-        this.TechDescL = "";
-        this.CatID = 0;
-        this.ItemTypeID = 0;
-        this.RefItemCode = "";
-        this.BarCode1 = "";
-        this.FirstEntryDate = "";
-        this.UnitPrice = 0;
-        this.StarGlobalCost = 0;
-        this.GlobalCost = 0;
-        this.Remarks = "";
-        this.CreatedAt = "";
-        this.CreatedBy = "";
-        this.UpdatedAt = "";
-        this.UpdatedBy = "";
-        this.LastBarCodeSeq = 0;
-        this.BarCodePrefix = "";
-        this.StatusFlag = "";
-    }
-    public ItemFamilyID: number;
-    public FamilyCode: string;
-    public CompCode: number;
-    public DescA: string;
-    public DescL: string;
-    public TechDescA: string;
-    public TechDescL: string;
-    public CatID: number;
-    public ItemTypeID: number;
-    public RefItemCode: string;
-    public BarCode1: string;
-    public FirstEntryDate: string;
-    public UnitPrice: number;
-    public StarGlobalCost: number;
-    public GlobalCost: number;
-    public Remarks: string;
-    public CreatedAt: string;
-    public CreatedBy: string;
-    public UpdatedAt: string;
-    public UpdatedBy: string;
-    public LastBarCodeSeq: number;
-    public BarCodePrefix: string;
-    public StatusFlag: string;
-}
-
+}        
 
 class I_D_UOM {
     constructor() {

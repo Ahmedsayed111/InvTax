@@ -285,10 +285,10 @@ namespace Inv.API.Controllers
 
 
         [HttpPost, AllowAnonymous]
-        public IHttpActionResult GetCatItem(int CompCode)
+        public IHttpActionResult GetAllItem(int CompCode)
         {
             string CreatedAt = DateTime.Now.ToString();
-            var QUERY = "select * from I_D_Category where CompCode = "+ CompCode + "";
+            var QUERY = "select * from Items where CompCode = " + CompCode + "";
             var res = db.Database.ExecuteSqlCommand(QUERY);
             return Ok(new BaseResponse(res));
         }
