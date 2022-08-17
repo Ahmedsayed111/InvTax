@@ -178,6 +178,7 @@ class UserPrivilege {
 
 class SystemEnvironment {
 
+    public issuer: issuer;
     public I_Control: I_Control;
     public SystemCode: string;
     public SYSTEM_DESCE: string;

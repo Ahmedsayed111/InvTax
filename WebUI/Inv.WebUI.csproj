@@ -1048,6 +1048,7 @@
     <Content Include="Views\Customer\CustomerIndex.cshtml" />
     <Content Include="Views\Customer\TestIndex.cshtml" />
     <Content Include="Views\StockDef\StockDefIndex.cshtml" />
+    <Content Include="Views\Invoice\InvoiceTax.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1067,6 +1068,7 @@
     <TypeScriptCompile Include="ClientApp\EslamGrid.ts" />
     <TypeScriptCompile Include="ClientApp\App.ts" />
     <TypeScriptCompile Include="ClientApp\ClientGeneralTools.ts" />
+    <TypeScriptCompile Include="ClientApp\Invoice\InvoiceTax.ts" />
     <TypeScriptCompile Include="ClientApp\StockDef\StockDef.ts" />
     <TypeScriptCompile Include="ClientApp\Quotation\TestGrad.ts" />
     <TypeScriptCompile Include="ClientApp\Quotation\QuotationView.ts" />

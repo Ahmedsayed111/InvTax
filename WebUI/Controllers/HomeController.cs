@@ -100,8 +100,12 @@ namespace Inv.WebUI.Controllers
  
         public ActionResult QuotationIndex()
         {
-            return View("~/Views/Quotation/QuotationIndex.cshtml");
+            return View("~/Views/Invoice/InvoiceTax.cshtml");
         }
+        //  public ActionResult QuotationIndex()
+        //{
+        //    return View("~/Views/Quotation/QuotationIndex.cshtml");
+        //}
 
         public ActionResult QuotationViewIndex()
         {
