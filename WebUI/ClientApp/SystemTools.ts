@@ -15,6 +15,12 @@ class SystemTools {
         var apiUrl = $("#GetAPIUrl").val() + controller + "/" + action;
         return (apiUrl);
     }
+    public apiUrlCore() {
+
+
+        var apiUrl = $("#GetAPIUrlCore").val() + "WeatherForecast";
+        return (apiUrl);
+    }
 
     public getJsonData(model: any, type: string = ""): any {
 

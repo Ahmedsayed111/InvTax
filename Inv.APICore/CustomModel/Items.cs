@@ -7,14 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Inv.DAL.Domain
+namespace Inv.APICore.CustomModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Item
-    {
-        public int ItemID { get; set; }
+    public partial class ItemTax
+    { 
         public string codeType { get; set; }
         public string parentCode { get; set; }
         public string itemCode { get; set; }
@@ -23,7 +22,6 @@ namespace Inv.DAL.Domain
         public Nullable<System.DateTime> activeFrom { get; set; }
         public Nullable<System.DateTime> activeTo { get; set; }
         public string description { get; set; }
-        public string UnitCode { get; set; }
-        public Nullable<int> StatusCode { get; set; }
+        public string UnitCode { get; set; } 
     }
 }

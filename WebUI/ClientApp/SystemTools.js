@@ -9,6 +9,10 @@ var SystemTools = /** @class */ (function () {
         var apiUrl = $("#GetAPIUrl").val() + controller + "/" + action;
         return (apiUrl);
     };
+    SystemTools.prototype.apiUrlCore = function () {
+        var apiUrl = $("#GetAPIUrlCore").val() + "WeatherForecast";
+        return (apiUrl);
+    };
     SystemTools.prototype.getJsonData = function (model, type) {
         if (type === void 0) { type = ""; }
         switch (type) {

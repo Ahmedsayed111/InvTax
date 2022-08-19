@@ -1770,6 +1770,7 @@ class Items extends SecurityClass {
     constructor() {
         super();
         this.ItemID = 0;
+        this.CompCode = "";
         this.codeType = "";
         this.parentCode = "";
         this.itemCode = "";
@@ -1780,8 +1781,10 @@ class Items extends SecurityClass {
         this.UnitCode = "";    
         this.StatusCode = 0;   
         this.StatusFlag = "";
+        this.StatusItem = false;
     }
     public ItemID: number;
+    public CompCode: string;
     public codeType: string;
     public parentCode: string;
     public itemCode: string;
@@ -1793,6 +1796,7 @@ class Items extends SecurityClass {
     public UnitCode: string; 
     public StatusCode = 0;  
     public StatusFlag: string;
+    public StatusItem: boolean;
 }        
 
 class I_D_UOM {

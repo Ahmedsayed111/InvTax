@@ -29,7 +29,7 @@ namespace Inv.API.Controllers
             return response.Content.ToString();
         }
 
-        public static string CreateCode(List<Item> item){
+        public static string CreateCode(List<Items> item){
 
             I_Control I_Control_ = new I_Control();
             var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(I_Control_));

@@ -56,7 +56,35 @@ namespace Inv.APICore
             IRestResponse response = client.Execute(request);
             return response.Content.ToString();
         }
+        internal static string CreateTokin2()
+        {
+            //RestClient client = new RestClient();
+            //client = new RestClient(Taxcontrol.CreateTokinlDllUrl);
+            //var request = new RestRequest();
+            //request.Method = Method.POST;
+            //request.Timeout = -1;
+            //request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            //request.AddParameter("client_secret", "" + Taxcontrol.SecretIDProd + "");
+            //request.AddParameter("client_id", "" + Taxcontrol.ClientIDProd + "");
+            //request.AddParameter("scope", "InvoicingAPI");
+            //request.AddParameter("grant_type", "client_credentials");
+            //IRestResponse response = client.Execute(request);
+            //return response.Content.ToString();
 
+
+            var client = new RestClient("https://id.eta.gov.eg/connect/token");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddParameter("grant_type", "client_credentials");
+            request.AddParameter("client_id", "02496d7e-0312-4cd2-81d4-e332ff2ccfe7");
+            request.AddParameter("client_secret", "0ae25efc-2811-4492-b345-506de7018978");
+            //request.AddParameter("client_id", "" + Taxcontrol.ClientIDProd + "");
+            //request.AddParameter("client_secret", "" + Taxcontrol.SecretIDProd + "");
+            request.AddParameter("scope", "InvoicingAPI");
+            IRestResponse response = client.Execute(request);
+            return response.Content.ToString();
+        }
         internal static string sendinvoce(I_ControlTax Taxcontrol, int Optype, int InvoiceID)
         {
 

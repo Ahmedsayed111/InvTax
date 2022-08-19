@@ -749,6 +749,7 @@
             <PropertyRef Name="ItemID" />
           </Key>
           <Property Name="ItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompCode" Type="int" />
           <Property Name="codeType" Type="nvarchar" MaxLength="50" />
           <Property Name="parentCode" Type="nvarchar" MaxLength="200" />
           <Property Name="itemCode" Type="nvarchar" MaxLength="50" />
@@ -2099,22 +2100,6 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CompCode" Type="Int32" />
         </EntityType>
-        <EntityType Name="Item">
-          <Key>
-            <PropertyRef Name="ItemID" />
-          </Key>
-          <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="codeType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="parentCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="itemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="codeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="codeNameAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="activeFrom" Type="DateTime" Precision="3" />
-          <Property Name="activeTo" Type="DateTime" Precision="3" />
-          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UnitCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StatusCode" Type="Int32" />
-        </EntityType>
         <EntityType Name="receiver">
           <Key>
             <PropertyRef Name="receiverID" />
@@ -2403,7 +2388,6 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <EntitySet Name="G_USERS" EntityType="Self.G_USERS" />
           <EntitySet Name="I_D_UOM" EntityType="Self.I_D_UOM" />
           <EntitySet Name="issuers" EntityType="Self.issuer" />
-          <EntitySet Name="Items" EntityType="Self.Item" />
           <EntitySet Name="receivers" EntityType="Self.receiver" />
           <EntitySet Name="Salesmen" EntityType="Self.Salesman" />
           <EntitySet Name="Sls_Ivoice" EntityType="Self.Sls_Ivoice" />
@@ -2474,6 +2458,7 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <EntitySet Name="G_Currency" EntityType="TaxModel.G_Currency" />
           <EntitySet Name="Sls_InvoiceDetail" EntityType="TaxModel.Sls_InvoiceDetail" />
           <EntitySet Name="I_D_CURRENCY" EntityType="TaxModel.I_D_CURRENCY" />
+          <EntitySet Name="Items1" EntityType="TaxModel.Items" />
         </EntityContainer>
         <ComplexType Name="Prnt_Quotation_Result">
           <Property Type="Int32" Name="Comp" Nullable="true" />
@@ -2705,6 +2690,23 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <Property Name="SMALLSINGLEA" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SMALLDOUBLEA" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SMALLPRULARA" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Items">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompCode" Type="Int32" />
+          <Property Name="codeType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parentCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="itemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="codeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="codeNameAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="activeFrom" Type="DateTime" Precision="3" />
+          <Property Name="activeTo" Type="DateTime" Precision="3" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UnitCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusCode" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3354,23 +3356,6 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Items">
-            <EntityTypeMapping TypeName="TaxModel.Item">
-              <MappingFragment StoreEntitySet="Items">
-                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
-                <ScalarProperty Name="codeType" ColumnName="codeType" />
-                <ScalarProperty Name="parentCode" ColumnName="parentCode" />
-                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
-                <ScalarProperty Name="codeName" ColumnName="codeName" />
-                <ScalarProperty Name="codeNameAr" ColumnName="codeNameAr" />
-                <ScalarProperty Name="activeFrom" ColumnName="activeFrom" />
-                <ScalarProperty Name="activeTo" ColumnName="activeTo" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="UnitCode" ColumnName="UnitCode" />
-                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="receivers">
             <EntityTypeMapping TypeName="TaxModel.receiver">
               <MappingFragment StoreEntitySet="receiver">
@@ -3848,104 +3833,6 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
                 <ScalarProperty Name="DefPurVatType" ColumnName="DefPurVatType" />
                 <ScalarProperty Name="DefSlsVatType" ColumnName="DefSlsVatType" />
                 <ScalarProperty Name="CompCode" ColumnName="CompCode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="G_Currency">
-            <EntityTypeMapping TypeName="TaxModel.G_Currency">
-              <MappingFragment StoreEntitySet="G_Currency">
-                <ScalarProperty Name="CurPluralNameE" ColumnName="CurPluralNameE" />
-                <ScalarProperty Name="CurPluralNameA" ColumnName="CurPluralNameA" />
-                <ScalarProperty Name="CurSmallPluralNameE" ColumnName="CurSmallPluralNameE" />
-                <ScalarProperty Name="CurSmallPluralNameA" ColumnName="CurSmallPluralNameA" />
-                <ScalarProperty Name="CurSmallNameDoubleA" ColumnName="CurSmallNameDoubleA" />
-                <ScalarProperty Name="CurNameDoubleA" ColumnName="CurNameDoubleA" />
-                <ScalarProperty Name="ISSmallCurMale" ColumnName="ISSmallCurMale" />
-                <ScalarProperty Name="ISCurMale" ColumnName="ISCurMale" />
-                <ScalarProperty Name="CurSmallNameE" ColumnName="CurSmallNameE" />
-                <ScalarProperty Name="CurSmallNameA" ColumnName="CurSmallNameA" />
-                <ScalarProperty Name="CurNameE" ColumnName="CurNameE" />
-                <ScalarProperty Name="CurNameA" ColumnName="CurNameA" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="DescL" ColumnName="DescL" />
-                <ScalarProperty Name="DescA" ColumnName="DescA" />
-                <ScalarProperty Name="CurrencyCode" ColumnName="CurrencyCode" />
-                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Sls_InvoiceDetail">
-            <EntityTypeMapping TypeName="TaxModel.Sls_InvoiceDetail">
-              <MappingFragment StoreEntitySet="Sls_InvoiceDetail">
-                <ScalarProperty Name="unitValueID" ColumnName="unitValueID" />
-                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
-                <ScalarProperty Name="Itemdesc" ColumnName="Itemdesc" />
-                <ScalarProperty Name="NetUnitPriceWithVat" ColumnName="NetUnitPriceWithVat" />
-                <ScalarProperty Name="UnitpriceWithVat" ColumnName="UnitpriceWithVat" />
-                <ScalarProperty Name="VatNatID" ColumnName="VatNatID" />
-                <ScalarProperty Name="ChargeCode" ColumnName="ChargeCode" />
-                <ScalarProperty Name="ChargeReason" ColumnName="ChargeReason" />
-                <ScalarProperty Name="ChargeAfterVat" ColumnName="ChargeAfterVat" />
-                <ScalarProperty Name="ChargeVatPrc" ColumnName="ChargeVatPrc" />
-                <ScalarProperty Name="ChargeVatNatID" ColumnName="ChargeVatNatID" />
-                <ScalarProperty Name="ChargeBase" ColumnName="ChargeBase" />
-                <ScalarProperty Name="ChargePrc" ColumnName="ChargePrc" />
-                <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
-                <ScalarProperty Name="ItemNetAmount" ColumnName="ItemNetAmount" />
-                <ScalarProperty Name="DiscountCode" ColumnName="DiscountCode" />
-                <ScalarProperty Name="Discountreason" ColumnName="Discountreason" />
-                <ScalarProperty Name="DiscountVatNatID" ColumnName="DiscountVatNatID" />
-                <ScalarProperty Name="DiscountPrcBase" ColumnName="DiscountPrcBase" />
-                <ScalarProperty Name="BaseQtyDiscount" ColumnName="BaseQtyDiscount" />
-                <ScalarProperty Name="BaseQtyPrice" ColumnName="BaseQtyPrice" />
-                <ScalarProperty Name="BaseQtyUomid" ColumnName="BaseQtyUomid" />
-                <ScalarProperty Name="BaseQty" ColumnName="BaseQty" />
-                <ScalarProperty Name="AllowCode" ColumnName="AllowCode" />
-                <ScalarProperty Name="AllowReason" ColumnName="AllowReason" />
-                <ScalarProperty Name="AllowanceBase" ColumnName="AllowanceBase" />
-                <ScalarProperty Name="AllowancePrc" ColumnName="AllowancePrc" />
-                <ScalarProperty Name="AllowAmount" ColumnName="AllowAmount" />
-                <ScalarProperty Name="Serial" ColumnName="Serial" />
-                <ScalarProperty Name="TotRetQty" ColumnName="TotRetQty" />
-                <ScalarProperty Name="VatApplied" ColumnName="VatApplied" />
-                <ScalarProperty Name="StockUnitCost" ColumnName="StockUnitCost" />
-                <ScalarProperty Name="StockSoldQty" ColumnName="StockSoldQty" />
-                <ScalarProperty Name="NetAfterVat" ColumnName="NetAfterVat" />
-                <ScalarProperty Name="VatAmount" ColumnName="VatAmount" />
-                <ScalarProperty Name="VatPrc" ColumnName="VatPrc" />
-                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
-                <ScalarProperty Name="NetUnitPrice" ColumnName="NetUnitPrice" />
-                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
-                <ScalarProperty Name="DiscountPrc" ColumnName="DiscountPrc" />
-                <ScalarProperty Name="Unitprice" ColumnName="Unitprice" />
-                <ScalarProperty Name="SoldQty" ColumnName="SoldQty" />
-                <ScalarProperty Name="InvoiceSoldQty" ColumnName="InvoiceSoldQty" />
-                <ScalarProperty Name="UomID" ColumnName="UomID" />
-                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
-                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-                <ScalarProperty Name="InvoiceItemID" ColumnName="InvoiceItemID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="I_D_CURRENCY">
-            <EntityTypeMapping TypeName="TaxModel.I_D_CURRENCY">
-              <MappingFragment StoreEntitySet="I_D_CURRENCY">
-                <ScalarProperty Name="SMALLPRULARA" ColumnName="SMALLPRULARA" />
-                <ScalarProperty Name="SMALLDOUBLEA" ColumnName="SMALLDOUBLEA" />
-                <ScalarProperty Name="SMALLSINGLEA" ColumnName="SMALLSINGLEA" />
-                <ScalarProperty Name="CURPRULARA" ColumnName="CURPRULARA" />
-                <ScalarProperty Name="CURDOUBLEA" ColumnName="CURDOUBLEA" />
-                <ScalarProperty Name="CURSINGLEA" ColumnName="CURSINGLEA" />
-                <ScalarProperty Name="SMALLCURMALE" ColumnName="SMALLCURMALE" />
-                <ScalarProperty Name="CURMALE" ColumnName="CURMALE" />
-                <ScalarProperty Name="SMALLSINGLEE" ColumnName="SMALLSINGLEE" />
-                <ScalarProperty Name="CURSINGLEE" ColumnName="CURSINGLEE" />
-                <ScalarProperty Name="ACTUAL_DATE" ColumnName="ACTUAL_DATE" />
-                <ScalarProperty Name="FACTOR" ColumnName="FACTOR" />
-                <ScalarProperty Name="DESCL" ColumnName="DESCL" />
-                <ScalarProperty Name="DESCA" ColumnName="DESCA" />
-                <ScalarProperty Name="CUR_CODE" ColumnName="CUR_CODE" />
-                <ScalarProperty Name="COMP_CODE" ColumnName="COMP_CODE" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

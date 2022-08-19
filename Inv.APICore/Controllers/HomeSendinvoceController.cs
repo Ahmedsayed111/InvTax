@@ -28,6 +28,6 @@ namespace Inv.APICore.Controllers
             newI_ControlTax = HomeSendinvoce.GetControlTax(Comp); 
             string Result = HomeSendinvoce.sendinvoce(newI_ControlTax, Optype, InvoiceID); 
             return Result;
-        }
+        }  
     }
 }

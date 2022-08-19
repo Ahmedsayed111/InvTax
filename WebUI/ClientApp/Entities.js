@@ -1071,6 +1071,7 @@ var Items = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.StatusCode = 0;
         _this.ItemID = 0;
+        _this.CompCode = "";
         _this.codeType = "";
         _this.parentCode = "";
         _this.itemCode = "";
@@ -1081,6 +1082,7 @@ var Items = /** @class */ (function (_super) {
         _this.UnitCode = "";
         _this.StatusCode = 0;
         _this.StatusFlag = "";
+        _this.StatusItem = false;
         return _this;
     }
     return Items;
