@@ -12,11 +12,11 @@ namespace Inv.DAL.Domain
     using System;
     using System.Collections.Generic;
     
-    public partial class Items
+    public partial class Item
     {
         public int ItemID { get; set; }
-        public Nullable<int> CompCode { get; set; }
         public string codeType { get; set; }
+        public Nullable<int> CompCode { get; set; }
         public string parentCode { get; set; }
         public string itemCode { get; set; }
         public string codeName { get; set; }
