@@ -15,10 +15,10 @@ class SystemTools {
         var apiUrl = $("#GetAPIUrl").val() + controller + "/" + action;
         return (apiUrl);
     }
-    public apiUrlCore() {
+    public apiUrlCore(controller: string, action: string) {
 
 
-        var apiUrl = $("#GetAPIUrlCore").val() + "WeatherForecast";
+        var apiUrl = $("#GetAPIUrlCore").val() + controller + "/" + action;
         return (apiUrl);
     }
 
