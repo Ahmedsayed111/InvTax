@@ -144,6 +144,7 @@ var SlsInvoiceMasterDetails = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.Sls_Ivoice = new Sls_Ivoice();
         _this.Sls_InvoiceDetail = new Array();
+        _this.TaxableItem = new Array();
         return _this;
     }
     return SlsInvoiceMasterDetails;
@@ -1243,6 +1244,7 @@ var TaxableItem = /** @class */ (function () {
         this.amount = 0;
         this.subType = "";
         this.rate = 0;
+        this.InvoiceID = 0;
     }
     return TaxableItem;
 }());
