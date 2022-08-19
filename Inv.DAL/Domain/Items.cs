@@ -15,8 +15,8 @@ namespace Inv.DAL.Domain
     public partial class Items
     {
         public int ItemID { get; set; }
-        public Nullable<int> CompCode { get; set; }
         public string codeType { get; set; }
+        public Nullable<int> CompCode { get; set; }
         public string parentCode { get; set; }
         public string itemCode { get; set; }
         public string codeName { get; set; }

@@ -102,6 +102,9 @@
     <Compile Include="Domain\G_Currency.cs">
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Domain\G_Government.cs">
+      <DependentUpon>InvModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Domain\G_ModuleHelp.cs">
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
