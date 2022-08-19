@@ -19,5 +19,6 @@ namespace Inv.DAL.Domain
         public Nullable<decimal> amount { get; set; }
         public string subType { get; set; }
         public Nullable<decimal> rate { get; set; }
+        public Nullable<int> InvoiceID { get; set; }
     }
 }

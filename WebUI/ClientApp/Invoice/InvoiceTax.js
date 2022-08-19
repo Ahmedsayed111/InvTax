@@ -12,6 +12,8 @@ var InvoiceTax;
     var MasterDetailsModel = new SlsInvoiceMasterDetails();
     var CustomerDetail = new Array();
     var I_D_UOMDetails = new Array();
+    var I_D_CURRENCYDetails = new Array();
+    var G_CodesDetails = new Array();
     var CountGrid = 0;
     var compcode; //SharedSession.CurrentEnvironment.CompCode;
     var BranchCode; //SharedSession.CurrentEnvironment.CompCode;
@@ -24,6 +26,7 @@ var InvoiceTax;
     var invoiceID = 0;
     var txtDate;
     var txtRFQ;
+    var ddlTypeInv;
     var txtCompanysales;
     var txtCompanyname;
     var txtQutationNo;
@@ -36,16 +39,27 @@ var InvoiceTax;
     var txtNetBefore;
     var txtAllDiscount;
     var txtNetAfterVat;
+    var ddlCurreny;
+    var ddlValueTax;
+    var ddlTypeTax;
+    var ddlDisTax;
+    var ddlTypeDis;
+    var include = "";
+    var Tax;
+    var TaxType;
     var include = "";
     function InitalizeComponent() {
-        alert(SysSession.CurrentEnvironment.issuer.buildingNumber);
+        //alert(SysSession.CurrentEnvironment.issuer.buildingNumber)
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
         InitalizeControls();
         InitalizeEvents();
         FillddlUom();
         AddNewRow();
+        FillddlCurreny();
+        FillddlG_Codes();
         txtDate.value = GetDate();
+        ddlCurreny.value = "EGP";
     }
     InvoiceTax.InitalizeComponent = InitalizeComponent;
     function InitalizeControls() {
@@ -56,8 +70,14 @@ var InvoiceTax;
         btnClean = document.getElementById("btnClean");
         btnprint = document.getElementById("btnprint");
         // inputs
+        ddlCurreny = document.getElementById("ddlCurreny");
+        ddlValueTax = document.getElementById("ddlValueTax");
+        ddlTypeTax = document.getElementById("ddlTypeTax");
+        ddlDisTax = document.getElementById("ddlDisTax");
+        ddlTypeDis = document.getElementById("ddlTypeDis");
         txtDate = document.getElementById("txtDate");
         txtRFQ = document.getElementById("txtRFQ");
+        ddlTypeInv = document.getElementById("ddlTypeInv");
         txtCompanysales = document.getElementById("txtCompanysales");
         txtCompanyname = document.getElementById("txtCompanyname");
         txtQutationNo = document.getElementById("txtQutationNo");
@@ -78,6 +98,69 @@ var InvoiceTax;
         btnClean.onclick = success_insert;
         txtAllDiscount.onkeyup = computeTotal;
         //btnprint.onclick = btnprint_onclick;
+        ddlValueTax.onchange = ddlValueTax_onchange;
+        ddlDisTax.onchange = ddlDisTax_onchange;
+    }
+    function ddlDisTax_onchange() {
+        var DisTax = ddlDisTax.value;
+        var TaxT1 = TaxType.filter(function (x) { return x.StdCode == DisTax; });
+        $('#ddlTypeDis').html('');
+        for (var i = 0; i < TaxT1.length; i++) {
+            $('#ddlTypeDis').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+        }
+        if (ddlDisTax.value == 'null') {
+            $('#ddlTypeDis').append('<option value="null"> Choose Tax </option>');
+        }
+    }
+    function ddlValueTax_onchange() {
+        var ValueTax = ddlValueTax.value;
+        var TaxT1 = TaxType.filter(function (x) { return x.StdCode == ValueTax; });
+        $('#ddlTypeTax').html('');
+        for (var i = 0; i < TaxT1.length; i++) {
+            $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+        }
+    }
+    function FillddlCurreny() {
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("SlsTrSales", "GetAllCurreny"),
+            success: function (d) {
+                var result = d;
+                if (result.IsSuccess) {
+                    I_D_CURRENCYDetails = result.Response;
+                    DocumentActions.FillCombowithdefult(I_D_CURRENCYDetails, ddlCurreny, "CUR_CODE", "DESCA", "Choose Currency");
+                }
+            }
+        });
+    }
+    function FillddlG_Codes() {
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("SlsTrSales", "GetAllG_Codes"),
+            success: function (d) {
+                var result = d;
+                if (result.IsSuccess) {
+                    G_CodesDetails = result.Response;
+                    Tax = G_CodesDetails.filter(function (x) { return x.CodeType == 'Taxtypes'; });
+                    TaxType = G_CodesDetails.filter(function (x) { return x.CodeType == 'TaxSubtypes'; });
+                    var TaxT1 = TaxType.filter(function (x) { return x.StdCode == 'T1'; });
+                    $('#ddlValueTax').html('');
+                    $('#ddlTypeTax').html('');
+                    for (var i = 0; i < Tax.length; i++) {
+                        $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+                        $('#ddlDisTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+                    }
+                    for (var i = 0; i < TaxType.length; i++) {
+                        $('#ddlTypeDis').append('<option   value="' + TaxType[i].SubCode + '">' + TaxType[i].DescA + '</option>');
+                    }
+                    for (var i = 0; i < TaxT1.length; i++) {
+                        $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+                    }
+                    $('#ddlValueTax').val('T1');
+                    $('#ddlTypeTax').val('V009');
+                }
+            }
+        });
     }
     function FillddlUom() {
         Ajax.Callsync({
@@ -125,7 +208,6 @@ var InvoiceTax;
         $("#Table_Data").append(html);
         debugger;
         for (var i = 0; i < I_D_UOMDetails.length; i++) {
-            debugger;
             $('#ddlTypeUom' + cnt + '').append('<option  value="' + I_D_UOMDetails[i].UomID + '">' + I_D_UOMDetails[i].DescE + '</option>');
         }
         $("#UnitPrice" + cnt).on('keyup', function (e) {
@@ -253,11 +335,13 @@ var InvoiceTax;
         InvoiceModel.TrNo = InvoiceNumber;
         InvoiceModel.CreatedAt = DateTimeFormat(Date().toString());
         InvoiceModel.CreatedBy = sys.SysSession.CurrentEnvironment.UserCode;
-        InvoiceModel.TrType = 0; //0 invoice 1 return     
+        InvoiceModel.TrType = 1; //0 invoice 1 return     
         InvoiceModel.InvoiceID = 0;
         InvoiceModel.TrDate = txtDate.value;
         InvoiceModel.RefNO = txtRFQ.value;
         InvoiceModel.SalesmanId = 1;
+        InvoiceModel.IsCash = Number(ddlTypeInv.value) == 1 ? true : false;
+        InvoiceModel.TaxCurrencyID = Number(ddlCurreny.value);
         InvoiceModel.ChargeReason = txtCompanysales.value;
         InvoiceModel.Remark = txtRemark.value;
         InvoiceModel.TotalAmount = Number(txtNetBefore.value);

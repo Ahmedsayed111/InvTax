@@ -1244,4 +1244,60 @@ var TaxableItem = /** @class */ (function () {
     }
     return TaxableItem;
 }());
+var G_Currency = /** @class */ (function () {
+    function G_Currency() {
+        this.CurrencyID = 0;
+        this.CurrencyCode = "";
+        this.DescA = "";
+        this.DescL = "";
+        this.Remarks = "";
+        this.CurNameA = "";
+        this.CurNameE = "";
+        this.CurSmallNameA = "";
+        this.CurSmallNameE = "";
+        this.ISCurMale = false;
+        this.ISSmallCurMale = false;
+        this.CurNameDoubleA = "";
+        this.CurSmallNameDoubleA = "";
+        this.CurSmallPluralNameA = "";
+        this.CurSmallPluralNameE = "";
+        this.CurPluralNameA = "";
+        this.CurPluralNameE = "";
+    }
+    return G_Currency;
+}());
+var I_D_CURRENCY = /** @class */ (function () {
+    function I_D_CURRENCY() {
+        this.COMP_CODE = 0;
+        this.CUR_CODE = "";
+        this.DESCA = "";
+        this.DESCL = "";
+        this.FACTOR = 0;
+        this.ACTUAL_DATE = "";
+        this.CURSINGLEE = "";
+        this.SMALLSINGLEE = "";
+        this.CURMALE = false;
+        this.SMALLCURMALE = false;
+        this.CURSINGLEA = "";
+        this.CURDOUBLEA = "";
+        this.CURPRULARA = "";
+        this.SMALLSINGLEA = "";
+        this.SMALLDOUBLEA = "";
+        this.SMALLPRULARA = "";
+    }
+    return I_D_CURRENCY;
+}());
+var G_Codes = /** @class */ (function () {
+    function G_Codes() {
+        this.ID = 0;
+        this.CodeType = "";
+        this.CodeValue = 0;
+        this.DescA = "";
+        this.DescE = "";
+        this.StdCode = "";
+        this.SubCode = "";
+        this.Remarks = "";
+    }
+    return G_Codes;
+}());
 //# sourceMappingURL=Entities.js.map

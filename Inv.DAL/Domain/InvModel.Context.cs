@@ -60,11 +60,9 @@ namespace Inv.DAL.Domain
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<receiver> receivers { get; set; }
         public virtual DbSet<Salesman> Salesmen { get; set; }
-        public virtual DbSet<Sls_InvoiceDetail> Sls_InvoiceDetail { get; set; }
         public virtual DbSet<Sls_Ivoice> Sls_Ivoice { get; set; }
         public virtual DbSet<taxableItem> taxableItems { get; set; }
         public virtual DbSet<unitValue> unitValues { get; set; }
-        public virtual DbSet<GQ_GetStore> GQ_GetStore { get; set; }
         public virtual DbSet<GQ_GetUserBarnchAccess> GQ_GetUserBarnchAccess { get; set; }
         public virtual DbSet<GQ_GetUserBranch> GQ_GetUserBranch { get; set; }
         public virtual DbSet<GQ_GetUserRole> GQ_GetUserRole { get; set; }
@@ -72,6 +70,9 @@ namespace Inv.DAL.Domain
         public virtual DbSet<GQ_ReportWebSetting> GQ_ReportWebSetting { get; set; }
         public virtual DbSet<I_VW_GetCompStatus> I_VW_GetCompStatus { get; set; }
         public virtual DbSet<I_Control> I_Control { get; set; }
+        public virtual DbSet<G_Currency> G_Currency { get; set; }
+        public virtual DbSet<Sls_InvoiceDetail> Sls_InvoiceDetail { get; set; }
+        public virtual DbSet<I_D_CURRENCY> I_D_CURRENCY { get; set; }
     
         [DbFunction("TaxEntities", "GFun_Companies")]
         public virtual IQueryable<GFun_Companies_Result> GFun_Companies(string userCode)

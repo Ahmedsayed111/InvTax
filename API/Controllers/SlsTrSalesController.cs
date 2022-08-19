@@ -227,6 +227,25 @@ namespace Inv.API.Controllers
             var res = db.Database.SqlQuery<I_D_UOM>(query).ToList();
             return Ok(new BaseResponse(res));
         }
+           
+        [HttpGet, AllowAnonymous]
+        public IHttpActionResult GetAllG_Codes()
+        {
+            string query = "select * from G_Codes where CodeType = 'TaxSubtypes' or CodeType = 'Taxtypes' ";
+
+            var res = db.Database.SqlQuery<G_Codes>(query).ToList();
+            return Ok(new BaseResponse(res));
+        } 
+        
+        
+        [HttpGet, AllowAnonymous]
+        public IHttpActionResult GetAllCurreny()
+        {
+            string query = "select * from I_D_CURRENCY ";
+
+            var res = db.Database.SqlQuery<I_D_CURRENCY>(query).ToList();
+            return Ok(new BaseResponse(res));
+        }
 
         [HttpGet, AllowAnonymous]
         public IHttpActionResult GetCustomer(int id)

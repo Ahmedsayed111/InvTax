@@ -2074,3 +2074,100 @@ class TaxableItem {
     public rate: number;
 }
 
+class G_Currency {
+    constructor() {
+        this.CurrencyID = 0;
+        this.CurrencyCode = "";
+        this.DescA = "";
+        this.DescL = "";
+        this.Remarks = "";
+        this.CurNameA = "";
+        this.CurNameE = "";
+        this.CurSmallNameA = "";
+        this.CurSmallNameE = "";
+        this.ISCurMale = false;
+        this.ISSmallCurMale = false;
+        this.CurNameDoubleA = "";
+        this.CurSmallNameDoubleA = "";
+        this.CurSmallPluralNameA = "";
+        this.CurSmallPluralNameE = "";
+        this.CurPluralNameA = "";
+        this.CurPluralNameE = "";
+    }
+    public CurrencyID: number;
+    public CurrencyCode: string;
+    public DescA: string;
+    public DescL: string;
+    public Remarks: string;
+    public CurNameA: string;
+    public CurNameE: string;
+    public CurSmallNameA: string;
+    public CurSmallNameE: string;
+    public ISCurMale: boolean;
+    public ISSmallCurMale: boolean;
+    public CurNameDoubleA: string;
+    public CurSmallNameDoubleA: string;
+    public CurSmallPluralNameA: string;
+    public CurSmallPluralNameE: string;
+    public CurPluralNameA: string;
+    public CurPluralNameE: string;
+}
+
+class I_D_CURRENCY {
+    constructor() {
+        this.COMP_CODE = 0;
+        this.CUR_CODE = "";
+        this.DESCA = "";
+        this.DESCL = "";
+        this.FACTOR = 0;
+        this.ACTUAL_DATE = "";
+        this.CURSINGLEE = "";
+        this.SMALLSINGLEE = "";
+        this.CURMALE = false;
+        this.SMALLCURMALE = false;
+        this.CURSINGLEA = "";
+        this.CURDOUBLEA = "";
+        this.CURPRULARA = "";
+        this.SMALLSINGLEA = "";
+        this.SMALLDOUBLEA = "";
+        this.SMALLPRULARA = "";
+    }
+    public COMP_CODE: number;
+    public CUR_CODE: string;
+    public DESCA: string;
+    public DESCL: string;
+    public FACTOR: number;
+    public ACTUAL_DATE: string;
+    public CURSINGLEE: string;
+    public SMALLSINGLEE: string;
+    public CURMALE: boolean;
+    public SMALLCURMALE: boolean;
+    public CURSINGLEA: string;
+    public CURDOUBLEA: string;
+    public CURPRULARA: string;
+    public SMALLSINGLEA: string;
+    public SMALLDOUBLEA: string;
+    public SMALLPRULARA: string;
+}
+
+class G_Codes {
+    constructor() {
+        this.ID = 0;
+        this.CodeType = "";
+        this.CodeValue = 0;
+        this.DescA = "";
+        this.DescE = "";
+        this.StdCode = "";
+        this.SubCode = "";
+        this.Remarks = "";
+    }
+    public ID: number;
+    public CodeType: string;
+    public CodeValue: number;
+    public DescA: string;
+    public DescE: string;
+    public StdCode: string;
+    public SubCode: string;
+    public Remarks: string;
+}
+

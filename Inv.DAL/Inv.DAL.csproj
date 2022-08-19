@@ -63,9 +63,6 @@
     <Compile Include="Domain\GFun_UserCompanyBranch_Result.cs">
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Domain\GQ_GetStore.cs">
-      <DependentUpon>InvModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Domain\GQ_GetUserBarnchAccess.cs">
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
@@ -100,6 +97,9 @@
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Domain\G_CONTROL.cs">
+      <DependentUpon>InvModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Domain\G_Currency.cs">
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Domain\G_ModuleHelp.cs">
@@ -185,6 +185,9 @@
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Domain\I_Control.cs">
+      <DependentUpon>InvModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Domain\I_D_CURRENCY.cs">
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Domain\I_D_UOM.cs">

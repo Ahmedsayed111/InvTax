@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="bd6c2fa11c064a33835de6968b910975" Name="Diagram1" ZoomLevel="20">
+      <Diagram DiagramId="bd6c2fa11c064a33835de6968b910975" Name="Diagram1" ZoomLevel="50">
         <EntityTypeShape EntityType="TaxModel.Customer" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.G_AlertControl" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.G_AlertLog" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
@@ -38,11 +38,9 @@
         <EntityTypeShape EntityType="TaxModel.Item" Width="1.5" PointX="18.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.receiver" Width="1.5" PointX="18.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.Salesman" Width="1.5" PointX="8.75" PointY="18.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TaxModel.Sls_InvoiceDetail" Width="1.5" PointX="18.75" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.Sls_Ivoice" Width="1.5" PointX="10.75" PointY="18.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.taxableItem" Width="1.5" PointX="12.75" PointY="19.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.unitValue" Width="1.5" PointX="14.75" PointY="19.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TaxModel.GQ_GetStore" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.GQ_GetUserBarnchAccess" Width="1.5" PointX="0.75" PointY="20.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.GQ_GetUserBranch" Width="1.5" PointX="20.75" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.GQ_GetUserRole" Width="1.5" PointX="20.75" PointY="10.75" IsExpanded="true" />
@@ -50,6 +48,10 @@
         <EntityTypeShape EntityType="TaxModel.GQ_ReportWebSetting" Width="1.5" PointX="16.75" PointY="20.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.I_VW_GetCompStatus" Width="1.5" PointX="18.75" PointY="20.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TaxModel.I_Control" Width="1.5" PointX="7.375" PointY="21.75" />
+        <EntityTypeShape EntityType="TaxModel.G_Currency" Width="1.5" PointX="21.375" PointY="19.75" />
+        <EntityTypeShape EntityType="TaxModel.taxableItem1" Width="1.5" PointX="13.375" PointY="22.75" />
+        <EntityTypeShape EntityType="TaxModel.Sls_InvoiceDetail" Width="1.5" PointX="23.375" PointY="0.75" />
+        <EntityTypeShape EntityType="TaxModel.I_D_CURRENCY" Width="1.5" PointX="13.375" PointY="22.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
