@@ -181,7 +181,7 @@
     <Compile Include="Domain\issuer.cs">
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Domain\Items.cs">
+    <Compile Include="Domain\Item.cs">
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Domain\I_Control.cs">
