@@ -270,6 +270,15 @@
           <Property Name="CurPluralNameA" Type="nvarchar" MaxLength="50" />
           <Property Name="CurPluralNameE" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="G_Government">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="100" />
+          <Property Name="DescA" Type="nvarchar(max)" />
+          <Property Name="DescE" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="G_ModuleHelp">
           <Key>
             <PropertyRef Name="SYSTEM_CODE" />
@@ -634,13 +643,6 @@
           <Property Name="SalesManID" Type="int" />
           <Property Name="StoreID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'InvoiceTax.dbo.Government' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="Government">
-          <Property Name="Code" Type="nvarchar" MaxLength="100" />
-          <Property Name="DescA" Type="nvarchar(max)" />
-          <Property Name="DescE" Type="nvarchar(max)" />
-        </EntityType>-->
         <EntityType Name="I_Control">
           <Key>
             <PropertyRef Name="CompCode" />
@@ -1264,6 +1266,7 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <EntitySet Name="G_COMPANY" EntityType="Self.G_COMPANY" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="G_CONTROL" EntityType="Self.G_CONTROL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="G_Currency" EntityType="Self.G_Currency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="G_Government" EntityType="Self.G_Government" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="G_ModuleHelp" EntityType="Self.G_ModuleHelp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="G_MODULES" EntityType="Self.G_MODULES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="G_Nationality" EntityType="Self.G_Nationality" Schema="dbo" store:Type="Tables" />
@@ -2466,6 +2469,7 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <EntitySet Name="I_D_CURRENCY" EntityType="TaxModel.I_D_CURRENCY" />
           <EntitySet Name="Sls_InvoiceDetail" EntityType="TaxModel.Sls_InvoiceDetail" />
           <EntitySet Name="Items1" EntityType="TaxModel.Items" />
+          <EntitySet Name="G_Government" EntityType="TaxModel.G_Government" />
         </EntityContainer>
         <ComplexType Name="Prnt_Quotation_Result">
           <Property Type="Int32" Name="Comp" Nullable="true" />
@@ -2714,6 +2718,15 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UnitCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StatusCode" Type="Int32" />
+        </EntityType>
+        <EntityType Name="G_Government">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DescA" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DescE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3956,6 +3969,16 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
                 <ScalarProperty Name="CompCode" ColumnName="CompCode" />
                 <ScalarProperty Name="codeType" ColumnName="codeType" />
                 <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="G_Government">
+            <EntityTypeMapping TypeName="TaxModel.G_Government">
+              <MappingFragment StoreEntitySet="G_Government">
+                <ScalarProperty Name="DescE" ColumnName="DescE" />
+                <ScalarProperty Name="DescA" ColumnName="DescA" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

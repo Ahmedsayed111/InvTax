@@ -19,75 +19,11 @@ namespace Inv.APICore
 
         public static string connectionString = @"Data Source=192.168.1.50\SQL2014;Initial Catalog=TESTRAGAB;User Id=SYSUSER;Password=SYSUSER";
 
-        //public DateTime Date { get; set; }
-
-        //public int TemperatureC { get; set; }
-
-        //public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-        //public string Summary { get; set; } 
-
-        internal static string CreateTokin(I_ControlTax Taxcontrol)
+         
+         
+        internal static string sendinvoce(int Optype, int InvoiceID, I_ControlTax I_ControlTax)
         {
-            //RestClient client = new RestClient();
-            //client = new RestClient(Taxcontrol.CreateTokinlDllUrl);
-            //var request = new RestRequest();
-            //request.Method = Method.POST;
-            //request.Timeout = -1;
-            //request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            //request.AddParameter("client_secret", "" + Taxcontrol.SecretIDProd + "");
-            //request.AddParameter("client_id", "" + Taxcontrol.ClientIDProd + "");
-            //request.AddParameter("scope", "InvoicingAPI");
-            //request.AddParameter("grant_type", "client_credentials");
-            //IRestResponse response = client.Execute(request);
-            //return response.Content.ToString();
-
-
-            var client = new RestClient("https://id.eta.gov.eg/connect/token");
-            client.Timeout = -1;
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            request.AddParameter("grant_type", "client_credentials");
-            request.AddParameter("client_id", "02496d7e-0312-4cd2-81d4-e332ff2ccfe7");
-            request.AddParameter("client_secret", "0ae25efc-2811-4492-b345-506de7018978");
-            //request.AddParameter("client_id", "" + Taxcontrol.ClientIDProd + "");
-            //request.AddParameter("client_secret", "" + Taxcontrol.SecretIDProd + "");
-            request.AddParameter("scope", "InvoicingAPI");
-            IRestResponse response = client.Execute(request);
-            return response.Content.ToString();
-        }
-        internal static string CreateTokin2()
-        {
-            //RestClient client = new RestClient();
-            //client = new RestClient(Taxcontrol.CreateTokinlDllUrl);
-            //var request = new RestRequest();
-            //request.Method = Method.POST;
-            //request.Timeout = -1;
-            //request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            //request.AddParameter("client_secret", "" + Taxcontrol.SecretIDProd + "");
-            //request.AddParameter("client_id", "" + Taxcontrol.ClientIDProd + "");
-            //request.AddParameter("scope", "InvoicingAPI");
-            //request.AddParameter("grant_type", "client_credentials");
-            //IRestResponse response = client.Execute(request);
-            //return response.Content.ToString();
-
-
-            var client = new RestClient("https://id.eta.gov.eg/connect/token");
-            client.Timeout = -1;
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            request.AddParameter("grant_type", "client_credentials");
-            request.AddParameter("client_id", "02496d7e-0312-4cd2-81d4-e332ff2ccfe7");
-            request.AddParameter("client_secret", "0ae25efc-2811-4492-b345-506de7018978");
-            //request.AddParameter("client_id", "" + Taxcontrol.ClientIDProd + "");
-            //request.AddParameter("client_secret", "" + Taxcontrol.SecretIDProd + "");
-            request.AddParameter("scope", "InvoicingAPI");
-            IRestResponse response = client.Execute(request);
-            return response.Content.ToString();
-        }
-        internal static string sendinvoce(I_ControlTax Taxcontrol, int Optype, int InvoiceID)
-        {
-
+ 
             string UUid = "";
             try
             {
@@ -122,13 +58,13 @@ namespace Inv.APICore
                         Header.Where(x => x.Status == 10 && x.InvoiceID == InvoiceID).ToList();
                     foreach (var item in Header)
                     {
-                        cancelledinv(Taxcontrol, item);
+                        cancelledinv(item, I_ControlTax);
                     }
                     return "cancelled " + Header.Count;
                 }
                 if (Optype == 4 || Optype == 0) // Update invoice status
                 {
-                    string UpdateDocuments = RecentDocumentsSengel(Taxcontrol);
+                    string UpdateDocuments = RecentDocumentsSengel(I_ControlTax);
                     return UpdateDocuments;
                 }
 
@@ -144,7 +80,7 @@ namespace Inv.APICore
                         List<IQ_EGTaxInvItems> lstInvItemsSend = new List<IQ_EGTaxInvItems>();
                         lstInvItemsSend = lstInvItems.Where(xx => xx.InvoiceID == HeaderSend.InvoiceID).ToList();
                         Rootcontent Rootcontent = new Rootcontent();
-                        UUid = GetDocumentsSend(Taxcontrol, HeaderSend, lstInvItemsSend);
+                        UUid = GetDocumentsSend(HeaderSend, lstInvItemsSend, I_ControlTax);
 
                         if (UUid != "" || UUid != null)
                         {
@@ -179,7 +115,7 @@ namespace Inv.APICore
                                 }
                             }
 
-                            DownloadPDF(UUid, Taxcontrol);
+                            DownloadPDF(UUid, I_ControlTax);
 
                         }
                         else
@@ -201,7 +137,7 @@ namespace Inv.APICore
             }
         }
 
-        private static string GetDocumentsSend(I_ControlTax Taxcontrol, IQ_EGTaxInvHeader Header, List<IQ_EGTaxInvItems> lstInvItems)
+        private static string GetDocumentsSend(IQ_EGTaxInvHeader Header, List<IQ_EGTaxInvItems> lstInvItems, I_ControlTax I_ControlTax)
         {
 
             string uuid = "";
@@ -354,7 +290,7 @@ namespace Inv.APICore
 
                 byte[] byteData = Encoding.UTF8.GetBytes(SerializeJson);
 
-                string SignToken = SignFromToken.SignWithCMS(byteData, Taxcontrol.TokenPinCode);
+                string SignToken = SignFromToken.SignWithCMS(byteData, I_ControlTax.TokenPinCode);
 
                 lstSignature.Add(new Signature
                 {
@@ -366,8 +302,7 @@ namespace Inv.APICore
                 Root RootObj = new Root();
                 RootObj = Root;
                 RestClient client = new RestClient();
-                var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(Taxcontrol));
-                client = new RestClient(Taxcontrol.UploadDllUrl);
+                 client = new RestClient(I_ControlTax.UploadDllUrl);
                 var requestApi = new RestRequest();
                 string json = JsonConvert.SerializeObject(RootObj);
                 Newtonsoft.Json.Linq.JObject request2 = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(json);
@@ -375,7 +310,7 @@ namespace Inv.APICore
                 requestApi.Method = Method.POST;
                 requestApi.Timeout = -1;
                 requestApi.AddHeader("Content-Type", "application/json");
-                requestApi.AddHeader("Authorization", "Bearer " + Contenttokin.access_token + "");
+                requestApi.AddHeader("Authorization", "Bearer " + I_ControlTax.access_token + "");
 
                 requestApi.AddParameter("application/json", body, ParameterType.RequestBody);
                 IRestResponse response = client.Execute(requestApi);
@@ -385,9 +320,7 @@ namespace Inv.APICore
                 {
                     Rootcontent = JsonConvert.DeserializeObject<Rootcontent>(response.Content);
                     uuid = Rootcontent.acceptedDocuments[0].uuid;
-                   // uuid = response.Content.ToString();
-                    //DownloadPDF(uuid, Taxcontrol);
-
+                    
 
                 }
                 else
@@ -414,19 +347,18 @@ namespace Inv.APICore
             return RemoveCharFromString(input.Remove(indexOfChar, 1), charItem);
         }
 
-        internal static string cancelledinv(I_ControlTax Taxcontrol, IQ_EGTaxInvHeader Header)
+        internal static string cancelledinv(IQ_EGTaxInvHeader Header, I_ControlTax I_ControlTax)
         {
             DateTime CurantDate = DateTime.Now;
-            var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(Taxcontrol));
-            RestClient client = new RestClient();
+             RestClient client = new RestClient();
 
 
-            client = new RestClient("https://api.invoicing.eta.gov.eg/api/v1.0/documents/state/" + Header.DocUUID + "/pdf?=");
+            client = new RestClient(I_ControlTax.CancelDllUrl + Header.DocUUID + "/pdf?=");
 
             client.Timeout = -1;
             var request = new RestRequest(Method.PUT);
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + Contenttokin.access_token + "");
+            request.AddHeader("Authorization", "Bearer " + I_ControlTax.access_token + "");
             var body = @"{" + "\n" +
             @"	""status"":""cancelled""," + "\n" +
             @"	""reason"":""some reason for cancelled document""" + "\n" +
@@ -467,7 +399,7 @@ namespace Inv.APICore
                     }
                 }
 
-                DownloadPDF(Header.DocUUID, Taxcontrol);
+                DownloadPDF(Header.DocUUID, I_ControlTax);
             }
             else
             {
@@ -492,21 +424,20 @@ namespace Inv.APICore
             return renderdByte;
         }
 
-        internal static void DownloadPDF(string UUID, I_ControlTax Taxcontrol)
+        internal static void DownloadPDF(string UUID, I_ControlTax I_ControlTax)
         {
-            var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(Taxcontrol));
-            RestClient client = new RestClient();
+             RestClient client = new RestClient();
             client = new RestClient("https://api.invoicing.eta.gov.eg/api/v1/documents/" + UUID + "/pdf?=");
             client.Timeout = -1;
             var request = new RestRequest(Method.GET);
-            request.AddHeader("Authorization", "Bearer " + Contenttokin.access_token + "");
+            request.AddHeader("Authorization", "Bearer " + I_ControlTax.access_token + "");
             IRestResponse response = client.Execute(request);
             var content_ = response.Content;
             byte[] renderdByte = response.RawBytes;
-            string path = Taxcontrol.PDFFolder;
+            string path = I_ControlTax.PDFFolder;
             try
             {
-                System.IO.File.WriteAllBytes(Taxcontrol.PDFFolder + @"\" + UUID + "" + ".pdf", renderdByte);
+                System.IO.File.WriteAllBytes(I_ControlTax.PDFFolder + @"\" + UUID + "" + ".pdf", renderdByte);
             }
 
             catch (Exception ex)
@@ -746,18 +677,17 @@ namespace Inv.APICore
             }
             return "UpdateDocuments" + Sls_TR_Invoice.Count;
         }
-        internal static void UpdateDocuments(I_Sls_TR_Invoice I_Sls_TR_Invoice, I_ControlTax Taxcontrol)
+        internal static void UpdateDocuments(I_Sls_TR_Invoice I_Sls_TR_Invoice, I_ControlTax I_ControlTax)
         {
             int oldstates_ = Convert.ToInt32(I_Sls_TR_Invoice.Status);
             int stat = 0;
             string pageNo = "1";
-            var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(Taxcontrol));
-            var client = new RestClient("https://api.invoicing.eta.gov.eg/api/v1/documents/" + I_Sls_TR_Invoice.DocUUID + "/details");
+             var client = new RestClient(I_ControlTax.DownloadInterDllUrl+ I_Sls_TR_Invoice.DocUUID + "/details");
             client.Timeout = -1;
             var request = new RestRequest(Method.GET);
             request.AddHeader("PageSize", "");
             request.AddHeader("PageNo", "");
-            request.AddHeader("Authorization", "Bearer " + Contenttokin.access_token + "");
+            request.AddHeader("Authorization", "Bearer " + I_ControlTax.access_token + "");
             IRestResponse response = client.Execute(request);
             ValidationResults _ValidationResults = new ValidationResults();
             _ValidationResults = JsonConvert.DeserializeObject<ValidationResults>(response.Content);
@@ -797,7 +727,7 @@ namespace Inv.APICore
                         DateTime CurantDate = DateTime.Now;
                         string Result_ = (CurantDate - TaxSycnDate).ToString();
                         Result_ = Result_.Substring(0, 1);
-                        int RejectPeriod = Taxcontrol.RejectInvoicePeriod;
+                        int RejectPeriod = I_ControlTax.RejectInvoicePeriod;
                         if (stat == 3)
                         {
                             if (stat == 3 && I_Sls_TR_Invoice.Status != 3 && Convert.ToInt32(Result_) > RejectPeriod)
@@ -821,8 +751,8 @@ namespace Inv.APICore
                             string Query = "DECLARE	@return_value int,@TrNo int,@Ok int EXEC @return_value = [dbo].[G_ProcessTrans] @Comp = @CompCode, @Branch = @BranchCode,@TrType = N'SlsInvoice', @OpMode = N'Open',@TrID = @InvoiceID,@TrNo = @TrNo OUTPUT, @Ok = @Ok OUTPUT SELECT	@TrNo as N'@TrNo',@Ok as N'@Ok' SELECT	'Return Value' = @return_value";
                             using (var cmd2 = new System.Data.SqlClient.SqlCommand(Query, con))
                             {
-                                cmd2.Parameters.AddWithValue("@CompCode", Taxcontrol.CompCode);
-                                cmd2.Parameters.AddWithValue("@BranchCode", Taxcontrol.BranchCode);
+                                cmd2.Parameters.AddWithValue("@CompCode", I_ControlTax.CompCode);
+                                cmd2.Parameters.AddWithValue("@BranchCode", I_ControlTax.BranchCode);
                                 cmd2.Parameters.AddWithValue("@InvoiceID", I_Sls_TR_Invoice.InvoiceID);
                                 cmd2.ExecuteNonQuery();
                             }
@@ -841,7 +771,7 @@ namespace Inv.APICore
                     }
                 }
 
-                DownloadPDF(I_Sls_TR_Invoice.DocUUID, Taxcontrol);
+                DownloadPDF(I_Sls_TR_Invoice.DocUUID, I_ControlTax);
             }
         }
     }

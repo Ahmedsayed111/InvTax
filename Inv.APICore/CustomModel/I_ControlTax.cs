@@ -30,6 +30,7 @@ namespace Inv.APICore
         public int BranchCode { get; set; }
         public string issuerId { get; set; }
         public string PDFFolder { get; set; }
+        public string access_token { get; set; }
       }
 
 }

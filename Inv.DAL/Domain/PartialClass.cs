@@ -23,6 +23,10 @@ namespace Inv.DAL.Domain
         public string UserCode { get; set; }
         public string Token { get; set; }
         public bool StatusItem { get; set; }
+        public string ClientIDProd { get; set; }
+        public string SecretIDProd { get; set; }
+
+      
     }
     public class SecurityandUpdateFlagClass_FIN_YEAR
     {
@@ -288,6 +292,8 @@ namespace Inv.DAL.Domain
     {
     }
     public partial class AVAT_D_Service : SecurityandUpdateFlagClass
+    {
+    }public partial class IQ_EGTaxInvHeader : SecurityandUpdateFlagClass
     {
     }
 
