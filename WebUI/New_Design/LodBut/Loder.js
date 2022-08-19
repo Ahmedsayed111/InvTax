@@ -3,30 +3,21 @@
     var lod = '<i class="fa fa-spinner fa-spin lod  "></i>';
 
     let lod_Old = '';
+    let id = '';
     $('button').mousedown(function () {
-         
+        if (id == '') {
+            id = this.getAttribute('id');
             lod_Old = $(this).html();
+            $(this).append(lod);
 
-
-        $(this).append(lod); 
-        let id = this.getAttribute('id');
-   
+        }
         setTimeout(function () {
             $('#' + id + '').removeAttr("disabled");
-            $('#' + id + '').html(lod_Old); 
+            $('#' + id + '').html(lod_Old);
+            lod_Old = '';
+            id = '';
         }, 500);
-         
     });
 
-    //$('button').click(function () {
 
-    //    debugger
-
-    //    $(this).attr("disabled", "disabled");
-        
-
-    //});
-
-
-
-})(jQuery); 
+})(jQuery);
