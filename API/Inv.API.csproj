@@ -246,11 +246,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL\Inv.BLL.csproj">
-      <Project>{fab4e0b7-aa99-44f2-a5f5-44b9d54a89b1}</Project>
+      <Project>{FAB4E0B7-AA99-44F2-A5F5-44B9D54A89B1}</Project>
       <Name>Inv.BLL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Inv.DAL\Inv.DAL.csproj">
-      <Project>{4a500666-7d24-47e3-a374-2f4a28cb26b5}</Project>
+      <Project>{4A500666-7D24-47E3-A374-2F4A28CB26B5}</Project>
       <Name>Inv.DAL</Name>
     </ProjectReference>
   </ItemGroup>
