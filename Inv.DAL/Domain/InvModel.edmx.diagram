@@ -51,6 +51,7 @@
         <EntityTypeShape EntityType="TaxModel.I_D_CURRENCY" Width="1.5" PointX="13.375" PointY="22.75" />
         <EntityTypeShape EntityType="TaxModel.Sls_InvoiceDetail" Width="1.5" PointX="23.375" PointY="0.75" />
         <EntityTypeShape EntityType="TaxModel.Items" Width="1.5" PointX="23.375" PointY="11.5" />
+        <EntityTypeShape EntityType="TaxModel.G_Government" Width="1.5" PointX="19.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
