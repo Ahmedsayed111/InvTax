@@ -2455,10 +2455,10 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
             <Parameter Name="TRId" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="I_Control" EntityType="TaxModel.I_Control" />
-          <EntitySet Name="Items" EntityType="TaxModel.Item" />
           <EntitySet Name="G_Currency" EntityType="TaxModel.G_Currency" />
           <EntitySet Name="I_D_CURRENCY" EntityType="TaxModel.I_D_CURRENCY" />
           <EntitySet Name="Sls_InvoiceDetail" EntityType="TaxModel.Sls_InvoiceDetail" />
+          <EntitySet Name="Items1" EntityType="TaxModel.Items" />
         </EntityContainer>
         <ComplexType Name="Prnt_Quotation_Result">
           <Property Type="Int32" Name="Comp" Nullable="true" />
@@ -2594,23 +2594,6 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <Property Name="SalesPriceWithVAT" Type="Boolean" />
           <Property Name="ISCustVendorInGL" Type="Boolean" />
         </EntityType>
-        <EntityType Name="Item">
-          <Key>
-            <PropertyRef Name="ItemID" />
-          </Key>
-          <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="codeType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CompCode" Type="Int32" />
-          <Property Name="parentCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="itemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="codeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="codeNameAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="activeFrom" Type="DateTime" Precision="3" />
-          <Property Name="activeTo" Type="DateTime" Precision="3" />
-          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UnitCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StatusCode" Type="Int32" />
-        </EntityType>
         <EntityType Name="G_Currency">
           <Key>
             <PropertyRef Name="CurrencyID" />
@@ -2707,6 +2690,23 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <Property Name="Itemdesc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="TaxID" Type="Int32" />
           <Property Name="unitValueID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Items">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="codeType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompCode" Type="Int32" />
+          <Property Name="parentCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="itemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="codeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="codeNameAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="activeFrom" Type="DateTime" Precision="3" />
+          <Property Name="activeTo" Type="DateTime" Precision="3" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UnitCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusCode" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3836,24 +3836,6 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Items">
-            <EntityTypeMapping TypeName="TaxModel.Item">
-              <MappingFragment StoreEntitySet="Items">
-                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
-                <ScalarProperty Name="UnitCode" ColumnName="UnitCode" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="activeTo" ColumnName="activeTo" />
-                <ScalarProperty Name="activeFrom" ColumnName="activeFrom" />
-                <ScalarProperty Name="codeNameAr" ColumnName="codeNameAr" />
-                <ScalarProperty Name="codeName" ColumnName="codeName" />
-                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
-                <ScalarProperty Name="parentCode" ColumnName="parentCode" />
-                <ScalarProperty Name="CompCode" ColumnName="CompCode" />
-                <ScalarProperty Name="codeType" ColumnName="codeType" />
-                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="G_Currency">
             <EntityTypeMapping TypeName="TaxModel.G_Currency">
               <MappingFragment StoreEntitySet="G_Currency">
@@ -3949,6 +3931,24 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
                 <ScalarProperty Name="ItemID" ColumnName="ItemID" />
                 <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
                 <ScalarProperty Name="InvoiceItemID" ColumnName="InvoiceItemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items1">
+            <EntityTypeMapping TypeName="TaxModel.Items">
+              <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="UnitCode" ColumnName="UnitCode" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="activeTo" ColumnName="activeTo" />
+                <ScalarProperty Name="activeFrom" ColumnName="activeFrom" />
+                <ScalarProperty Name="codeNameAr" ColumnName="codeNameAr" />
+                <ScalarProperty Name="codeName" ColumnName="codeName" />
+                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
+                <ScalarProperty Name="parentCode" ColumnName="parentCode" />
+                <ScalarProperty Name="CompCode" ColumnName="CompCode" />
+                <ScalarProperty Name="codeType" ColumnName="codeType" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
