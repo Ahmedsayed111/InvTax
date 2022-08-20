@@ -59,8 +59,8 @@ namespace Inv.API.Controllers
         [HttpGet, AllowAnonymous]
         public IHttpActionResult GetAllGovenment()
         {
-            //var res = db.Database.SqlQuery<Government>("select * from Government").ToList();
-            return Ok(new BaseResponse(1));
+            var res = db.Database.SqlQuery<G_Government>("select * from G_Government").ToList();
+            return Ok(new BaseResponse(res));
         }
 
     }

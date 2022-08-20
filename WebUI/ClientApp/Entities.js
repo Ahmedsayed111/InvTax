@@ -1076,11 +1076,13 @@ var Items = /** @class */ (function (_super) {
         _this.parentCode = "";
         _this.itemCode = "";
         _this.codeName = "";
+        _this.codeNameAr = "";
         _this.activeFrom = "";
         _this.activeTo = "";
         _this.description = "";
         _this.UnitCode = "";
         _this.StatusCode = 0;
+        _this.StatusCodeDesc = "";
         _this.StatusFlag = "";
         _this.StatusItem = false;
         return _this;
@@ -1125,6 +1127,18 @@ var issuer = /** @class */ (function () {
     }
     return issuer;
 }());
+var G_Government = /** @class */ (function (_super) {
+    __extends(G_Government, _super);
+    function G_Government() {
+        var _this = _super.call(this) || this;
+        _this.ID = 0;
+        _this.Code = "";
+        _this.DescA = "";
+        _this.DescE = "";
+        return _this;
+    }
+    return G_Government;
+}(SecurityClass));
 var receiver = /** @class */ (function () {
     function receiver() {
         this.receiverID = 0;
