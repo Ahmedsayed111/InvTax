@@ -108,9 +108,11 @@ class SlsInvoiceMasterDetails extends SecurityClass {
         super();
         this.Sls_Ivoice = new Sls_Ivoice();
         this.Sls_InvoiceDetail = new Array<Sls_InvoiceDetail>();
+        this.TaxableItem = new Array<TaxableItem>();
     }
     public Sls_Ivoice: Sls_Ivoice;
     public Sls_InvoiceDetail: Array<Sls_InvoiceDetail>;         
+    public TaxableItem: Array<TaxableItem>;
 }          
 
 abstract class EntityContext {
@@ -2088,11 +2090,13 @@ class TaxableItem {
         this.amount = 0;
         this.subType = "";
         this.rate = 0;
+        this.InvoiceID = 0;
     }
     public taxType: string;
     public amount: number;
     public subType: string;
     public rate: number;
+    public InvoiceID: number;
 }
 
 class G_Currency {

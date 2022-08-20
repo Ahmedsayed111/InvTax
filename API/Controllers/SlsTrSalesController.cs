@@ -56,6 +56,15 @@ namespace Inv.API.Controllers
                         obj.Sls_InvoiceDetail[i].InvoiceID = Sls_TR_Invoice.InvoiceID;
                     }
                     SlsInvoiceItemsService.InsertLst(obj.Sls_InvoiceDetail);
+
+                    for (int i = 0; i < obj.taxableItem.Count; i++)
+                    {
+                        obj.taxableItem[i].InvoiceID = Sls_TR_Invoice.InvoiceID;
+
+                        string query = "insert into [dbo].[taxableItems] values('"+ obj.taxableItem[i].taxType + "',0,'"+ obj.taxableItem[i].subType + "',0,"+ obj.taxableItem[i].InvoiceID + ")";
+                        db.Database.ExecuteSqlCommand(query);
+
+                    }
                     // call process trans 
 
                     ResponseResult res =  Shared.TransactionProcess(Convert.ToInt32(obj.Sls_Ivoice.CompCode), Convert.ToInt32(obj.Sls_Ivoice.BranchCode), Sls_TR_Invoice.InvoiceID, "Quotation", "Add", db);
@@ -123,6 +132,16 @@ namespace Inv.API.Controllers
                         //SlsInvoiceItemsService.Delete(deletedId);
 
                         string query = "delete [dbo].[Sls_InvoiceDetail] where InvoiceItemID = " + deletedId + "";
+                        db.Database.ExecuteSqlCommand(query);
+
+                    }
+
+
+                    for (int i = 0; i < updatedObj.taxableItem.Count; i++)
+                    {
+                        updatedObj.taxableItem[i].InvoiceID = Sls_TR_Invoice.InvoiceID;
+
+                        string query = "insert into [dbo].[taxableItems] values('" + updatedObj.taxableItem[i].taxType + "',0,'" + updatedObj.taxableItem[i].subType + "',0," + updatedObj.taxableItem[i].InvoiceID + ")";
                         db.Database.ExecuteSqlCommand(query);
 
                     }

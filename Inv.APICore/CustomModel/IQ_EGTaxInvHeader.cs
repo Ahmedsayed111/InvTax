@@ -61,6 +61,11 @@ namespace Inv.APICore
         public string cus_passportNo { get; set; }
         public string DocUUID { get; set; }
         public int Status { get; set; }
+        public string ClientIDProd { get; set; }
+        public string SecretIDProd { get; set; }
 
+
+        
+        
     }
 }
