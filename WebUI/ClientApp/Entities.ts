@@ -1777,11 +1777,13 @@ class Items extends SecurityClass {
         this.parentCode = "";
         this.itemCode = "";
         this.codeName = "";    
+        this.codeNameAr = "";    
         this.activeFrom = "";    
         this.activeTo = "";    
         this.description = "";    
         this.UnitCode = "";    
         this.StatusCode = 0;   
+        this.StatusCodeDesc = "";   
         this.StatusFlag = "";
         this.StatusItem = false;
     }
@@ -1797,6 +1799,7 @@ class Items extends SecurityClass {
     public description: string; 
     public UnitCode: string; 
     public StatusCode = 0;  
+    public StatusCodeDesc: string;
     public StatusFlag: string;
     public StatusItem: boolean;
 }        
@@ -1866,6 +1869,20 @@ class issuer {
     public name: string;
     public CompCode: number;
 }
+class G_Government extends SecurityClass {
+    constructor() {
+        super();   
+        this.ID = 0;
+        this.Code = "";
+        this.DescA = "";
+        this.DescE = "";
+    }
+    public ID: number;
+    public Code: string;
+    public DescA: string;
+    public DescE: string;
+}
+
 
 class receiver {
     constructor() {
