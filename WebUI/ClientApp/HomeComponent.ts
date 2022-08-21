@@ -419,6 +419,9 @@ namespace HomeComponent {
         $("#btnCompanies").click(() => { OpenPage(Modules.Companies); })
         $("#btnUsers").click(() => { OpenPage(Modules.Users); })
         $("#btnTest").click(() => { OpenPage(Modules.Test); })
+        $("#btnTest").click(() => { OpenPage(Modules.Test); })
+        $("#btnDownloadInv").click(() => { OpenPage(Modules.DownloadInv); })
+        $("#btnUploadInv").click(() => { OpenPage(Modules.UploadInv); })
         
     }
 

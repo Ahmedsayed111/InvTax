@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Loading Invoice";
+    Layout = "~/Views/Shared/Layout.cshtml";
+
+}
+
+<style>
+    .btnDownload {
+        background-color: #009966;
+        border: none;
+        color: white;
+        padding: 2px 2px;
+        cursor: pointer;
+        font-size: 10px;
+    }
+
+    .background_upload {
+        background-color: #2083ff !important;
+    }
+
+    .Invalid {
+        color: red;
+        font-weight: bold;
+    }
+
+    .Valid {
+        color: #02ea14;
+        font-weight: bold;
+    }
+</style>
+
+
+
+
+
+
+
+
+<div id="divControl" class="row" style="border-radius: 30px;background: #F5F7FF;">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 p-0">
+        <label>   </label>
+        <label>   </label>
+        <label>   </label>
+        <label>Master</label>
+        <input id="uploadMaster" class="btn btn-success   btnAjax float_left" type=file name="files[]">
+        <label>   </label>
+        <label>Detail</label>
+        <input id="uploadDetail" class="btn btn-success   btnAjax float_left" type=file name="files[]">
+        <label>   </label>
+        <label>   </label>
+        <label>   </label>
+
+        <button id="btnMargin" type="button" class="btn btn-success   btnAjax float_left" style="background-color: #2b6292;">
+            Margin <span class="ti-layers-alt"></span>
+        </button>
+
+        <label>   </label>
+        <label>   </label>
+        <button id="btnRefrash" type="button" class="btn btn-success   btnAjax float_left" style="background-color: #blue;">
+            Refrash <span class="tidt-autofill-select"></span>
+        </button>
+        <label>   </label>
+        <label>   </label>
+
+        <button id="btnPush" type="button" class="btn btn-success   btnAjax float_left" style="background-color: #922b2b;">
+            Push <span class="ti-save"></span>
+        </button>
+    </div>
+
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 p-0">
+
+        <textarea class="form-control" style="display: none;" rows=100 cols=120 id="xlx_jsonMaster"></textarea>
+        <textarea class="form-control" style="display: none;" rows=100 cols=120 id="xlx_jsonDetail"></textarea>
+
+    </div>
+
+
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 p-0">
+    </div>
+
+
+
+    <div class="form-row">
+        <div class="col">
+            <div id="jsGrid"></div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 p-0" style="font-weight: bold;font-size: 17px;">
+
+        <label>  اجمالي الاصناف </label>
+        <input id="totalouttax" class="x float_left col-lg-2" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+        <label>اجمالي الضريبة</label>
+        <input id="totatax" class="float_left" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+
+        <label>الاجمالي بعد الضريبة </label>
+        <input id="totalaftartax" class="float_left col-lg-1" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+
+        <label> الخصم </label>
+        <input id="textDisount" class="float_left col-lg-2" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+
+
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 p-0" style="font-weight: bold;font-size: 17px;">
+        <label>الاجمالي بعد الخصم </label>
+        <input id="totaِAftarDisount" class="float_left" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+
+    </div>
+</div>
+
+
+
+
+
+<script src="~/ClientApp/Excel/jquery.min.js"></script>
+<script src="~/ClientApp/Excel/jszip.js"></script>
+<script src="~/ClientApp/Excel/xlsx.js"></script>
+<script src="~/ClientApp/Excel/LoadExcel.js"></script>
+
+
+@*<script src="~/ClientApp/UploadInv/UploadInv.js"></script>*@
