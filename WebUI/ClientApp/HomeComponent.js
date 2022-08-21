@@ -100,6 +100,7 @@ var HomeComponent;
     }
     HomeComponent.OpenReportsPopup = OpenReportsPopup;
     function InitalizeComponent() {
+        myfunction();
         ApplyModules();
         ApplyCompanyPrivilages();
         //$("#btnHelpRep").click(() => { ScreenHelp(); })
@@ -112,6 +113,19 @@ var HomeComponent;
         App.Startup();
     }
     HomeComponent.InitalizeComponent = InitalizeComponent;
+    function myfunction() {
+        Ajax.Callsync({
+            type: "Get",
+            //url: sys.apiUrlCore("HomeSendinvoce","ActivateItems"),
+            url: sys.apiUrlCore("WeatherForecast", "Get"),
+            // data: { data: data },   
+            success: function (d) {
+                var result = d;
+                if (result.IsSuccess) {
+                }
+            }
+        });
+    }
     function LogoutUserApi() {
         var userCode = SysSession.CurrentEnvironment.UserCode;
         Ajax.Callsync({

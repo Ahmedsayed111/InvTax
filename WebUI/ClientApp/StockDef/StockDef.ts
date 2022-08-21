@@ -6,8 +6,9 @@ $(document).ready(() => {
 namespace StockDef {
 
     var sys: SystemTools = new SystemTools();
-    var SysSession: SystemSession = GetSystemSession(Modules.Quotation);
+    var SysSession: SystemSession = GetSystemSession(Modules.StockDef);
     var I_ItemDetails: Array<Items> = new Array<Items>();
+    var data: Array<Items> = new Array<Items>();
     var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>();
     var compcode: number;//SharedSession.CurrentEnvironment.CompCode;
     var BranchCode: number;//SharedSession.CurrentEnvironment.CompCode; 
@@ -79,9 +80,11 @@ namespace StockDef {
         BindGridControl(Grid);
         DisplayDataGridControl(I_ItemDetails, Grid);
     }
-    function SaveNew() {           
-        console.log(Grid.ESG.Model);
+    function SaveNew() {
+        Grid.ESG.Model[0].ClientIDProd = "10d35b27-603c-426f-af72-a96df405dc98";
+        Grid.ESG.Model[0].SecretIDProd = "d684b331-f346-4769-91e1-7957979eb855";
         let data = JSON.stringify(Grid.ESG.Model);
+         
         Ajax.Callsync({
             type: "Get",
             url: sys.apiUrl("Items", "UpdateItems"),
@@ -96,23 +99,11 @@ namespace StockDef {
             }
         });
         debugger
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrlCore("HomeSendinvoce","ActivateItems"),
-            data: { data: data },   
-            success: (d) => {
-                let result = d as BaseResponse;
-                if (result.IsSuccess) {
-                    GetAllItem();
-                 DisplayDataGridControl(I_ItemDetails, Grid);
-
-                }
-            }
-        });  
+         
     }
     function computeTotal() {
-        console.log(Grid.ESG.TotalModel);
-    }
+
+     }
     function DoubleClicked() {
         alert(Grid.ESG.SelectedKey);
     }     
@@ -128,21 +119,6 @@ namespace StockDef {
                 }
             }
         });
-	}
-
-                               
-
+	} 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

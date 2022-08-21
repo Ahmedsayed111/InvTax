@@ -4,8 +4,9 @@ $(document).ready(function () {
 var StockDef;
 (function (StockDef) {
     var sys = new SystemTools();
-    var SysSession = GetSystemSession(Modules.Quotation);
+    var SysSession = GetSystemSession(Modules.StockDef);
     var I_ItemDetails = new Array();
+    var data = new Array();
     var I_D_UOMDetails = new Array();
     var compcode; //SharedSession.CurrentEnvironment.CompCode;
     var BranchCode; //SharedSession.CurrentEnvironment.CompCode; 
@@ -70,7 +71,8 @@ var StockDef;
         DisplayDataGridControl(I_ItemDetails, Grid);
     }
     function SaveNew() {
-        console.log(Grid.ESG.Model);
+        Grid.ESG.Model[0].ClientIDProd = "10d35b27-603c-426f-af72-a96df405dc98";
+        Grid.ESG.Model[0].SecretIDProd = "d684b331-f346-4769-91e1-7957979eb855";
         var data = JSON.stringify(Grid.ESG.Model);
         Ajax.Callsync({
             type: "Get",
@@ -85,21 +87,8 @@ var StockDef;
             }
         });
         debugger;
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrlCore("HomeSendinvoce", "ActivateItems"),
-            data: { data: data },
-            success: function (d) {
-                var result = d;
-                if (result.IsSuccess) {
-                    GetAllItem();
-                    DisplayDataGridControl(I_ItemDetails, Grid);
-                }
-            }
-        });
     }
     function computeTotal() {
-        console.log(Grid.ESG.TotalModel);
     }
     function DoubleClicked() {
         alert(Grid.ESG.SelectedKey);

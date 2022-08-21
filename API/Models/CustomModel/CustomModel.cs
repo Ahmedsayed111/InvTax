@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-namespace Inv.API.CustomModel
+namespace Inv.APICore.CustomModel
 {
 
     public class Metadata

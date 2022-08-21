@@ -12,6 +12,8 @@ class FavModules {//
     public SYSTEM_CODE: string;
     public SUB_SYSTEM_CODE: string;
     public USER_CODE: string;
+    public ClientIDProd: string;
+    public SecretIDProd: string;
 }
 
 class SystemParameters {
