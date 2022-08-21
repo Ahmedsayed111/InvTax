@@ -144,6 +144,7 @@ var SlsInvoiceMasterDetails = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.Sls_Ivoice = new Sls_Ivoice();
         _this.Sls_InvoiceDetail = new Array();
+        _this.TaxableItem = new Array();
         return _this;
     }
     return SlsInvoiceMasterDetails;
@@ -1076,11 +1077,13 @@ var Items = /** @class */ (function (_super) {
         _this.parentCode = "";
         _this.itemCode = "";
         _this.codeName = "";
+        _this.codeNameAr = "";
         _this.activeFrom = "";
         _this.activeTo = "";
         _this.description = "";
         _this.UnitCode = "";
         _this.StatusCode = 0;
+        _this.StatusCodeDesc = "";
         _this.StatusFlag = "";
         _this.StatusItem = false;
         return _this;
@@ -1125,8 +1128,21 @@ var issuer = /** @class */ (function () {
     }
     return issuer;
 }());
+var G_Government = /** @class */ (function (_super) {
+    __extends(G_Government, _super);
+    function G_Government() {
+        var _this = _super.call(this) || this;
+        _this.ID = 0;
+        _this.Code = "";
+        _this.DescA = "";
+        _this.DescE = "";
+        return _this;
+    }
+    return G_Government;
+}(SecurityClass));
 var receiver = /** @class */ (function () {
     function receiver() {
+        this.address = new Address();
         this.receiverID = 0;
         this.branchID = 0;
         this.country = "";
@@ -1145,6 +1161,15 @@ var receiver = /** @class */ (function () {
         this.CompCode = 0;
     }
     return receiver;
+}());
+var Receiver = /** @class */ (function () {
+    function Receiver() {
+        this.address = new Address();
+        this.type = "";
+        this.id = "";
+        this.name = "";
+    }
+    return Receiver;
 }());
 var Documente = /** @class */ (function () {
     function Documente() {
@@ -1203,6 +1228,83 @@ var TaxTotal = /** @class */ (function () {
     }
     return TaxTotal;
 }());
+var VDocument = /** @class */ (function () {
+    function VDocument() {
+    }
+    return VDocument;
+}());
+var ClientResponseModel = /** @class */ (function () {
+    function ClientResponseModel() {
+    }
+    return ClientResponseModel;
+}());
+var TblFile = /** @class */ (function () {
+    function TblFile() {
+    }
+    return TblFile;
+}());
+var Root = /** @class */ (function () {
+    function Root() {
+        this.documents = new Array();
+    }
+    return Root;
+}());
+var TblInvoice = /** @class */ (function () {
+    function TblInvoice() {
+    }
+    return TblInvoice;
+}());
+var TblDelivery = /** @class */ (function () {
+    function TblDelivery() {
+    }
+    return TblDelivery;
+}());
+var TblIssuer = /** @class */ (function () {
+    function TblIssuer() {
+    }
+    return TblIssuer;
+}());
+var TblPayment = /** @class */ (function () {
+    function TblPayment() {
+    }
+    return TblPayment;
+}());
+var TblReceiver = /** @class */ (function () {
+    function TblReceiver() {
+    }
+    return TblReceiver;
+}());
+var TblInvoiceLine = /** @class */ (function () {
+    function TblInvoiceLine() {
+    }
+    return TblInvoiceLine;
+}());
+var TblTaxableItem = /** @class */ (function () {
+    function TblTaxableItem() {
+    }
+    return TblTaxableItem;
+}());
+var TblTaxTotal = /** @class */ (function () {
+    function TblTaxTotal() {
+    }
+    return TblTaxTotal;
+}());
+var Address = /** @class */ (function () {
+    function Address() {
+        this.branchID = "";
+        this.country = "";
+        this.governate = "";
+        this.regionCity = "";
+        this.street = "";
+        this.buildingNumber = "";
+        this.postalCode = "";
+        this.floor = "";
+        this.room = "";
+        this.landmark = "";
+        this.additionalInformation = "";
+    }
+    return Address;
+}());
 var InvoiceLine = /** @class */ (function () {
     function InvoiceLine() {
         this.description = "";
@@ -1243,6 +1345,7 @@ var TaxableItem = /** @class */ (function () {
         this.amount = 0;
         this.subType = "";
         this.rate = 0;
+        this.InvoiceID = 0;
     }
     return TaxableItem;
 }());

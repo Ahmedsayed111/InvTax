@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<link href="~/css/ScreenForm.css" rel="stylesheet" />
+<script src="~/Style_design/js/jquery-3.4.1.js"></script>
+<link href="~/Style_design/bootstrap-rtl.css" rel="stylesheet" />
+<link href="~/Style_design/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Style_design/css/bootstrap-editable.css" rel="stylesheet" />
+<link href="~/Style_design/responsive.css" rel="stylesheet" />
+
+
+
+
+<div style="position:center" class="col-lg-12">
+    <h1 style="margin-left: 43%;">شاشة تحميل الفواتير</h1>
+
+
+    <div class="col-lg-12" style="border: solid 1px; border-radius: 24px;margin-bottom: 3%;" id="inv">
+
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">
+            <input type="text" class="form-control input-sm inputClass  editable addable" id="invto">
+        </div>
+        <label id="" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">   الي  رقم </label>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">
+            <input type="text" class="form-control input-sm inputClass  editable addable" id="invfrom">
+        </div>
+        <label id="" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start"> من الفاتورة رقم      </label>
+
+
+        <input type="radio" name="radio" id="sales" checked class="form-control col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 " />
+        <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">  مبيعات   </label>
+    </div>
+</div>
+
+<div class="col-lg-12" style="border: solid 1px; border-radius: 24px;margin-bottom: 3%;" id="">
+
+
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2">
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2">
+        <input type="date" class="form-control" id="puchfrom" />
+    </div>
+
+    <label for="date" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 form-label">من تاريخ رقم</label>
+
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2">
+        <input type="date" class="form-control" id="puchvto" />
+    </div>
+
+    <label for="date" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 form-label"> الي  تاريخ     </label>
+
+
+    <input type="radio" name="radio" id="Putcher" class="form-control col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1  " />
+
+    <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">  مشتريات   </label>
+</div>
+
+<br />
+
+<br />
+<br />
+
+<div class="col-lg-12" style="border: solid 1px; border-radius: 24px;margin-bottom: 3%;" id=" ">
+
+    <label id="" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">عدد الفاتورة </label>
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">
+        <input type="text" class="form-control input-sm inputClass  editable addable" id="pageNo">
+    </div>
+    <label id="" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">رقم الصفحة </label>
+
+
+
+    <input type="radio" name="radio" id="All" class="form-control col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1  " />
+
+    <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">  الجميع   </label>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
+    <button class=" btn btn-success " id="btnDownload" style="margin-left: 46%;margin-top: 5%;"> Download</button>
+</div>
+
+
+<script src="~/ClientApp/DownloadInv/Downloadinv.js"></script>
+

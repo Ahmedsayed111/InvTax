@@ -15,5 +15,6 @@ namespace Inv.API.Models.CustomModel
 
         public Sls_Ivoice Sls_Ivoice { get; set; }
         public List<Sls_InvoiceDetail> Sls_InvoiceDetail { get; set; }
+        public List<taxableItem> taxableItem { get; set; }
     }
 }

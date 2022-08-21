@@ -11,9 +11,12 @@ var InvoiceTax;
     var InvoiceModel = new Sls_Ivoice();
     var MasterDetailsModel = new SlsInvoiceMasterDetails();
     var CustomerDetail = new Array();
+    var ItemDetail = new Array();
     var I_D_UOMDetails = new Array();
     var I_D_CURRENCYDetails = new Array();
     var G_CodesDetails = new Array();
+    var TaxableModel = new Array();
+    var TaxableSinglModel = new TaxableItem();
     var CountGrid = 0;
     var compcode; //SharedSession.CurrentEnvironment.CompCode;
     var BranchCode; //SharedSession.CurrentEnvironment.CompCode;
@@ -195,21 +198,37 @@ var InvoiceTax;
         html = '<tr id= "No_Row' + cnt + '" class="  animated zoomIn ">' +
             '<td><button id="btn_minus' + cnt + '" type="button" class="btn btn-custon-four btn-danger"><i class="fa fa-minus-circle"></i></button></td>' +
             '<td><input  id="serial' + cnt + '" disabled="disabled"  type="text" class="form-control" placeholder="SR"></td>' +
-            '<td><input  id="QTY' + cnt + '" type="number" class="form-control" placeholder="QTY"></td>' +
-            '<td> <textarea id="Description' + cnt + '" name="Description" type="text" class="form-control" style="height:34px" placeholder="Description" spellcheck="false"></textarea></td>' +
+            '<td><button id="btnItem' + cnt + '" class="btn btn-custon-four btn-success oo"  style="height:34px;width: 275px;background-color: #3bafda;"  > Seach Item </button></td>' +
+            //'<td> <textarea id="Description' + cnt + '" name="Description" type="text" class="form-control" style="height:34px" placeholder="Description" spellcheck="false"></textarea></td>' +
             '<td><select id="ddlTypeUom' + cnt + '" class="form-control"> <option value="null"> Choose Uom </option></select></td>' +
+            '<td><input  id="QTY' + cnt + '" type="number" class="form-control" placeholder="QTY"></td>' +
             '<td><input  id="UnitPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="Unit Price"></td>' +
             '<td><input  id="Totalprice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="Total price"></td>' +
             '<td><input  id="DiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountPrc%"></td>' +
             '<td><input  id="DiscountAmount' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountAmount"></td>' +
             '<td><input  id="Net' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="Net"></td>' +
             ' <input  id="txt_StatusFlag' + cnt + '" type="hidden" class="form-control"> ' +
+            ' <input  id="txt_IDItem' + cnt + '" type="hidden" class="form-control"> ' +
             '</tr>';
         $("#Table_Data").append(html);
         debugger;
         for (var i = 0; i < I_D_UOMDetails.length; i++) {
             $('#ddlTypeUom' + cnt + '').append('<option  value="' + I_D_UOMDetails[i].UomID + '">' + I_D_UOMDetails[i].DescE + '</option>');
         }
+        $('#btnItem' + cnt).click(function (e) {
+            sys.FindKey(Modules.Quotation, "btnItem", "", function () {
+                ItemDetail = SearchGrid.SearchDataGrid.SelectedKey;
+                console.log(ItemDetail);
+                var ItemID = Number(ItemDetail[0]);
+                var description = String(ItemDetail[1]);
+                var UnitCode = String(ItemDetail[2]);
+                $('#btnItem' + cnt).html(description);
+                $('#txt_IDItem' + cnt).val(ItemID);
+                $('#ddlTypeUom' + cnt).val(UnitCode);
+                $('#ddlTypeUom' + cnt).val(UnitCode);
+                $('#QTY' + cnt).val('1');
+            });
+        });
         $("#UnitPrice" + cnt).on('keyup', function (e) {
             computeRows(cnt);
         });
@@ -259,21 +278,10 @@ var InvoiceTax;
     function AddNewRow() {
         $('paginationSwitch').addClass("display_none");
         $('.no-records-found').addClass("display_none");
-        var CanAdd = true;
-        if (CountGrid > 0) {
-            for (var i = 0; i < CountGrid; i++) {
-                CanAdd = validationgrid(i);
-                if (CanAdd == false) {
-                    break;
-                }
-            }
-        }
-        if (CanAdd) {
-            BuildControls(CountGrid);
-            $("#txt_StatusFlag" + CountGrid).val("i"); //In Insert mode 
-            CountGrid++;
-            Insert_Serial();
-        }
+        BuildControls(CountGrid);
+        $("#txt_StatusFlag" + CountGrid).val("i"); //In Insert mode 
+        CountGrid++;
+        Insert_Serial();
     }
     function validationgrid(rowcount) {
         if ($("#QTY" + rowcount).val().trim() == "" || Number($("#QTY" + rowcount).val()) <= 0) {
@@ -327,6 +335,8 @@ var InvoiceTax;
         //var StatusFlag: String;
         InvoiceModel = new Sls_Ivoice();
         InvoiceItemsDetailsModel = new Array();
+        TaxableSinglModel = new TaxableItem();
+        TaxableModel = new Array();
         InvoiceModel.CustomerId = CustomerId == 0 ? null : CustomerId;
         InvoiceModel.Status = 1;
         InvoiceModel.CompCode = Number(compcode);
@@ -371,8 +381,19 @@ var InvoiceTax;
                 InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
             }
         }
+        TaxableSinglModel.InvoiceID = 0;
+        TaxableSinglModel.subType = ddlTypeTax.value;
+        TaxableSinglModel.taxType = ddlValueTax.value;
+        TaxableModel.push(TaxableSinglModel);
+        if (ddlDisTax.value != 'null' && ddlTypeDis.value != 'null') {
+            TaxableSinglModel.InvoiceID = 0;
+            TaxableSinglModel.subType = ddlTypeDis.value;
+            TaxableSinglModel.taxType = ddlDisTax.value;
+            TaxableModel.push(TaxableSinglModel);
+        }
         MasterDetailsModel.Sls_Ivoice = InvoiceModel;
         MasterDetailsModel.Sls_InvoiceDetail = InvoiceItemsDetailsModel;
+        MasterDetailsModel.TaxableItem = TaxableModel;
     }
     function insert() {
         if (!validation())
@@ -418,6 +439,13 @@ var InvoiceTax;
         AddNewRow();
     }
     function validation() {
+        var count = 0;
+        for (var i = 0; i < CountGrid; i++) {
+            var StatusFlag = $("#txt_StatusFlag" + i).val();
+            if (StatusFlag != "m" && StatusFlag != "d") {
+                count++;
+            }
+        }
         if (txtDate.value.trim() == "") {
             Errorinput(txtDate);
             DisplayMassage('Date must be entered', 'Date must be entered', MessageType.Error);
@@ -438,30 +466,46 @@ var InvoiceTax;
             DisplayMassage(' RFQ must be entered', ' RFQ must be entered', MessageType.Error);
             return false;
         }
-        if (txtsalesVAT.value.trim() == "") {
-            Errorinput(txtsalesVAT);
-            DisplayMassage('Vat include or not must be entered', ' Vat include or not must be entered', MessageType.Error);
+        if (count == 0) {
+            Errorinput(btnAddDetails);
+            DisplayMassage('يجب ادخال  بينات الفاتوره', 'يجب ادخال  بينات الفاتوره', MessageType.Error);
             return false;
         }
-        if (txtfirstdays.value.trim() == "") {
-            Errorinput(txtfirstdays);
-            DisplayMassage('days starting from the delivery date must be entered', 'days starting from the delivery date must be entered', MessageType.Error);
-            return false;
-        }
-        if (txtsecounddays.value.trim() == "") {
-            Errorinput(txtsecounddays);
-            DisplayMassage('Offer validity days from offer date must be entered', ' Offer validity days from offer date must be entered', MessageType.Error);
-            return false;
-        }
-        if (txtlastdays.value.trim() == "") {
-            Errorinput(txtlastdays);
-            DisplayMassage('Place of delivery must be entered', ' Place of delivery must be entered', MessageType.Error);
-            return false;
-        }
+        //if (txtsalesVAT.value.trim() == "") {
+        //    Errorinput(txtsalesVAT);
+        //    DisplayMassage('Vat include or not must be entered', ' Vat include or not must be entered', MessageType.Error);
+        //    return false;
+        //}
+        //if (txtfirstdays.value.trim() == "") {
+        //    Errorinput(txtfirstdays);
+        //    DisplayMassage('days starting from the delivery date must be entered', 'days starting from the delivery date must be entered', MessageType.Error);
+        //    return false;
+        //}
+        //if (txtsecounddays.value.trim() == "") {
+        //    Errorinput(txtsecounddays);
+        //    DisplayMassage('Offer validity days from offer date must be entered', ' Offer validity days from offer date must be entered', MessageType.Error);
+        //    return false;
+        //}
+        //if (txtlastdays.value.trim() == "") {
+        //    Errorinput(txtlastdays);
+        //    DisplayMassage('Place of delivery must be entered', ' Place of delivery must be entered', MessageType.Error);
+        //    return false;
+        //}
         return true;
     }
     function btnsave_onclick() {
-        insert();
+        var CanAdd = true;
+        if (CountGrid > 0) {
+            for (var i = 0; i < CountGrid; i++) {
+                CanAdd = validationgrid(i);
+                if (CanAdd == false) {
+                    break;
+                }
+            }
+        }
+        if (CanAdd) {
+            insert();
+        }
     }
 })(InvoiceTax || (InvoiceTax = {}));
 //# sourceMappingURL=InvoiceTax.js.map

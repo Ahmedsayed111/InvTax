@@ -184,6 +184,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClientApp\Excel\jquery.min.js" />
+    <Content Include="ClientApp\Excel\jszip.js" />
+    <Content Include="ClientApp\Excel\LoadExcel.js" />
+    <Content Include="ClientApp\Excel\xlsx.js" />
     <Content Include="login\css\bootstrap-arabic.min.css" />
     <Content Include="NewStyle\accordion.html" />
     <Content Include="NewStyle\advance-form-element.html" />
@@ -1049,6 +1053,8 @@
     <Content Include="Views\Customer\TestIndex.cshtml" />
     <Content Include="Views\StockDef\StockDefIndex.cshtml" />
     <Content Include="Views\Invoice\InvoiceTax.cshtml" />
+    <Content Include="Views\UploadInv\UploadInvIndex.cshtml" />
+    <Content Include="Views\DownloadInv\DownloadInvIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1065,6 +1071,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\AjaxCaller.ts" />
+    <TypeScriptCompile Include="ClientApp\DownloadInv\Downloadinv.ts" />
     <TypeScriptCompile Include="ClientApp\EslamGrid.ts" />
     <TypeScriptCompile Include="ClientApp\App.ts" />
     <TypeScriptCompile Include="ClientApp\ClientGeneralTools.ts" />
@@ -1072,6 +1079,7 @@
     <TypeScriptCompile Include="ClientApp\StockDef\StockDef.ts" />
     <TypeScriptCompile Include="ClientApp\Quotation\TestGrad.ts" />
     <TypeScriptCompile Include="ClientApp\Quotation\QuotationView.ts" />
+    <TypeScriptCompile Include="ClientApp\UploadInv\UploadInv.ts" />
     <TypeScriptCompile Include="ClientApp\USERS\Users.ts" />
     <TypeScriptCompile Include="ClientApp\Entities.ts" />
     <TypeScriptCompile Include="ClientApp\Pages\LoginAdmin.ts" />
