@@ -5,10 +5,8 @@ var Downloadinv;
 (function (Downloadinv) {
     var InvoiceModel = new Documente();
     var InvoiceLst = new Array();
-    var dataSource;
-    var frestdataSource;
-    var dataSourcefeltar;
-    var dataSourceDownload;
+    var sys = new SystemTools();
+    var SysSession = GetSystemSession(Modules.StockDef);
     var btnSearch;
     var txtSearch;
     var fromno;
@@ -122,17 +120,18 @@ var Downloadinv;
         return ReturnedDate;
     }
     function DownloadList(_from, _to, pageNo, pageSize, _tyep) {
-        var _Uri = Url.Action("DownloadList", "Home");
-        Ajax.CallAsync({
-            "url": _Uri,
-            "data": { from: _from, to: _to, pageNo: pageNo, pageSize: pageSize, tyep: _tyep },
+        debugger;
+        var ClientIDProd_ = "531b1531-d482-46c6-9e87-da8bc33f4fd3";
+        var SecretIDProd_ = "97959a2a-1829-42b4-8330-20d1b829c6bf";
+        var RegistrationNumber_ = "200154257";
+        var PDFFolder_ = SysSession.CurrentEnvironment.I_Control[0].DocPDFFolder;
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("Items", "DownloadList"),
+            data: { from: _from, to: _to, pageNo: pageNo, pageSize: pageSize, tyep: _tyep, ClientIDProd: ClientIDProd_, SecretIDProd: SecretIDProd_, RegistrationNumber: RegistrationNumber_, PDFFolder: PDFFolder_ },
             success: function (d) {
-                if (d == null) {
-                    dataSource = new Array();
-                    alert("Document No. Not Exist");
-                }
-                else {
-                    dataSource = d;
+                var result = d;
+                if (result.IsSuccess) {
                 }
             }
         });

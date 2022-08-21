@@ -119,8 +119,7 @@ namespace HomeComponent {
 
     export function InitalizeComponent() {
 
-        myfunction();
-      
+       
         ApplyModules();
         ApplyCompanyPrivilages();
         //$("#btnHelpRep").click(() => { ScreenHelp(); })
@@ -135,20 +134,7 @@ namespace HomeComponent {
         App.Startup();
  
     }
-    function myfunction() {
-        Ajax.Callsync({
-            type: "Get",
-            //url: sys.apiUrlCore("HomeSendinvoce","ActivateItems"),
-            url: sys.apiUrlCore("WeatherForecast", "Get"),
-            // data: { data: data },   
-            success: (d) => {
-                let result = d as BaseResponse;
-                if (result.IsSuccess) {
- 
-                }
-            }
-        });  
-    }
+    
     export function LogoutUserApi() {
         let userCode = SysSession.CurrentEnvironment.UserCode;
         Ajax.Callsync({
