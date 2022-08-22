@@ -99,6 +99,24 @@ function Fixed(value) {
 }
 var App;
 (function (App) {
+    Number.prototype.RoundToNum = function (dec) {
+        var num = this;
+        return (Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec));
+    };
+    Number.prototype.RoundToSt = function (dec) {
+        var num = this;
+        return (Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec)).toString();
+    };
+    HTMLInputElement.prototype.setVal = function (value) {
+        var Input = this;
+        value == null || Number(value) == 0 ? Input.value = '' : Input.value = value;
+        return value;
+    };
+    HTMLSelectElement.prototype.SetValSelect = function (value) {
+        var Input = this;
+        value == null || value == '' || value == 0 || value == '0' ? Input.value = 'null' : Input.value = value;
+        return value;
+    };
     var branchCodeSelected = "";
     var LanguageButton;
     function AssignLoginInformation() {

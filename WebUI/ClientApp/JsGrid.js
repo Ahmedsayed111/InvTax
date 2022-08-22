@@ -67,6 +67,7 @@ var JsGrid = /** @class */ (function () {
         if (this.SwitchingLanguageEnabled == true) {
             this.SwitchColumnsLanguage();
         }
+        debugger;
         $("#" + this.ElementName).jsGrid({
             width: this.Width,
             height: this.Height,

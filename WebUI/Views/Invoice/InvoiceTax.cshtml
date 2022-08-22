@@ -7,10 +7,17 @@
 <style>
 
     .des {
-        width: 22% !important;
+        width:15% !important;
     }
 
     .uom {
+        width: 11% !important;
+    }
+
+    .Net {
+        width: 15% !important;
+    }
+    .QTY {
         width: 11% !important;
     }
 
@@ -18,6 +25,9 @@
         width: 0% !important;
     }
 
+    .Tax {
+        width: 7% !important;
+    }
     .Price {
         width: 9% !important;
     }
@@ -37,7 +47,7 @@
 
                             <div class="col-lg-12">
                                 <div class="tab-content">
-                                    <div id="inbox" class="tab-pane fade in animated zoomInDown custom-inbox-message shadow-reset active">
+                                    <div id="inbox" class="tab-pane fade in animated zoomInDown custom-inbox-message shadow-reset active" style="direction: rtl;">
 
                                         <div class="wrapper-pro">
 
@@ -119,7 +129,7 @@
 
                                                                         <div class="col-lg-1">
                                                                             <div class="input-mask-title">
-                                                                                <label>Type Inv</label>
+                                                                                <label>Pay</label>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-3">
@@ -150,7 +160,7 @@
                                                                     <div class="row">
 
 
-                                                                        <div class="col-lg-2">
+                                                                        <div class="col-lg-1">
                                                                             <div class="input-mask-title">
                                                                                 <label>ضريبة القيمه المضافه</label>
                                                                             </div>
@@ -165,7 +175,7 @@
 
 
 
-                                                                        <div class="col-lg-2">
+                                                                        <div class="col-lg-1">
                                                                             <div class="input-mask-title">
                                                                                 <label>نوع الضريبه</label>
                                                                             </div>
@@ -177,6 +187,23 @@
                                                                                 </select>
                                                                             </div>
                                                                         </div>
+                                                                        
+
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>Statas</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <select id="ddlStatas" class="form-control">
+                                                                                    <option value="0"> جديد   </option>
+                                                                                    <option value="1"> صحيحه   </option>
+                                                                                    <option value="2"> غير صحيحه   </option>
+                                                                                    <option value="3"> ملغي  </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
 
 
                                                                     </div>
@@ -185,7 +212,7 @@
                                                                     <div class="row">
 
 
-                                                                        <div class="col-lg-2">
+                                                                        <div class="col-lg-1">
                                                                             <div class="input-mask-title">
                                                                                 <label>خصم تحت حساب الضريبه</label>
                                                                             </div>
@@ -200,7 +227,7 @@
 
 
 
-                                                                        <div class="col-lg-2">
+                                                                        <div class="col-lg-1">
                                                                             <div class="input-mask-title">
                                                                                 <label>نوع الخصم</label>
                                                                             </div>
@@ -212,6 +239,22 @@
                                                                                 </select>
                                                                             </div>
                                                                         </div>
+
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>   Type Inv</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <select id="ddlTypeInv" class="form-control">
+                                                                                    <option value="I"> فاتوره   </option>
+                                                                                    <option value="C"> مرتجع   </option>
+                                                                                    <option value="D"> أضافه   </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
 
 
                                                                     </div>
@@ -250,12 +293,15 @@
                                                                                             <th data-field="id" class="SR" style="">SR</th>
                                                                                             <th class="des" data-field="description" data-editable="true">Item Descr </th>
                                                                                             <th data-field="" class="uom" data-editable="true"> Type Unit</th>
-                                                                                            <th data-field="" data-editable="true">QTY</th>
+                                                                                            <th data-field="" class="QTY" data-editable="true">QTY</th>
                                                                                             <th data-field="number" class="Price" data-editable="true">Unit Price</th>
-                                                                                            <th data-field="number" class="Price" data-editable="true">Total price</th>
                                                                                             <th data-field="number" class="Zero" data-editable="true">Discount%</th>
-                                                                                            <th data-field="number" data-editable="true">Discount Amount</th>
-                                                                                            <th data-field="number" data-editable="true">Net</th>
+                                                                                            <th data-field="number" data-editable="true">Dis Amount</th>
+                                                                                            <th data-field="number" data-editable="true">   Price Aft Dis  </th>
+                                                                                            <th data-field="number" class="Price" data-editable="true">Total price</th>
+                                                                                            <th data-field="number" class="Tax" data-editable="true">  Tax %   </th>
+                                                                                            <th data-field="number" data-editable="true">  Amount Tax     </th>
+                                                                                            <th data-field="number" class="Net" data-editable="true">Net</th>
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody id="Table_Data">
@@ -268,47 +314,124 @@
                                                                         </div>
                                                                     </div>
                                                                     <br />
+
                                                                     <div class="row">
-                                                                        <div class="col-lg-2">
-                                                                            <div class="input-mask-title">
-                                                                                <label>Total Quotation</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-lg-2">
+
+                                                                        <div class="col-lg-3">
                                                                             <div class="input-mark-inner mg-b-22">
-                                                                                <input id="txtNetBefore" disabled="disabled" type="number" name="TotalAmount" class="form-control" placeholder="">
+                                                                                <input id="txtCompanysales" type="text" class="form-control" placeholder="company salesman">
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-2">
+                                                                        <div class="col-lg-1">
                                                                             <div class="input-mask-title">
-                                                                                <label>Discount</label>
+                                                                                <label>خصم تحت حساب الضريبه</label>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-2">
+
+
+
+                                                                        <div class="col-lg-3">
                                                                             <div class="input-mark-inner mg-b-22">
-                                                                                <input id="txtAllDiscount" type="number" name="RoundingAmount" class="form-control" placeholder="">
+                                                                                <input id="txtCompanysales" type="text" class="form-control" placeholder="company salesman">
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-2">
+
+                                                                        <div class="col-lg-1">
                                                                             <div class="input-mask-title">
-                                                                                <label>Net</label>
+                                                                                <label>نوع الخصم</label>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-2">
+
+
+                                                                        <div class="col-lg-3">
                                                                             <div class="input-mark-inner mg-b-22">
-                                                                                <input id="txtNetAfterVat" disabled="disabled" name="NetAfterVat" type="number" class="form-control" placeholder="">
+                                                                                <input id="txtCompanysales" type="text" class="form-control" placeholder="company salesman">
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-2">
+                                                                        <div class="col-lg-1">
                                                                             <div class="input-mask-title">
-                                                                                <label>Remarks</label>
+                                                                                <label>   Type Inv</label>
                                                                             </div>
                                                                         </div>
+
+
+
+
+                                                                    </div>
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtCompanysales" type="text" class="form-control" placeholder="company salesman">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>خصم تحت حساب الضريبه</label>
+                                                                            </div>
+                                                                        </div>
+
+
+
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtCompanysales" type="text" class="form-control" placeholder="company salesman">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>نوع الخصم</label>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtCompanysales" type="text" class="form-control" placeholder="company salesman">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>   Type Inv</label>
+                                                                            </div>
+                                                                        </div>
+
+
+
+
+                                                                    </div>
+
+
+
+                                                                    <br />
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                <input id="txtCompanysales" type="text" class="form-control" placeholder="company salesman">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <label>   عدد العبوات</label>
+                                                                            </div>
+                                                                        </div>
+
                                                                         <div class="col-lg-6">
                                                                             <div class="input-mark-inner mg-b-22">
                                                                                 <textarea id="txtRemark" maxlength="200" name="Remark" type="text" class="form-control" placeholder="Remark"></textarea>
                                                                             </div>
                                                                         </div>
+
+                                                                        <div class="col-lg-2">
+                                                                            <div class="input-mask-title">
+                                                                                <label>الملاحظات</label>
+                                                                            </div>
+                                                                        </div>
+
                                                                     </div>
 
                                                                     <div class="display_none">

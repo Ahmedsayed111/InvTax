@@ -121,6 +121,27 @@ interface JQueryStatic {
     event: any;
 }
 
+
+interface Number {
+
+    RoundToNum: (dec: number) => number;
+    RoundToSt: (dec: number) => string;
+}
+
+interface HTMLInputElement {
+
+    setVal: (dec: any) => string;
+
+}
+
+
+interface HTMLSelectElement {
+
+    SetValSelect: (dec: any) => string;
+
+}
+
+
 interface IIgGridColumn {
     key?: string;
     dataType?: string;
@@ -170,6 +191,34 @@ interface IJsGridColumn {
 
 
 namespace App {
+
+
+    Number.prototype.RoundToNum = function (dec: number): number {
+        let num = this;
+        return (Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec));
+    };
+
+
+
+    Number.prototype.RoundToSt = function (dec: number): string {
+        let num = this;
+        return (Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec)).toString();
+    };
+
+
+    HTMLInputElement.prototype.setVal = function (value: any): any { 
+        let Input = this;
+        value == null || Number(value) == 0 ? Input.value = '' : Input.value = value;
+        return value;
+    };
+
+    HTMLSelectElement.prototype.SetValSelect = function (value: any): any { 
+        let Input = this;
+        value == null || value == '' || value == 0 || value == '0' ? Input.value = 'null' : Input.value = value;
+        return value;
+    };
+
+
 
     let branchCodeSelected: string = "";
     var LanguageButton: HTMLAnchorElement;
