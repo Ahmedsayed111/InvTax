@@ -133,6 +133,14 @@ namespace Inv.WebUI.Controllers
         
   
 
+        public ActionResult DownloadInvIndex()
+        {
+            return View("~/Views/DownloadInv/DownloadInvIndex.cshtml");
+        }
+        public ActionResult UploadInvIndex()
+        {
+            return View("~/Views/UploadInv/UploadInvIndex.cshtml");
+        }
         public ActionResult ReportsPopup()
         {
             return View("~/Views/Partial/ReportsPopup.cshtml");

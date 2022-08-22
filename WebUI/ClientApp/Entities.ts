@@ -12,6 +12,8 @@ class FavModules {//
     public SYSTEM_CODE: string;
     public SUB_SYSTEM_CODE: string;
     public USER_CODE: string;
+    public ClientIDProd: string;
+    public SecretIDProd: string;
 }
 
 class SystemParameters {
@@ -1886,6 +1888,7 @@ class G_Government extends SecurityClass {
 
 class receiver {
     constructor() {
+        this.address = new Address();
         this.receiverID = 0;
         this.branchID = 0;
         this.country = "";
@@ -1903,6 +1906,7 @@ class receiver {
         this.name = "";
         this.CompCode = 0;
     }
+    public address: Address; 
     public receiverID: number;
     public branchID: number;
     public country: string;
@@ -1920,8 +1924,20 @@ class receiver {
     public name: string;
     public CompCode: number;
 }
+ 
 
-
+class Receiver {
+    constructor() {
+        this.address = new Address();
+        this.type = "";
+        this.id = "";
+        this.name = "";
+    }
+    public address: Address;
+    public type: string;
+    public id: string;
+    public name: string;
+}
 
 class Documente {
     constructor() {
@@ -2028,7 +2044,283 @@ class TaxTotal {
 }
 
 
+class VDocument {
+    public invId: number;
+    public internalId: string;
+    public issuerId: string;
+    public receiverId: string;
+    public documentType: string;
+    public documentTypeVersion: string;
+    public dateTimeIssued: string;
+    public taxpayerActivityCode: string;
+    public purchaseOrderReference: string;
+    public purchaseOrderDescription: string;
+    public salesOrderReference: string;
+    public salesOrderDescription: string;
+    public proformaInvoiceNumber: string;
+    public paymentId: number | null;
+    public deliveryId: number | null;
+    public totalDiscountAmount: number | null;
+    public totalSalesAmount: number | null;
+    public netAmount: number | null;
+    public totalAmount: number | null;
+    public extraDiscountAmount: number | null;
+    public totalItemsDiscountAmount: number | null;
+    public UuId: string | null;
+    public msg: string | null;
+    public Status: string | null;
+    public issId: string;
+    public issBranchId: string;
+    public issCountry: string;
+    public issGovernate: string;
+    public issRegionCity: string;
+    public issStreet: string;
+    public issBuildingNumber: string;
+    public issPostalCode: string;
+    public issFloor: string;
+    public issRoom: string;
+    public issLandmark: string;
+    public issAdditionalInformation: string;
+    public issType: string;
+    public issName: string;
+    public recId: string;
+    public recBranchId: string;
+    public recCountry: string;
+    public recGovernate: string;
+    public recRegionCity: string;
+    public recStreet: string;
+    public recBuildingNumber: string;
+    public recPostalCode: string;
+    public recFloor: string;
+    public recRoom: string;
+    public recLandmark: string;
+    public recAdditionalInformation: string;
+    public recType: string;
+    public recName: string;
+    public payBankName: string;
+    public payBankAddress: string;
+    public payBankAccountNo: string;
+    public payBankAccountIban: string;
+    public paySwiftCode: string;
+    public payTerms: string;
+    public delApproach: string;
+    public delPackaging: string;
+    public delDateValidity: string;
+    public delExportPort: string;
+    public delGrossWeight: number | null;
+    public delNetWeight: number | null;
+    public delTerms: string;
+    public ttTaxType: string;
+    public ttAmount: string;
+    public itemId: number;
+    public itemInternalId: string;
+    public itemDescription: string;
+    public itemType: string;
+    public itemCode: string;
+    public itemUnitType: string;
+    public itemQuantity: number | null;
+    public itemInternalCode: string;
+    public itemSalesTotal: number | null;
+    public itemTotal: number | null;
+    public itemValueDifference: number | null;
+    public itemTotalTaxableFees: number | null;
+    public itemNetTotal: number | null;
+    public itemsDiscount: number | null;
+    public itemUnitCurrencySold: string;
+    public itemUnitAmountEgp: number | null;
+    public itemDiscountRate: number | null;
+    public itemDiscountAmount: number | null;
+    public invoiceLineId: number | null;
+    public taxType: string;
+    public amount: number | null;
+    public subType: string;
+    public rate: number | null;
+}
 
+class ClientResponseModel {
+    public uuid: string;
+    public internalId: string;
+    public message: string;
+    public isSuccess: boolean;
+    public responseData: any;
+
+}
+
+class TblFile {
+    id: number;
+    internalId: string;
+    uuId: string;
+    type: string;
+    date: string | null;
+    userName: string;
+    internal: TblInvoice;
+}
+class Root {
+    constructor() {
+        this.documents = new Array<Documente>();
+    }
+    public documents: Array<Documente>;
+}
+
+class TblInvoice {
+    internalId: string;
+    issuerId: string;
+    receiverId: string;
+    documentType: string;
+    documentTypeVersion: string;
+    dateTimeIssued: string;
+    taxpayerActivityCode: string;
+    purchaseOrderReference: string;
+    purchaseOrderDescription: string;
+    salesOrderReference: string;
+    salesOrderDescription: string;
+    proformaInvoiceNumber: string;
+    paymentId: number | null;
+    deliveryId: number | null;
+    totalDiscountAmount: number | null;
+    totalSalesAmount: number | null;
+    netAmount: number | null;
+    totalAmount: number | null;
+    extraDiscountAmount: number | null;
+    totalItemsDiscountAmount: number | null;
+    uuId: string;
+    msg: string;
+    status: boolean;
+    createdDate: string;
+    delivery: TblDelivery;
+    issuer: TblIssuer;
+    payment: TblPayment;
+    receiver: TblReceiver;
+    tblFiles: Array<TblFile>;
+    tblInvoiceLines: Array<TblInvoiceLine>;
+    tblTaxTotals: Array<TblTaxTotal>;
+}
+
+class TblDelivery {
+    id: number;
+    approach: string;
+    packaging: string;
+    dateValidity: string;
+    exportPort: string;
+    grossWeight: number | null;
+    netWeight: number | null;
+    terms: string;
+    tblInvoices: TblInvoice[];
+}
+class TblIssuer {
+    id: string;
+    branchId: string;
+    country: string;
+    governate: string;
+    regionCity: string;
+    street: string;
+    buildingNumber: string;
+    postalCode: string;
+    floor: string;
+    room: string;
+    landmark: string;
+    additionalInformation: string;
+    type: string;
+    name: string;
+    clientId: string;
+    clientSecret: string;
+    activityCode: string;
+    registrationNumber: string;
+    documentTypeVersion: string;
+    tblInvoices: TblInvoice[];
+}
+class TblPayment {
+    id: number;
+    bankName: string;
+    bankAddress: string;
+    bankAccountNo: string;
+    bankAccountIban: string;
+    swiftCode: string;
+    terms: string;
+    tblInvoices: TblInvoice[];
+}
+class TblReceiver {
+    id: string;
+    branchId: string;
+    country: string;
+    governate: string;
+    regionCity: string;
+    street: string;
+    buildingNumber: string;
+    postalCode: string;
+    floor: string;
+    room: string;
+    landmark: string;
+    additionalInformation: string;
+    type: string;
+    name: string;
+    tblInvoices: TblInvoice[];
+} 
+class TblInvoiceLine {
+    Id: number;
+    InternalId: string;
+    Description: string;
+    ItemType: string;
+    ItemCode: string;
+    UnitType: string;
+    Quantity: number | null;
+    InternalCode: string;
+    SalesTotal: number | null;
+    Total: number | null;
+    ValueDifference: number | null;
+    TotalTaxableFees: number | null;
+    NetTotal: number | null;
+    ItemsDiscount: number | null;
+    UnitCurrencySold: string;
+    UnitAmountEgp: number | null;
+    DiscountRate: number | null;
+    DiscountAmount: number | null;
+    Internal: TblInvoice;
+    TblTaxableItems: Array<TblTaxableItem>;
+}
+class TblTaxableItem {
+    Id: number;
+    InvoiceLineId: number;
+    TaxType: string;
+    Amount: number | null;
+    SubType: string;
+    Rate: number | null;
+    InvoiceLine: TblInvoiceLine;
+}
+class TblTaxTotal {
+    id: number;
+    internalId: string;
+    taxType: string;
+    amount: number | null;
+    internal: TblInvoice;
+}
+
+class Address {
+    constructor() {
+        this.branchID = "";
+        this.country = "";
+        this.governate = "";
+        this.regionCity = "";
+        this.street = "";
+        this.buildingNumber = "";
+        this.postalCode = "";
+        this.floor = "";
+        this.room = "";
+        this.landmark = "";
+        this.additionalInformation = "";
+    }
+    public branchID: string;
+    public country: string;
+    public governate: string;
+    public regionCity: string;
+    public street: string;
+    public buildingNumber: string;
+    public postalCode: string;
+    public floor: string;
+    public room: string;
+    public landmark: string;
+    public additionalInformation: string;
+}
 
 class InvoiceLine {
     constructor() {

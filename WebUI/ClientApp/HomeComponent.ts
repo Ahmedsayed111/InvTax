@@ -119,8 +119,7 @@ namespace HomeComponent {
 
     export function InitalizeComponent() {
 
-      
-      
+       
         ApplyModules();
         ApplyCompanyPrivilages();
         //$("#btnHelpRep").click(() => { ScreenHelp(); })
@@ -135,7 +134,7 @@ namespace HomeComponent {
         App.Startup();
  
     }
-
+    
     export function LogoutUserApi() {
         let userCode = SysSession.CurrentEnvironment.UserCode;
         Ajax.Callsync({
@@ -419,6 +418,9 @@ namespace HomeComponent {
         $("#btnCompanies").click(() => { OpenPage(Modules.Companies); })
         $("#btnUsers").click(() => { OpenPage(Modules.Users); })
         $("#btnTest").click(() => { OpenPage(Modules.Test); })
+        $("#btnTest").click(() => { OpenPage(Modules.Test); })
+        $("#btnDownloadInv").click(() => { OpenPage(Modules.DownloadInv); })
+        $("#btnUploadInv").click(() => { OpenPage(Modules.UploadInv); })
         
     }
 

@@ -11,7 +11,9 @@ var Modules = {
     Companies: "Companies",
     Users: "Users",
     Test: "Test",
-    Quotation: "Quotation"
+    Quotation: "Quotation",
+    DownloadInv: "DownloadInv",
+    UploadInv: "UploadInv"
 
 
 };

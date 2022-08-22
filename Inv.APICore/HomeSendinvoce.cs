@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace Inv.APICore
 {
@@ -17,13 +18,23 @@ namespace Inv.APICore
     public class HomeSendinvoce
     {
 
-        public static string connectionString = @"Data Source=192.168.1.50\SQL2014;Initial Catalog=TESTRAGAB;User Id=SYSUSER;Password=SYSUSER";
+        //public static string connectionString = @"Data Source=192.168.1.50\SQL2014;Initial Catalog=TESTRAGAB;User Id=SYSUSER;Password=SYSUSER";
+        public static string connectionString = "";
+        private IConfiguration Configuration;
 
-         
-         
+        public HomeSendinvoce(IConfiguration _configuration)
+        {
+            Configuration = _configuration;
+            connectionString = this.Configuration.GetConnectionString("DefaultConnection");
+
+        }
+
+
+
+
         internal static string sendinvoce(int Optype, int InvoiceID, I_ControlTax I_ControlTax)
         {
- 
+
             string UUid = "";
             try
             {
@@ -298,11 +309,11 @@ namespace Inv.APICore
                     value = SignToken
                 });
                 Root.documents[0].signatures = lstSignature;
- 
+
                 Root RootObj = new Root();
                 RootObj = Root;
                 RestClient client = new RestClient();
-                 client = new RestClient(I_ControlTax.UploadDllUrl);
+                client = new RestClient(I_ControlTax.UploadDllUrl);
                 var requestApi = new RestRequest();
                 string json = JsonConvert.SerializeObject(RootObj);
                 Newtonsoft.Json.Linq.JObject request2 = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(json);
@@ -320,13 +331,13 @@ namespace Inv.APICore
                 {
                     Rootcontent = JsonConvert.DeserializeObject<Rootcontent>(response.Content);
                     uuid = Rootcontent.acceptedDocuments[0].uuid;
-                    
+
 
                 }
                 else
                 {
-                   uuid = response.Content.ToString();
-                } 
+                    uuid = response.Content.ToString();
+                }
 
                 return uuid;
             }
@@ -336,7 +347,7 @@ namespace Inv.APICore
                 return ""; //ex.Message.ToString();
             }
         }
- 
+
         public static string RemoveCharFromString(string input, char charItem)
         {
             int indexOfChar = input.IndexOf(charItem);
@@ -350,7 +361,7 @@ namespace Inv.APICore
         internal static string cancelledinv(IQ_EGTaxInvHeader Header, I_ControlTax I_ControlTax)
         {
             DateTime CurantDate = DateTime.Now;
-             RestClient client = new RestClient();
+            RestClient client = new RestClient();
 
 
             client = new RestClient(I_ControlTax.CancelDllUrl + Header.DocUUID + "/pdf?=");
@@ -426,7 +437,7 @@ namespace Inv.APICore
 
         internal static void DownloadPDF(string UUID, I_ControlTax I_ControlTax)
         {
-             RestClient client = new RestClient();
+            RestClient client = new RestClient();
             client = new RestClient("https://api.invoicing.eta.gov.eg/api/v1/documents/" + UUID + "/pdf?=");
             client.Timeout = -1;
             var request = new RestRequest(Method.GET);
@@ -682,7 +693,7 @@ namespace Inv.APICore
             int oldstates_ = Convert.ToInt32(I_Sls_TR_Invoice.Status);
             int stat = 0;
             string pageNo = "1";
-             var client = new RestClient(I_ControlTax.DownloadInterDllUrl+ I_Sls_TR_Invoice.DocUUID + "/details");
+            var client = new RestClient(I_ControlTax.DownloadInterDllUrl + I_Sls_TR_Invoice.DocUUID + "/details");
             client.Timeout = -1;
             var request = new RestRequest(Method.GET);
             request.AddHeader("PageSize", "");
@@ -775,5 +786,5 @@ namespace Inv.APICore
             }
         }
     }
-     
+
 }

@@ -1142,6 +1142,7 @@ var G_Government = /** @class */ (function (_super) {
 }(SecurityClass));
 var receiver = /** @class */ (function () {
     function receiver() {
+        this.address = new Address();
         this.receiverID = 0;
         this.branchID = 0;
         this.country = "";
@@ -1160,6 +1161,15 @@ var receiver = /** @class */ (function () {
         this.CompCode = 0;
     }
     return receiver;
+}());
+var Receiver = /** @class */ (function () {
+    function Receiver() {
+        this.address = new Address();
+        this.type = "";
+        this.id = "";
+        this.name = "";
+    }
+    return Receiver;
 }());
 var Documente = /** @class */ (function () {
     function Documente() {
@@ -1217,6 +1227,83 @@ var TaxTotal = /** @class */ (function () {
         this.amount = 0;
     }
     return TaxTotal;
+}());
+var VDocument = /** @class */ (function () {
+    function VDocument() {
+    }
+    return VDocument;
+}());
+var ClientResponseModel = /** @class */ (function () {
+    function ClientResponseModel() {
+    }
+    return ClientResponseModel;
+}());
+var TblFile = /** @class */ (function () {
+    function TblFile() {
+    }
+    return TblFile;
+}());
+var Root = /** @class */ (function () {
+    function Root() {
+        this.documents = new Array();
+    }
+    return Root;
+}());
+var TblInvoice = /** @class */ (function () {
+    function TblInvoice() {
+    }
+    return TblInvoice;
+}());
+var TblDelivery = /** @class */ (function () {
+    function TblDelivery() {
+    }
+    return TblDelivery;
+}());
+var TblIssuer = /** @class */ (function () {
+    function TblIssuer() {
+    }
+    return TblIssuer;
+}());
+var TblPayment = /** @class */ (function () {
+    function TblPayment() {
+    }
+    return TblPayment;
+}());
+var TblReceiver = /** @class */ (function () {
+    function TblReceiver() {
+    }
+    return TblReceiver;
+}());
+var TblInvoiceLine = /** @class */ (function () {
+    function TblInvoiceLine() {
+    }
+    return TblInvoiceLine;
+}());
+var TblTaxableItem = /** @class */ (function () {
+    function TblTaxableItem() {
+    }
+    return TblTaxableItem;
+}());
+var TblTaxTotal = /** @class */ (function () {
+    function TblTaxTotal() {
+    }
+    return TblTaxTotal;
+}());
+var Address = /** @class */ (function () {
+    function Address() {
+        this.branchID = "";
+        this.country = "";
+        this.governate = "";
+        this.regionCity = "";
+        this.street = "";
+        this.buildingNumber = "";
+        this.postalCode = "";
+        this.floor = "";
+        this.room = "";
+        this.landmark = "";
+        this.additionalInformation = "";
+    }
+    return Address;
 }());
 var InvoiceLine = /** @class */ (function () {
     function InvoiceLine() {
