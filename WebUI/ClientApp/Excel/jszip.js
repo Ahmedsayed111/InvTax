@@ -2260,9 +2260,9 @@ ZipEntries.prototype = {
      */
     readEndOfCentral: function() {
         var offset = this.reader.lastIndexOfSignature(sig.CENTRAL_DIRECTORY_END);
-        if (offset === -1) {
-            throw new Error("Corrupted zip : can't find end of central directory");
-        }
+        //if (offset === -1) {
+        //    throw new Error("Corrupted zip : can't find end of central directory");
+        //}
         this.reader.setIndex(offset);
         this.checkSignature(sig.CENTRAL_DIRECTORY_END);
         this.readBlockEndOfCentral();

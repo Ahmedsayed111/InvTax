@@ -1,10 +1,12 @@
 ﻿/// 
 
 $(document).ready(() => {
-    LoadingInv.InitalizeComponent();
+    UploadInv.InitalizeComponent();
 })
 
-namespace LoadingInv {
+namespace UploadInv {
+    var sys: SystemTools = new SystemTools();
+
     var TaxModel: TaxTotal = new TaxTotal();
     var InvoiceModel: Documente = new Documente();
     var InvoiceItemsDetailsModel: Array<InvoiceLine> = new Array<InvoiceLine>();
@@ -12,7 +14,7 @@ namespace LoadingInv {
     var invoiceItemSingleModel: InvoiceLine = new InvoiceLine();
     var invoiceTaxSingleModel: TaxableItem = new TaxableItem();
     var Model_root: Root = new Root();
-
+    var ReportGrid: JsGrid = new JsGrid();
 
     var btnMargin: HTMLButtonElement;
     var btnPush: HTMLButtonElement;
@@ -36,6 +38,7 @@ namespace LoadingInv {
         InitalizeControls();
         InitializeEvents();
 
+        InitializeGrid(Model_root.documents)
 
     }
     function InitalizeControls() {
@@ -61,8 +64,8 @@ namespace LoadingInv {
         setTimeout(function () {
             debugger
             let json_object = $('#xlx_json' + Type).val();
-            let object = JSON.parse(json_object);
-             $('#upload' + Type).addClass('background_upload');
+            //let object = JSON.parse(json_object);
+            $('#upload' + Type).addClass('background_upload');
         }, 400);
 
     }
@@ -71,14 +74,14 @@ namespace LoadingInv {
     }
 
     function btnMargin_onclick() {
-         debugger
+        debugger
         let Master_object = $('#xlx_jsonMaster').val();
         let Model_MasterAll = JSON.parse(Master_object);
 
         let Detail_object = $('#xlx_jsonDetail').val();
-        
+
         let Model_DetailAll = JSON.parse(Detail_object);
-         
+
 
         Model_root = new Root();
         Qty = 0;
@@ -89,7 +92,7 @@ namespace LoadingInv {
         let Msg = "";
 
         for (var i = 0; i < Model_MasterAll.length; i++) {
-             
+
             let InvoiceNo = Number(Model_MasterAll[i].InvoiceNo)
             let Model_Detail = Model_DetailAll.filter(x => x.InvoiceNo == InvoiceNo);
             Qty = 0;
@@ -103,6 +106,8 @@ namespace LoadingInv {
         if (!IsNullOrEmpty(Msg))
             alert(Msg)
 
+
+        debugger
         InitializeGrid(Model_root.documents)
         $("#totalaftartax").val(totalaftarall.toFixed(2));
         $("#totalouttax").val(totaloutall.toFixed(2));
@@ -113,7 +118,7 @@ namespace LoadingInv {
 
 
     function Assign(Model_Master: any, Model_Detail: any) {
-         
+
         var StatusFlag: String;
         InvoiceModel = new Documente();
         InvoiceItemsDetailsModel = new Array<InvoiceLine>();
@@ -167,71 +172,71 @@ namespace LoadingInv {
             total = Number(Model_Detail[i].Price) * Number(Model_Detail[i].Qty)
             debugger
             Disountinv = Number((total * Number(Model_Master.Disount) / 100).toFixed(2))
-           
+
             let txtsalesTotalD = Number(Model_Detail[i].Price) * Number(Model_Detail[i].Qty)
             let VatPrcD = Number(Model_Detail[i].TaxRate);
             let vatAmountD = 0;
             if (VatPrcD != 0) {
                 vatAmountD = Numeric(Number(total) * VatPrcD / 100);
             }
-            let totalAfterVatD = Numeric(Number(vatAmountD.toFixed(2)) + Number(total.toFixed(2))); 
+            let totalAfterVatD = Numeric(Number(vatAmountD.toFixed(2)) + Number(total.toFixed(2)));
             totalaftarall += Numeric(Number(totalAfterVatD));
             totaloutall += Numeric(Number(total));
-            totalvatAmountD += Numeric(Number(vatAmountD));  
+            totalvatAmountD += Numeric(Number(vatAmountD));
             //الاجمالي بدون ضريبه - (price * qty) 
-            invoiceItemSingleModel.salesTotal = Numeric(txtsalesTotalD); 
-             
+            invoiceItemSingleModel.salesTotal = Numeric(txtsalesTotalD);
+
             invoiceItemSingleModel.netTotal = Numeric(txtsalesTotalD);
-             invoiceItemSingleModel.unitValue.currencySold = "EGP"; 
+            invoiceItemSingleModel.unitValue.currencySold = "EGP";
             invoiceItemSingleModel.unitValue.amountEGP = Numeric(Number(Model_Detail[i].Price));
             //------------------------------------------Discount-----------
             invoiceItemSingleModel.discount.amount = 0;
             invoiceItemSingleModel.discount.rate = 0;
             //------------------------------------------TaxableItem-----------
- 
+
             invoiceTaxSingleModel.amount = Numeric(Number(vatAmountD));//Number($("#txtsalesTotal" + i).val());//Number($("#txtTax" + i).val());
             vatAmount += invoiceTaxSingleModel.amount;
             invoiceTaxSingleModel.rate = Number(Model_Detail[i].TaxRate)
             invoiceTaxSingleModel.subType = "V003";
             invoiceTaxSingleModel.taxType = "T1";
             invoiceItemSingleModel.taxableItems.push(invoiceTaxSingleModel);
-              
+
             var result = 0;
             if (Model_Master.Disount > 0) {
                 debugger
-              invoiceTaxSingleModel = new TaxableItem(); 
-              invoiceTaxSingleModel.taxType = "T4"; 
-              invoiceTaxSingleModel.subType = "W004";
-              invoiceTaxSingleModel.rate = Number(Model_Master.Disount);
-              invoiceTaxSingleModel.amount = Number(Disountinv) ;
-              totaltaxEX += Number(Disountinv); 
-              invoiceItemSingleModel.taxableItems.push(invoiceTaxSingleModel);
+                invoiceTaxSingleModel = new TaxableItem();
+                invoiceTaxSingleModel.taxType = "T4";
+                invoiceTaxSingleModel.subType = "W004";
+                invoiceTaxSingleModel.rate = Number(Model_Master.Disount);
+                invoiceTaxSingleModel.amount = Number(Disountinv);
+                totaltaxEX += Number(Disountinv);
+                invoiceItemSingleModel.taxableItems.push(invoiceTaxSingleModel);
 
             }
-            invoiceItemSingleModel.total = Numeric(Number(totalAfterVatD) - Number(Disountinv) );
+            invoiceItemSingleModel.total = Numeric(Number(totalAfterVatD) - Number(Disountinv));
             InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
             totalAmount += Numeric(Number(totalAfterVatD));
         }
-        InvoiceModel.totalAmount = Numeric(Number(totalAmount) - totaltaxEX );
+        InvoiceModel.totalAmount = Numeric(Number(totalAmount) - totaltaxEX);
         InvoiceModel.extraDiscountAmount = 0.00;
-  ;
+        ;
 
         //------------------------------------------**TaxTotal**------------------------------------      
         TaxModel.taxType = "T1";
         TaxModel.amount = Numeric(vatAmount);
         InvoiceModel.taxTotals.push(TaxModel);
-         
-         if (Number(Model_Master.Disount) > 0) {
+
+        if (Number(Model_Master.Disount) > 0) {
             let TaxModel_ = new TaxTotal();
-             TaxModel_.taxType = "T4"
-           
-             TaxModel_.amount = Numeric(totaltaxEX) ;
+            TaxModel_.taxType = "T4"
+
+            TaxModel_.amount = Numeric(totaltaxEX);
             InvoiceModel.taxTotals.push(TaxModel_);
 
         }
         InvoiceModel.invoiceLines = InvoiceItemsDetailsModel;
         _root.documents.push(InvoiceModel);
-        
+
         Model_root.documents.push(InvoiceModel);
     }
 
@@ -240,7 +245,7 @@ namespace LoadingInv {
     }
 
     function ComputeTotals(Model_Detail: any) {
-         
+
         PackageCount = 0;
         Totalbefore = 0;
         CountTotal = 0;
@@ -273,9 +278,9 @@ namespace LoadingInv {
     function insert() {
         debugger
         let _Uri: string = Url.Action("ListInvoice", "Home");
-        
+
         let _Data: string = JSON.stringify(Model_root.documents);
-         Ajax.Callsync(
+        Ajax.Callsync(
             {
                 "url": _Uri,
                 "data": _Data,
@@ -286,45 +291,83 @@ namespace LoadingInv {
                     let _msg: string = "";
                     for (var i = 0; i < _res.length; i++) {
                         _msg = " ( " + i + ":" + _res[i].message + " ) ";
-                         //alert("( " + i + 1 + " ) >> " + _res[i].message);
+                        //alert("( " + i + 1 + " ) >> " + _res[i].message);
                         if (_res[i].isSuccess)
                             if (!IsNullOrEmpty(_res[i].uuid)) {
                                 console.log("Download Mehtod");
                                 console.log(_res);
                             }
                     }
-                 }
+                }
             }
         )
     }
 
     function InitializeGrid(dataSource: any) {
 
-         $("#jsGrid").jsGrid({
-            width: "100%",
-            height: "auto",
-            sorting: true,
-            paging: true,
-            autoload: true,
-            pageSize: 10,
-            data: dataSource,
-            fields: [
-                { title: "Internal ID", name: "internalID", type: "label", width: "8%" },
-                { title: "Date", name: "dateTimeIssued", type: "label", width: "8%" },
 
-                { title: "Receiver No.", name: "receiver.id", type: "label", width: "8%" },
-                { title: "Receiver Name", name: "receiver.name", type: "label", width: "20%" },
-                { title: "Receiver Type", name: "receiver.type", type: "label", width: "8%" },
 
-                //Sum all all InvoiceLine/SalesTotal items
-                { title: "Total without Tax", name: "totalSalesAmount", type: "label", width: "8%" },
-                //TotalSales – TotalDiscount
-                //{ title: "Net Amount", name: "netAmount", type: "label", width: "8%" },
-                //Total amount of the invoice calculated as NetAmount + Totals of tax amounts. 5 decimal digits allowed.
-                { title: "Total with Tax", name: "totalAmount", type: "label", width: "8%" },
 
-                
-            ]
-        });
+        ReportGrid.OnRowDoubleClicked = () => { };
+        ReportGrid.ElementName = "LodGrid";
+        ReportGrid.PrimaryKey = "internalID";
+        ReportGrid.Paging = true;
+        ReportGrid.PageSize = 6;
+        ReportGrid.Sorting = true;
+        ReportGrid.InsertionMode = JsGridInsertionMode.Binding;
+        ReportGrid.Editing = false;
+        ReportGrid.Inserting = false;
+        ReportGrid.SelectedIndex = 1;
+        ReportGrid.SwitchingLanguageEnabled = false;
+        ReportGrid.OnItemEditing = () => { };
+        ReportGrid.Columns = [
+            { title: "Internal ID", name: "internalID", type: "text", width: "8%",  },
+            { title: "Date", name: "dateTimeIssued", type: "text", width: "8%" },
+
+            {
+                title: "Receiver No.", css: "ColumPadding", name: "No", width: "8%",
+                itemTemplate: (s: string, item: Documente): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+                    txt.innerHTML = item.receiver.id;
+                    return txt;
+                }
+            },
+
+             {
+                 title: "Receiver Name.", css: "ColumPadding", name: "Name", width: "20%",
+                itemTemplate: (s: string, item: Documente): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+                    txt.innerHTML = item.receiver.name;
+                    return txt;
+                }
+            },
+
+            {
+                title: "Receiver type.", css: "ColumPadding", name: "type", width: "8%",
+                itemTemplate: (s: string, item: Documente): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+                    txt.innerHTML = item.receiver.type;
+                    return txt;
+                }
+            },
+
+            //{ title: "Receiver No.", name: "receiver.id", type: "text", width: "8%" },
+            //{ title: "Receiver Name", name: "receiver.name", type: "text", width: "20%" },
+            //{ title: "Receiver Type", name: "receiver.type", type: "text", width: "8%" },
+
+            //Sum all all InvoiceLine/SalesTotal items
+            { title: "Total without Tax", name: "totalSalesAmount", type: "text", width: "8%" },
+            //TotalSales – TotalDiscount
+            //{ title: "Net Amount", name: "netAmount", type: "label", width: "8%" },
+            //Total amount of the invoice calculated as NetAmount + Totals of tax amounts. 5 decimal digits allowed.
+            { title: "Total with Tax", name: "totalAmount", type: "text", width: "8%" },
+
+
+
+        ];
+
+        ReportGrid.DataSource = dataSource;
+        ReportGrid.Bind();
+
     }
 }

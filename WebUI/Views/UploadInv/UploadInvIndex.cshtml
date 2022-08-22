@@ -1,9 +1,8 @@
-﻿@{
-    ViewBag.Title = "Loading Invoice";
+﻿@using Inv.WebUI.Resources
+@{
+
     Layout = "~/Views/Shared/Layout.cshtml";
-
 }
-
 <style>
     .btnDownload {
         background-color: #009966;
@@ -32,9 +31,7 @@
 
 
 
-
-
-
+ 
 
 <div id="divControl" class="row" style="border-radius: 30px;background: #F5F7FF;">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 p-0">
@@ -82,8 +79,10 @@
 
 
     <div class="form-row">
-        <div class="col">
-            <div id="jsGrid"></div>
+        <div class="sparkline8-graph">
+            <table id="LodGrid">
+            </table>
+
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 p-0" style="font-weight: bold;font-size: 17px;">
@@ -111,11 +110,9 @@
 
 
 
-
-<script src="~/ClientApp/Excel/jquery.min.js"></script>
+<script src="~/ClientApp/UploadInv/UploadInv.js"></script>
+ 
 <script src="~/ClientApp/Excel/jszip.js"></script>
 <script src="~/ClientApp/Excel/xlsx.js"></script>
 <script src="~/ClientApp/Excel/LoadExcel.js"></script>
-
-
-@*<script src="~/ClientApp/UploadInv/UploadInv.js"></script>*@
+ 
