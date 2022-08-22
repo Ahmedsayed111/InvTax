@@ -60,12 +60,11 @@ namespace Inv.API.Controllers
 
             var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(Itemlist[0].ClientIDProd, Itemlist[0].SecretIDProd));
 
-            ItemTax ItemTaxsingle = new ItemTax();
-            List<ItemTax> ItemTax = new List<ItemTax>();
+            Inv.API.CustomModel.items ItemTaxsingle = new Inv.API.CustomModel.items();
+            List<Inv.API.CustomModel.items> ItemTax = new List<Inv.API.CustomModel.items>();
             foreach (var item in Itemlist)
             {
-                ItemTaxsingle.codeType = item.codeType;
-                ItemTaxsingle.UnitCode = item.UnitCode;
+                ItemTaxsingle.codeType = item.codeType; 
                 ItemTaxsingle.codeName = item.codeName;
                 ItemTaxsingle.activeFrom = item.activeFrom;
                 ItemTaxsingle.activeTo = item.activeTo;
@@ -85,28 +84,51 @@ namespace Inv.API.Controllers
         }
 
 
-        public static string CreateCode(List<ItemTax> item, string Contenttokin)
+        public static string CreateCode(List<items> item, string Contenttokin)
         {
 
-            List<ItemTax> objlst = new List<ItemTax>();
-            objlst = item;
+            ItemTax objlstItemTax = new ItemTax();
+
+            List<items> itemsSing = new List<items>();
+
+            for (int i = 0; i < item.Count; i++)
+            {
+                itemsSing.Add(item[i]);
+
+            };
+
+
+            objlstItemTax.items = itemsSing;
+
+
+            var body = JsonConvert.SerializeObject(objlstItemTax);
+
             var client = new RestClient("https://api.preprod.invoicing.eta.gov.eg/api/v1.0/codetypes/requests/codes");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("Authorization", "Bearer " + Contenttokin + "");
-            request.AddHeader("Content-Type", "application/json");
-            var item_ = JsonConvert.SerializeObject(objlst);
-            var body = "\"items\"\"\":" + item_;
+            request.AddHeader("Content-Type", "application/json"); 
+             
             request.AddParameter("application/json", body, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
+            Root3 Root3 = new Root3();
+            Root3= JsonConvert.DeserializeObject<Root3>(response.Content);
 
-            return "";
+            if (response.IsSuccessful == true)
+            {
+                return objlstItemTax.items.Count.ToString();
+
+            }
+            else
+            {
+                return response.Content.ToString();
+            }
         }
 
         internal static string CreateTokin(string ClientIDProd, string SecretIDProd)
         {
-            //var client = new RestClient("https://id.preprod.eta.gov.eg/connect/token");
-            var client = new RestClient("https://id.eta.gov.eg/connect/token");
+            var client = new RestClient("https://id.preprod.eta.gov.eg/connect/token");
+            //var client = new RestClient("https://id.eta.gov.eg/connect/token");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -197,7 +219,7 @@ namespace Inv.API.Controllers
         }
         protected async void DownloadPDF(string UUID, string nternalId, string Tokin, string PDFFolder)
         {
-            nternalId.Replace("/","");
+            nternalId.Replace("/", "");
             RestClient client = new RestClient();
             client = new RestClient("https://api.invoicing.eta.gov.eg/api/v1/documents/" + UUID + "/pdf?=");
             client.Timeout = -1;
@@ -268,6 +290,18 @@ namespace Inv.API.Controllers
         public Metadata metadata { get; set; }
     }
 
+    public class FailedItem
+    {
+        public int index;
+        public List<String> errors;
+    }
+
+    public class Root3
+    {
+        public int passedItemsCount;
+        public List<FailedItem> failedItems;
+        public List<Object> passedItems;
+    }
 
 
 
