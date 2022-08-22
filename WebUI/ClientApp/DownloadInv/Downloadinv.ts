@@ -5,10 +5,8 @@
 namespace Downloadinv {
     var InvoiceModel: Documente = new Documente();
     var InvoiceLst: Array<Documente> = new Array<Documente>();
-    var dataSource: Array<VDocument>;
-    var frestdataSource: Array<VDocument>;
-    var dataSourcefeltar: Array<VDocument>;
-    var dataSourceDownload: Array<TblFile>;
+    var sys: SystemTools = new SystemTools();
+    var SysSession: SystemSession = GetSystemSession(Modules.StockDef);
     var btnSearch: HTMLElement;
     var txtSearch: HTMLButtonElement;
 
@@ -147,27 +145,26 @@ namespace Downloadinv {
         ReturnedDate = yyyy + '-' + mm + '-' + dd;
         return ReturnedDate;
     }
-
-
-
+      
     function DownloadList(_from: string, _to: string, pageNo: string, pageSize: string, _tyep: number) {
-
-
-        let _Uri: string = Url.Action("DownloadList", "Home");
-        Ajax.CallAsync(
-            {
-                "url": _Uri,
-                "data": { from: _from, to: _to, pageNo: pageNo, pageSize: pageSize, tyep: _tyep },
-                success: (d) => {
-                    if (d == null) {
-                        dataSource = new Array<VDocument>();
-                        alert("Document No. Not Exist");
-                    } else {
-                        dataSource = d as Array<VDocument>;
-                    }
+        debugger
+        var ClientIDProd_ = "531b1531-d482-46c6-9e87-da8bc33f4fd3";
+        var SecretIDProd_ = "97959a2a-1829-42b4-8330-20d1b829c6bf";
+        var RegistrationNumber_ = "200154257";
+        var PDFFolder_ = SysSession.CurrentEnvironment.I_Control[0].DocPDFFolder;
+         
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("Items", "DownloadList"),
+            data: { from: _from, to: _to, pageNo: pageNo, pageSize: pageSize, tyep: _tyep, ClientIDProd: ClientIDProd_, SecretIDProd: SecretIDProd_, RegistrationNumber: RegistrationNumber_, PDFFolder: PDFFolder_ },
+            success: (d) => {
+                let result = d as BaseResponse;
+                if (result.IsSuccess) {
+                 
                 }
             }
-        )
+        });
+        
     }
 
 

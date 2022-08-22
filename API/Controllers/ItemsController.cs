@@ -1,6 +1,6 @@
 ﻿using Inv.API.Models;
 using Inv.API.Tools;
-using Inv.BLL.Services.IItems; 
+using Inv.BLL.Services.IItems;
 using Inv.DAL.Domain;
 using System;
 using System.Collections.Generic;
@@ -19,19 +19,19 @@ using Inv.APICore.CustomModel;
 namespace Inv.API.Controllers
 {
     public class ItemsController : BaseController
-    { 
+    {
         private readonly ItemsService ItemsService;
         private readonly G_USERSController UserControl;
 
-        public ItemsController(ItemsService _IItemsService, G_USERSController _Control )
+        public ItemsController(ItemsService _IItemsService, G_USERSController _Control)
         {
-            this.ItemsService = _IItemsService; 
+            this.ItemsService = _IItemsService;
             this.UserControl = _Control;
         }
-        
+
         [HttpGet, AllowAnonymous]
         public IHttpActionResult GetAllItem(int CompCode)
-        { 
+        {
             var res = db.Database.SqlQuery<Items>("select * from Items where CompCode = " + CompCode + "").ToList();
             return Ok(new BaseResponse(res));
         }
@@ -47,15 +47,15 @@ namespace Inv.API.Controllers
 
             foreach (var item in insertedInvoiceItems)
             {
-                ItemsService.Insert(item); 
+                ItemsService.Insert(item);
             }
             foreach (var item in updatedInvoiceItems)
             {
-                ItemsService.Update(item); 
+                ItemsService.Update(item);
             }
             foreach (var item in deletedInvoiceItems)
             {
-                ItemsService.Delete(item.ItemID); 
+                ItemsService.Delete(item.ItemID);
             }
 
             var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(Itemlist[0].ClientIDProd, Itemlist[0].SecretIDProd));
@@ -84,6 +84,7 @@ namespace Inv.API.Controllers
             return Ok(new BaseResponse(11));
         }
 
+
         public static string CreateCode(List<ItemTax> item, string Contenttokin)
         {
 
@@ -103,8 +104,9 @@ namespace Inv.API.Controllers
         }
 
         internal static string CreateTokin(string ClientIDProd, string SecretIDProd)
-        { 
-            var client = new RestClient("https://id.preprod.eta.gov.eg/connect/token");
+        {
+            //var client = new RestClient("https://id.preprod.eta.gov.eg/connect/token");
+            var client = new RestClient("https://id.eta.gov.eg/connect/token");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -116,10 +118,13 @@ namespace Inv.API.Controllers
             return response.Content; ;
         }
 
-        public string DownloadList(string from, string to, string pageNo, string pageSize, int tyep, string ClientIDProd, string SecretIDProd, string RegistrationNumber, string PDFFolder)
+
+
+        [HttpGet, AllowAnonymous]
+        public IHttpActionResult DownloadList(string from, string to, string pageNo, string pageSize, int tyep, string ClientIDProd, string SecretIDProd, string RegistrationNumber, string PDFFolder)
         {
-          
-            var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(ClientIDProd,SecretIDProd));
+
+            var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(ClientIDProd, SecretIDProd));
 
             var client = new RestClient("https://api.invoicing.eta.gov.eg/api/v1.0/documents/recent?pageNo=" + pageNo + "&pageSize=" + pageSize + "");
             client.Timeout = -1;
@@ -147,7 +152,11 @@ namespace Inv.API.Controllers
 
                 foreach (var item in _ResultissuerId.result)
                 {
+
                     DownloadPDF(item.uuid, item.internalId, Contenttokin.access_token, PDFFolder);
+
+
+
                 }
             }
             else if (tyep == 1)
@@ -155,7 +164,11 @@ namespace Inv.API.Controllers
                 double FROMNO = Convert.ToDouble(from);
                 double TONO = Convert.ToDouble(to);
 
+
                 _ResultissuerId.result = _Result.result.Where(x => x.issuerId == RegistrationNumber && x.status == "Valid").ToList();
+
+                _ResultissuerId.result = _Result.result.Where(x => x.issuerId == RegistrationNumber && x.status == "Valid").ToList();
+
                 for (int i = 0; i < _ResultissuerId.result.Count; i++)
                 {
                     _ResultissuerId.result[i].internalId2 = Convert.ToDouble(_ResultissuerId.result[i].internalId);
@@ -164,11 +177,14 @@ namespace Inv.API.Controllers
 
                 foreach (var item in _ResultissuerId.result)
                 {
+
                     DownloadPDF(item.uuid, item.internalId, Contenttokin.access_token, PDFFolder);
+
                 }
             }
             else
             {
+
                 _ResultreceiverId.result = _Result.result.Where(x => x.issuerId != RegistrationNumber && x.status == "Valid").ToList();
 
                 foreach (var item in _ResultreceiverId.result)
@@ -177,10 +193,11 @@ namespace Inv.API.Controllers
                 }
             }
 
-            return "";
+            return Ok(new BaseResponse("ok"));
         }
-        protected async void DownloadPDF(string UUID, string nternalId, string PDFFolder, string Tokin)
+        protected async void DownloadPDF(string UUID, string nternalId, string Tokin, string PDFFolder)
         {
+            nternalId.Replace("/","");
             RestClient client = new RestClient();
             client = new RestClient("https://api.invoicing.eta.gov.eg/api/v1/documents/" + UUID + "/pdf?=");
             client.Timeout = -1;
@@ -191,16 +208,16 @@ namespace Inv.API.Controllers
             client.DownloadData(request);
             byte[] renderdByte = response.RawBytes;
 
-          
+
             try
-            {                
+            {
                 System.IO.File.WriteAllBytes(PDFFolder + @"\" + nternalId + "" + ".pdf", renderdByte);
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-            } 
+            }
         }
     }
     public class Metadata
@@ -244,9 +261,15 @@ namespace Inv.API.Controllers
         public string createdByUserId { get; set; }
     }
 
+
     public class Root2
     {
         public List<Result> result { get; set; }
         public Metadata metadata { get; set; }
     }
+
+
+
+
+
 }
