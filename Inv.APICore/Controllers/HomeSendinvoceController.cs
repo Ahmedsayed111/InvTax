@@ -34,7 +34,7 @@ namespace Inv.APICore.Controllers
         {
             I_ControlTax I_ControlTax = new I_ControlTax();
             I_ControlTax = ETax.CreateTokin();
-            string Result = HomeSendinvoce.sendinvoce(Optype, InvoiceID, I_ControlTax); 
+            string Result = "";/* HomeSendinvoce.sendinvoce(Optype, InvoiceID, I_ControlTax); */
             return Result;
         }
 
@@ -42,9 +42,9 @@ namespace Inv.APICore.Controllers
         [Route("ActivateItems")]
         public string ActivateItems(List<Items> ListItems)
         {
-             
-              
-            var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(ETax.CreateTokin(ListItems[0].ClientIDProd,ListItems[0].SecretIDProd));
+
+
+            var Contenttokin = "";/* JsonConvert.DeserializeObject<TkenModelView>(ETax.CreateTokin(ListItems[0].ClientIDProd,ListItems[0].SecretIDProd));*/
 
             ItemTax ItemTaxsingle = new ItemTax();
             List<ItemTax> ItemTax = new List<ItemTax>();
@@ -63,7 +63,7 @@ namespace Inv.APICore.Controllers
             }
 
 
-         var result= ETax.CreateCode(ItemTax, Contenttokin.access_token);
+            var result = "";/* ETax.CreateCode(ItemTax, Contenttokin.access_token);*/
 
 
             return result;

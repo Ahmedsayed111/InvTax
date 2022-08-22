@@ -89,7 +89,7 @@ var StockDef;
         debugger;
         Ajax.Callsync({
             type: "Get",
-            url: sys.apiUrlCore("HomeSendinvoce", "ActivateItems"),
+            //url: sys.apiUrlCore("HomeSendinvoce","ActivateItems"),
             data: { data: data },
             success: function (d) {
                 var result = d;

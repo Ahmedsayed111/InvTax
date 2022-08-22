@@ -97,7 +97,7 @@ namespace StockDef {
         debugger
         Ajax.Callsync({
             type: "Get",
-            url: sys.apiUrlCore("HomeSendinvoce","ActivateItems"),
+            //url: sys.apiUrlCore("HomeSendinvoce","ActivateItems"),
             data: { data: data },   
             success: (d) => {
                 let result = d as BaseResponse;
