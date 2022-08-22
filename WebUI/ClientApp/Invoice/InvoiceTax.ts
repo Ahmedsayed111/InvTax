@@ -110,7 +110,7 @@ namespace InvoiceTax {
         btnCustSrch.onclick = btnCustSrch_onClick;
         btnsave.onclick = btnsave_onclick;
         btnClean.onclick = success_insert;
-        txtAllDiscount.onkeyup = computeTotal;
+        txtAllDiscount.onkeyup = ComputeTotals;
         //btnprint.onclick = btnprint_onclick;
         ddlValueTax.onchange = ddlValueTax_onchange;
         ddlDisTax.onchange = ddlDisTax_onchange;
@@ -225,7 +225,7 @@ namespace InvoiceTax {
             else {
                 txtsalesVAT.value = "not include";
             }
-            computeTotal();
+            ComputeTotals();
         });
     }
     function BuildControls(cnt: number) {
@@ -234,16 +234,19 @@ namespace InvoiceTax {
         html = '<tr id= "No_Row' + cnt + '" class="  animated zoomIn ">' +
 
             '<td><button id="btn_minus' + cnt + '" type="button" class="btn btn-custon-four btn-danger"><i class="fa fa-minus-circle"></i></button></td>' +
-            '<td><input  id="serial' + cnt + '" disabled="disabled"  type="text" class="form-control" placeholder="SR"></td>' +
-            '<td><button id="btnItem' + cnt + '" class="btn btn-custon-four btn-success oo"  style="height:34px;width: 275px;background-color: #3bafda;"  > Seach Item </button></td>' +
+            '<td><input  id="txtSerial' + cnt + '" disabled="disabled"  type="text" class="form-control" placeholder="SR"></td>' +
+            '<td><button id="btnItem' + cnt + '" class="btn btn-custon-four btn-success oo"  style="height:34px;width: 235px;background-color: #3bafda;"  > Seach Item </button></td>' +
             //'<td> <textarea id="Description' + cnt + '" name="Description" type="text" class="form-control" style="height:34px" placeholder="Description" spellcheck="false"></textarea></td>' +
             '<td><select id="ddlTypeUom' + cnt + '" class="form-control"> <option value="null"> Choose Uom </option></select></td>' +
-            '<td><input  id="QTY' + cnt + '" type="number" class="form-control" placeholder="QTY"></td>' +
-            '<td><input  id="UnitPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="Unit Price"></td>' +
-            '<td><input  id="Totalprice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="Total price"></td>' +
-            '<td><input  id="DiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountPrc%"></td>' +
-            '<td><input  id="DiscountAmount' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountAmount"></td>' +
-            '<td><input  id="Net' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="Net"></td>' +
+            '<td><input  id="txtQuantity' + cnt + '" type="number" class="form-control" placeholder="QTY"></td>' +
+            '<td><input  id="txtPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="Unit Price"></td>' +
+            '<td><input  id="txtDiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountPrc%"></td>' +
+            '<td><input  id="txtDiscountAmount' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountAmount"></td>' +
+            '<td><input  id="txtNetUnitPrice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder=" Price After Discount "></td>' +
+            '<td><input  id="txtTotal' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="Total price"></td>' +
+            '<td><input  id="txtTax_Rate' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="   Tax %  "></td>' +
+            '<td><input  id="txtTax' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder=" Amount Tax  "></td>' +
+            '<td><input  id="txtTotAfterTax' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="Net"></td>' +
             ' <input  id="txt_StatusFlag' + cnt + '" type="hidden" class="form-control"> ' +
             ' <input  id="txt_IDItem' + cnt + '" type="hidden" class="form-control"> ' +
             '</tr>';
@@ -275,25 +278,59 @@ namespace InvoiceTax {
                 $('#ddlTypeUom' + cnt).val(UnitCode)
                 $('#QTY' + cnt).val('1')
 
+
+                totalRow(cnt, true);
             });
         });
 
-        $("#UnitPrice" + cnt).on('keyup', function (e) {
-            computeRows(cnt);
+        $("#txtPrice" + cnt).on('keyup', function (e) {
+            if ($("#txt_StatusFlag" + cnt).val() != "i")
+                $("#txt_StatusFlag" + cnt).val("u");
+
+            totalRow(cnt, true);
         });
-        $("#QTY" + cnt).on('keyup', function (e) {
-            computeRows(cnt);
+        $("#txtQuantity" + cnt).on('keyup', function (e) {
+            if ($("#txt_StatusFlag" + cnt).val() != "i")
+                $("#txt_StatusFlag" + cnt).val("u");
+
+            totalRow(cnt, true);
         });
-        $("#DiscountPrc" + cnt).on('keyup', function (e) {
-            if (Number($("#DiscountPrc" + cnt).val()) < 0 || $("#DiscountPrc" + cnt).val().trim() == "") {
-                $("#DiscountPrc" + cnt).val("0");
+      
+
+        $("#txtDiscountPrc" + cnt).on('keyup', function () {
+            if ($("#txt_StatusFlag" + cnt).val() != "i")
+                $("#txt_StatusFlag" + cnt).val("u");
+
+
+            if (Number($("#txtDiscountPrc" + cnt).val()) < 0 || $("#txtDiscountPrc" + cnt).val().trim() == "") {
+                $("#txtDiscountPrc" + cnt).val("0");
             }
             if (Number($("#DiscountPrc" + cnt).val()) > 100) {
-                $("#DiscountPrc" + cnt).val("100");
+                $("#txtDiscountPrc" + cnt).val("100");
             }
-            computeRows(cnt);
+
+            totalRow(cnt, true);
+        });
+        $("#txtDiscountAmount" + cnt).on('keyup', function () {
+            if ($("#txt_StatusFlag" + cnt).val() != "i")
+                $("#txt_StatusFlag" + cnt).val("u");
+
+
+            let txtPrice = Number($("#txtPrice" + cnt).val());
+            let txtDiscountAmount = Number($("#txtDiscountAmount" + cnt).val());
+
+            $("#txtDiscountPrc" + cnt).val(((txtDiscountAmount / txtPrice) * 100).RoundToSt(2));
+
+            $("#txtNetUnitPrice" + cnt).val((txtPrice - txtDiscountAmount).RoundToSt(2));
+
+
+            totalRow(cnt, false);
 
         });
+
+
+
+
         $("#btn_minus" + cnt).click(function (e) {
 
             DeleteRow(cnt);
@@ -301,34 +338,96 @@ namespace InvoiceTax {
 
         return;
     }
-    function computeRows(cnt: number) {
+    function totalRow(cnt: number, flagDiscountAmount: boolean) {
+        debugger
 
-        $("#Totalprice" + cnt).val(Number($("#UnitPrice" + cnt).val()) * (Number($("#QTY" + cnt).val())));
-        $("#DiscountAmount" + cnt).val(Number($("#DiscountPrc" + cnt).val()) * Number($("#Totalprice" + cnt).val()) / 100);
-        $("#Net" + cnt).val(Number($("#Totalprice" + cnt).val()) - (Number($("#DiscountAmount" + cnt).val())));
-        computeTotal();
-    }
-    function computeTotal() {
-        let NetCount = 0;
-        for (let i = 0; i < CountGrid; i++) {
-            if ($("#txt_StatusFlag" + i).val() != 'm' && $("#txt_StatusFlag" + i).val() != 'd') {
-                NetCount += Number($("#Net" + i).val());
-                NetCount = Number(NetCount.toFixed(2).toString());
-            }
-        }
-        //if (include == "true") {
-        //    NetCount = NetCount + ((NetCount * 14) / 100);
-        //}
-        txtNetBefore.value = NetCount.toString();
 
-        if (Number(txtAllDiscount.value) > 0) {
+ 
+        $('#txtTax_Rate' + cnt).val('15');
 
-            let Discount = ((Number(txtAllDiscount.value) * Number(txtNetBefore.value)) / 100).toFixed(2);
-            txtNetAfterVat.value = (NetCount - Number(Discount)).toString();
+        //$("#txtUnitpriceWithVat" + cnt).val((Number($("#txtPrice" + cnt).val()) * (Tax_Rate + 100) / 100).RoundToNum(2))
+        //$("#txtPrice" + cnt).val((Number($("#txtUnitpriceWithVat" + cnt).val()) * 100 / (Tax_Rate + 100)).RoundToSt(2))
+
+        //-------------------------
+
+
+        let txtPrice = Number($("#txtPrice" + cnt).val());
+        let txtDiscountPrc = Number($("#txtDiscountPrc" + cnt).val());
+
+        if (flagDiscountAmount) {
+            $("#txtDiscountAmount" + cnt).val(((txtDiscountPrc * txtPrice) / 100).RoundToSt(2));
+            $("#txtNetUnitPrice" + cnt).val((txtPrice - ((txtDiscountPrc * txtPrice) / 100)).RoundToSt(2));
         }
         else {
-            txtNetAfterVat.value = txtNetBefore.value;
+
+            let txtDiscountAmount = Number($("#txtDiscountAmount" + cnt).val());
+            $("#txtDiscountPrc" + cnt).val(((txtDiscountAmount / txtPrice) * 100).RoundToSt(2));
+            $("#txtNetUnitPrice" + cnt).val((txtPrice - txtDiscountAmount).RoundToSt(2));
         }
+
+
+
+
+        var txtQuantityValue = $("#txtQuantity" + cnt).val();
+        var txtPriceValue = $("#txtNetUnitPrice" + cnt).val();
+
+
+
+        var total = Number(txtQuantityValue) * Number(txtPriceValue);
+       var VatPrc = $("#txtTax_Rate" + cnt).val();
+        var vatAmount = Number(total) * VatPrc / 100;
+        $("#txtTax" + cnt).val(vatAmount.RoundToSt(2));
+        var total = Number(txtQuantityValue) * Number(txtPriceValue);
+        $("#txtTotal" + cnt).val(total.RoundToSt(2));
+
+        var totalAfterVat = Number(vatAmount.RoundToSt(2)) + Number(total.RoundToSt(2));
+        $("#txtTotAfterTax" + cnt).val(totalAfterVat.RoundToSt(2));
+
+
+
+        ComputeTotals();
+
+
+    }
+    
+    function ComputeTotals() {
+        debugger
+        let PackageCount = 0;
+        let CountTotal = 0;
+        let TotalDiscount = 0;
+        let Totalbefore = 0;
+        let TaxCount = 0;
+        let NetCount = 0;
+        let CountItems = 0;
+        for (let i = 0; i < CountGrid; i++) {
+            var flagvalue = $("#txt_StatusFlag" + i).val();
+            if (flagvalue != "d" && flagvalue != "m") {
+                PackageCount += Number($("#txtQuantity" + i).val());
+                PackageCount = Number(PackageCount.RoundToSt(2).toString());
+
+                Totalbefore += (Number($("#txtQuantity" + i).val()) * Number($("#txtPrice" + i).val()));
+                Totalbefore = Number(Totalbefore.RoundToSt(2).toString());
+
+                TotalDiscount += (Number($("#txtQuantity" + i).val()) * Number($("#txtDiscountAmount" + i).val()));
+                TotalDiscount = Number(TotalDiscount.RoundToSt(2).toString());
+
+                CountTotal += Number($("#txtTotal" + i).val());
+                CountTotal = Number(CountTotal.RoundToSt(2).toString());
+
+                TaxCount += Number($("#txtTax" + i).val());
+                TaxCount = Number(TaxCount.RoundToSt(2).toString());
+
+                NetCount += Number($("#txtTotAfterTax" + i).val());
+
+            }
+        }
+        //txtItemCount.value = CountItems.toString();
+        //txtPackageCount.value = PackageCount.toString();
+        //txtTotalDiscount.value = TotalDiscount.toString();
+        //txtTotalbefore.value = Totalbefore.toString();
+        //txtTotal.value = CountTotal.toString();
+        //txtTax.value = TaxCount.toString();
+        //txtNet.value = (Number(NetCount.RoundToSt(2))).RoundToSt(2);
     }
     function AddNewRow() {
         $('paginationSwitch').addClass("display_none");
@@ -374,8 +473,8 @@ namespace InvoiceTax {
 
         WorningMessage("Do you want to delete?", "Do you want to delete?", "warning", "warning", () => {
             $("#txt_StatusFlag" + RecNo).val() == 'i' ? $("#txt_StatusFlag" + RecNo).val('m') : $("#txt_StatusFlag" + RecNo).val('d');
-            computeRows(RecNo);
-            computeTotal();
+          
+            ComputeTotals();
             $("#serial" + RecNo).val("99");
             $("#QTY" + RecNo).val("99");
             $("#Description" + RecNo).val("99");
@@ -391,14 +490,25 @@ namespace InvoiceTax {
     }
     function Insert_Serial() {
 
+        let Chack_Flag = false;
+        let flagval = "";
         let Ser = 1;
         for (let i = 0; i < CountGrid; i++) {
-            if ($("#txt_StatusFlag" + i).val() != 'm' && $("#txt_StatusFlag" + i).val() != 'd') {
-                $("#serial" + i).val(Ser);
+            flagval = $("#txt_StatusFlag" + i).val();
+            if (flagval != "d" && flagval != "m") {
+                $("#txtSerial" + i).val(Ser);
                 Ser++;
             }
-
+            if (flagval == 'd' || flagval == 'm' || flagval == 'i') {
+                Chack_Flag = true
+            }
+            if (Chack_Flag) {
+                if ($("#txt_StatusFlag" + i).val() != 'i' && $("#txt_StatusFlag" + i).val() != 'm' && $("#txt_StatusFlag" + i).val() != 'd') {
+                    $("#txt_StatusFlag" + i).val('u');
+                }
+            }
         }
+
 
     }
     function Assign() {
