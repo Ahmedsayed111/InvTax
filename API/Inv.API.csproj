@@ -201,6 +201,7 @@
     <Compile Include="Models\CustomModel\Customcustomer.cs" />
     <Compile Include="Models\CustomModel\CustomModel.cs" />
     <Compile Include="Models\CustomModel\ETax.cs" />
+    <Compile Include="Models\CustomModel\items.cs" />
     <Compile Include="Models\CustomModel\ItemTax.cs" />
     <Compile Include="Models\CustomModel\MasterDetailsUserRoles.cs" />
     <Compile Include="Models\CustomModel\SlsInvoiceMasterDetails.cs" />
