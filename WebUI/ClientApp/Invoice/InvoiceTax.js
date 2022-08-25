@@ -205,14 +205,6 @@ var InvoiceTax;
             console.log(CustomerDetail);
             CustomerId = Number(CustomerDetail[0]);
             txtCompanyname.value = String(CustomerDetail[2]);
-            include = String(CustomerDetail[3]);
-            if (include == "true") {
-                txtsalesVAT.value = "not include";
-            }
-            else {
-                txtsalesVAT.value = "not include";
-            }
-            ComputeTotals();
         });
     }
     function BuildControls(cnt) {
