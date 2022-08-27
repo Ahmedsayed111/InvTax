@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Inv.API.CustomModel;
 using RestSharp;
 using Inv.APICore.CustomModel;
+using System.Data;
 
 namespace Inv.API.Controllers
 {
@@ -44,6 +45,7 @@ namespace Inv.API.Controllers
             var insertedInvoiceItems = Itemlist.Where(x => x.StatusFlag == 'i').ToList();
             var updatedInvoiceItems = Itemlist.Where(x => x.StatusFlag == 'u').ToList();
             var deletedInvoiceItems = Itemlist.Where(x => x.StatusFlag == 'd').ToList();
+            var ActiveItems = Itemlist.Where(x => x.StatusItem == true).ToList();
 
             foreach (var item in insertedInvoiceItems)
             {
@@ -62,7 +64,7 @@ namespace Inv.API.Controllers
 
             Inv.API.CustomModel.items ItemTaxsingle = new Inv.API.CustomModel.items();
             List<Inv.API.CustomModel.items> ItemTax = new List<Inv.API.CustomModel.items>();
-            foreach (var item in Itemlist)
+            foreach (var item in ActiveItems)
             {
                 ItemTaxsingle.codeType = item.codeType; 
                 ItemTaxsingle.codeName = item.codeName;
@@ -113,11 +115,13 @@ namespace Inv.API.Controllers
             IRestResponse response = client.Execute(request);
             Root3 Root3 = new Root3();
             Root3= JsonConvert.DeserializeObject<Root3>(response.Content);
-
+            //List<Passed> passed = new List<Passed>();
             if (response.IsSuccessful == true)
             {
-                return objlstItemTax.items.Count.ToString();
+                Root3.PassedItems[0].itemCode;
 
+
+                return Root3.ToString();
             }
             else
             {
@@ -295,12 +299,18 @@ namespace Inv.API.Controllers
         public int index;
         public List<String> errors;
     }
+    
+    public class Passed
+    {
+        public string itemCode;
+        public string codeUsageRequestId;
+    }
 
     public class Root3
     {
         public int passedItemsCount;
         public List<FailedItem> failedItems;
-        public List<Object> passedItems;
+        public List<Passed> PassedItems;
     }
 
 

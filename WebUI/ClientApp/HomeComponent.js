@@ -369,9 +369,6 @@ var HomeComponent;
         $("#btnCompanies").click(function () { OpenPage(Modules.Companies); });
         $("#btnUsers").click(function () { OpenPage(Modules.Users); });
         $("#btnTest").click(function () { OpenPage(Modules.Test); });
-        $("#btnTest").click(function () { OpenPage(Modules.Test); });
-        $("#btnDownloadInv").click(function () { OpenPage(Modules.DownloadInv); });
-        $("#btnUploadInv").click(function () { OpenPage(Modules.UploadInv); });
     }
     function Notifications_Message() {
         var comCode = SysSession.CurrentEnvironment.CompCode;
