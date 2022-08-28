@@ -40,8 +40,15 @@ var InvoiceTax;
     var txtPlacedeliv;
     var txtRemark;
     var txtNetBefore;
-    var txtAllDiscount;
     var txtNetAfterVat;
+    var txtTaxPrc;
+    var txtItemCount;
+    var txtPackageCount;
+    var txtTotalDiscount;
+    var txtTotalbefore;
+    var txtTotal;
+    var txtTax;
+    var txtNet;
     var ddlCurreny;
     var ddlValueTax;
     var ddlTypeTax;
@@ -91,18 +98,33 @@ var InvoiceTax;
         txtPlacedeliv = document.getElementById("txtPlacedeliv");
         txtRemark = document.getElementById("txtRemark");
         txtNetBefore = document.getElementById("txtNetBefore");
-        txtAllDiscount = document.getElementById("txtAllDiscount");
         txtNetAfterVat = document.getElementById("txtNetAfterVat");
+        txtTaxPrc = document.getElementById("txtTaxPrc");
+        txtItemCount = document.getElementById("txtItemCount");
+        txtPackageCount = document.getElementById("txtPackageCount");
+        txtTotalDiscount = document.getElementById("txtTotalDiscount");
+        txtTotalbefore = document.getElementById("txtTotalbefore");
+        txtTotal = document.getElementById("txtTotal");
+        txtTax = document.getElementById("txtTax");
+        txtNet = document.getElementById("txtNet");
     }
     function InitalizeEvents() {
         btnAddDetails.onclick = AddNewRow; //
         btnCustSrch.onclick = btnCustSrch_onClick;
         btnsave.onclick = btnsave_onclick;
-        btnClean.onclick = success_insert;
-        txtAllDiscount.onkeyup = ComputeTotals;
+        btnClean.onclick = btnClean_onclick;
         //btnprint.onclick = btnprint_onclick;
         ddlValueTax.onchange = ddlValueTax_onchange;
         ddlDisTax.onchange = ddlDisTax_onchange;
+        txtTaxPrc.onkeyup = txtTaxPrc_onchange;
+    }
+    function txtTaxPrc_onchange() {
+        for (var i = 0; i < CountGrid; i++) {
+            var flagvalue = $("#txt_StatusFlag" + i).val();
+            if (flagvalue != "d" && flagvalue != "m") {
+                totalRow(i, true);
+            }
+        }
     }
     function ddlDisTax_onchange() {
         var DisTax = ddlDisTax.value;
@@ -183,14 +205,6 @@ var InvoiceTax;
             console.log(CustomerDetail);
             CustomerId = Number(CustomerDetail[0]);
             txtCompanyname.value = String(CustomerDetail[2]);
-            include = String(CustomerDetail[3]);
-            if (include == "true") {
-                txtsalesVAT.value = "not include";
-            }
-            else {
-                txtsalesVAT.value = "not include";
-            }
-            ComputeTotals();
         });
     }
     function BuildControls(cnt) {
@@ -198,18 +212,18 @@ var InvoiceTax;
         html = '<tr id= "No_Row' + cnt + '" class="  animated zoomIn ">' +
             '<td><button id="btn_minus' + cnt + '" type="button" class="btn btn-custon-four btn-danger"><i class="fa fa-minus-circle"></i></button></td>' +
             '<td><input  id="txtSerial' + cnt + '" disabled="disabled"  type="text" class="form-control" placeholder="SR"></td>' +
-            '<td><button id="btnItem' + cnt + '" class="btn btn-custon-four btn-success oo"  style="height:34px;width: 235px;background-color: #3bafda;"  > Seach Item </button></td>' +
+            '<td><button id="btnItem' + cnt + '" class="btn btn-custon-four btn-success oo"  style="height:34px;width: 235px;background-color: #3bafda;font-weight: bold;font-size: 18px;"  > بحـث الصنــف </button></td>' +
             //'<td> <textarea id="Description' + cnt + '" name="Description" type="text" class="form-control" style="height:34px" placeholder="Description" spellcheck="false"></textarea></td>' +
-            '<td><select id="ddlTypeUom' + cnt + '" class="form-control"> <option value="null"> Choose Uom </option></select></td>' +
-            '<td><input  id="txtQuantity' + cnt + '" type="number" class="form-control" placeholder="QTY"></td>' +
-            '<td><input  id="txtPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="Unit Price"></td>' +
-            '<td><input  id="txtDiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountPrc%"></td>' +
-            '<td><input  id="txtDiscountAmount' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountAmount"></td>' +
-            '<td><input  id="txtNetUnitPrice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder=" Price After Discount "></td>' +
-            '<td><input  id="txtTotal' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="Total price"></td>' +
-            '<td><input  id="txtTax_Rate' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="   Tax %  "></td>' +
-            '<td><input  id="txtTax' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder=" Amount Tax  "></td>' +
-            '<td><input  id="txtTotAfterTax' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="Net"></td>' +
+            '<td><select id="ddlTypeUom' + cnt + '" class="form-control"> <option value="null"> أختر الوحده  </option></select></td>' +
+            '<td><input  id="txtQuantity' + cnt + '" type="number" class="form-control" placeholder="الكميه"></td>' +
+            '<td><input  id="txtPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="السعر  "></td>' +
+            '<td><input  id="txtDiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="الخصم%"></td>' +
+            '<td><input  id="txtDiscountAmount' + cnt + '" value="0" type="number" class="form-control" placeholder="مبلغ الخصم"></td>' +
+            '<td><input  id="txtNetUnitPrice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="السعر بعد الخصم "></td>' +
+            '<td><input  id="txtTotal' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="الاجمالي  "></td>' +
+            '<td><input  id="txtTax_Rate' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="   نسبة الضريبه  "></td>' +
+            '<td><input  id="txtTax' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="الضريبه "></td>' +
+            '<td><input  id="txtTotAfterTax' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="الصافي"></td>' +
             ' <input  id="txt_StatusFlag' + cnt + '" type="hidden" class="form-control"> ' +
             ' <input  id="txt_IDItem' + cnt + '" type="hidden" class="form-control"> ' +
             '</tr>';
@@ -270,7 +284,7 @@ var InvoiceTax;
     }
     function totalRow(cnt, flagDiscountAmount) {
         debugger;
-        $('#txtTax_Rate' + cnt).val('15');
+        $('#txtTax_Rate' + cnt).val($('#txtTaxPrc').val());
         //$("#txtUnitpriceWithVat" + cnt).val((Number($("#txtPrice" + cnt).val()) * (Tax_Rate + 100) / 100).RoundToNum(2))
         //$("#txtPrice" + cnt).val((Number($("#txtUnitpriceWithVat" + cnt).val()) * 100 / (Tax_Rate + 100)).RoundToSt(2))
         //-------------------------
@@ -320,15 +334,16 @@ var InvoiceTax;
                 TaxCount += Number($("#txtTax" + i).val());
                 TaxCount = Number(TaxCount.RoundToSt(2).toString());
                 NetCount += Number($("#txtTotAfterTax" + i).val());
+                CountItems++;
             }
         }
-        //txtItemCount.value = CountItems.toString();
-        //txtPackageCount.value = PackageCount.toString();
-        //txtTotalDiscount.value = TotalDiscount.toString();
-        //txtTotalbefore.value = Totalbefore.toString();
-        //txtTotal.value = CountTotal.toString();
-        //txtTax.value = TaxCount.toString();
-        //txtNet.value = (Number(NetCount.RoundToSt(2))).RoundToSt(2);
+        txtItemCount.value = CountItems.toString();
+        txtPackageCount.value = PackageCount.toString();
+        txtTotalDiscount.value = TotalDiscount.toString();
+        txtTotalbefore.value = Totalbefore.toString();
+        txtTotal.value = CountTotal.toString();
+        txtTax.value = TaxCount.toString();
+        txtNet.value = (Number(NetCount.RoundToSt(2))).RoundToSt(2);
     }
     function AddNewRow() {
         $('paginationSwitch').addClass("display_none");
@@ -420,7 +435,6 @@ var InvoiceTax;
         InvoiceModel.ChargeReason = txtCompanysales.value;
         InvoiceModel.Remark = txtRemark.value;
         InvoiceModel.TotalAmount = Number(txtNetBefore.value);
-        InvoiceModel.RoundingAmount = Number(txtAllDiscount.value);
         InvoiceModel.NetAfterVat = Number(txtNetAfterVat.value);
         //-------------------------(T E R M S & C O N D I T I O N S)-----------------------------------------------     
         InvoiceModel.ContractNo = txtsalesVAT.value; //----------------- include sales VAT.
@@ -498,7 +512,6 @@ var InvoiceTax;
         txtPlacedeliv.value = "";
         txtRemark.value = "";
         txtNetBefore.value = "";
-        txtAllDiscount.value = "";
         txtNetAfterVat.value = "";
         $("#Table_Data").html("");
         AddNewRow();
@@ -571,6 +584,11 @@ var InvoiceTax;
         if (CanAdd) {
             insert();
         }
+    }
+    function btnClean_onclick() {
+        CountGrid = 0;
+        $("#Table_Data").html("");
+        AddNewRow();
     }
 })(InvoiceTax || (InvoiceTax = {}));
 //# sourceMappingURL=InvoiceTax.js.map

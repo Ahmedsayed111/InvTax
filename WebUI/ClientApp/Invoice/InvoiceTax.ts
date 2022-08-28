@@ -43,9 +43,19 @@ namespace InvoiceTax {
     var txtlastdays: HTMLInputElement;
     var txtPlacedeliv: HTMLInputElement;
     var txtRemark: HTMLInputElement;
-    var txtNetBefore: HTMLInputElement;
-    var txtAllDiscount: HTMLInputElement;
+    var txtNetBefore: HTMLInputElement; 
     var txtNetAfterVat: HTMLInputElement;
+
+    var txtTaxPrc: HTMLInputElement;
+    var txtItemCount: HTMLInputElement;
+    var txtPackageCount: HTMLInputElement;
+    var txtTotalDiscount: HTMLInputElement;
+    var txtTotalbefore: HTMLInputElement;
+    var txtTotal: HTMLInputElement;
+    var txtTax: HTMLInputElement;
+    var txtNet: HTMLInputElement;
+     
+
 
     var ddlCurreny: HTMLSelectElement;
     var ddlValueTax: HTMLSelectElement;
@@ -100,20 +110,41 @@ namespace InvoiceTax {
         txtlastdays = document.getElementById("txtlastdays") as HTMLInputElement;
         txtPlacedeliv = document.getElementById("txtPlacedeliv") as HTMLInputElement;
         txtRemark = document.getElementById("txtRemark") as HTMLInputElement;
-        txtNetBefore = document.getElementById("txtNetBefore") as HTMLInputElement;
-        txtAllDiscount = document.getElementById("txtAllDiscount") as HTMLInputElement;
+        txtNetBefore = document.getElementById("txtNetBefore") as HTMLInputElement; 
         txtNetAfterVat = document.getElementById("txtNetAfterVat") as HTMLInputElement;
+
+        txtTaxPrc = document.getElementById("txtTaxPrc") as HTMLInputElement;
+        txtItemCount = document.getElementById("txtItemCount") as HTMLInputElement;
+        txtPackageCount = document.getElementById("txtPackageCount") as HTMLInputElement;
+        txtTotalDiscount = document.getElementById("txtTotalDiscount") as HTMLInputElement;
+        txtTotalbefore = document.getElementById("txtTotalbefore") as HTMLInputElement;
+        txtTotal = document.getElementById("txtTotal") as HTMLInputElement;
+        txtTax = document.getElementById("txtTax") as HTMLInputElement;
+        txtNet = document.getElementById("txtNet") as HTMLInputElement;
+
+         
+
     }
     function InitalizeEvents() {
 
         btnAddDetails.onclick = AddNewRow;//
         btnCustSrch.onclick = btnCustSrch_onClick;
         btnsave.onclick = btnsave_onclick;
-        btnClean.onclick = success_insert;
-        txtAllDiscount.onkeyup = ComputeTotals;
+        btnClean.onclick = btnClean_onclick;
         //btnprint.onclick = btnprint_onclick;
         ddlValueTax.onchange = ddlValueTax_onchange;
         ddlDisTax.onchange = ddlDisTax_onchange;
+        txtTaxPrc.onkeyup = txtTaxPrc_onchange;
+    }
+    function txtTaxPrc_onchange() {
+
+        for (let i = 0; i < CountGrid; i++) {
+            var flagvalue = $("#txt_StatusFlag" + i).val();
+            if (flagvalue != "d" && flagvalue != "m") {
+                totalRow(i, true);
+            }
+        }
+
     }
     function ddlDisTax_onchange() {
 
@@ -218,14 +249,7 @@ namespace InvoiceTax {
             console.log(CustomerDetail);
             CustomerId = Number(CustomerDetail[0]);
             txtCompanyname.value = String(CustomerDetail[2]);
-            include = String(CustomerDetail[3]);
-            if (include == "true") {
-                txtsalesVAT.value = "not include";
-            }
-            else {
-                txtsalesVAT.value = "not include";
-            }
-            ComputeTotals();
+         
         });
     }
     function BuildControls(cnt: number) {
@@ -235,18 +259,18 @@ namespace InvoiceTax {
 
             '<td><button id="btn_minus' + cnt + '" type="button" class="btn btn-custon-four btn-danger"><i class="fa fa-minus-circle"></i></button></td>' +
             '<td><input  id="txtSerial' + cnt + '" disabled="disabled"  type="text" class="form-control" placeholder="SR"></td>' +
-            '<td><button id="btnItem' + cnt + '" class="btn btn-custon-four btn-success oo"  style="height:34px;width: 235px;background-color: #3bafda;"  > Seach Item </button></td>' +
+            '<td><button id="btnItem' + cnt + '" class="btn btn-custon-four btn-success oo"  style="height:34px;width: 235px;background-color: #3bafda;font-weight: bold;font-size: 18px;"  > بحـث الصنــف </button></td>' +
             //'<td> <textarea id="Description' + cnt + '" name="Description" type="text" class="form-control" style="height:34px" placeholder="Description" spellcheck="false"></textarea></td>' +
-            '<td><select id="ddlTypeUom' + cnt + '" class="form-control"> <option value="null"> Choose Uom </option></select></td>' +
-            '<td><input  id="txtQuantity' + cnt + '" type="number" class="form-control" placeholder="QTY"></td>' +
-            '<td><input  id="txtPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="Unit Price"></td>' +
-            '<td><input  id="txtDiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountPrc%"></td>' +
-            '<td><input  id="txtDiscountAmount' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountAmount"></td>' +
-            '<td><input  id="txtNetUnitPrice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder=" Price After Discount "></td>' +
-            '<td><input  id="txtTotal' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="Total price"></td>' +
-            '<td><input  id="txtTax_Rate' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="   Tax %  "></td>' +
-            '<td><input  id="txtTax' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder=" Amount Tax  "></td>' +
-            '<td><input  id="txtTotAfterTax' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="Net"></td>' +
+            '<td><select id="ddlTypeUom' + cnt + '" class="form-control"> <option value="null"> أختر الوحده  </option></select></td>' +
+            '<td><input  id="txtQuantity' + cnt + '" type="number" class="form-control" placeholder="الكميه"></td>' +
+            '<td><input  id="txtPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="السعر  "></td>' +
+            '<td><input  id="txtDiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="الخصم%"></td>' +
+            '<td><input  id="txtDiscountAmount' + cnt + '" value="0" type="number" class="form-control" placeholder="مبلغ الخصم"></td>' +
+            '<td><input  id="txtNetUnitPrice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="السعر بعد الخصم "></td>' +
+            '<td><input  id="txtTotal' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="الاجمالي  "></td>' +
+            '<td><input  id="txtTax_Rate' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="   نسبة الضريبه  "></td>' +
+            '<td><input  id="txtTax' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="الضريبه "></td>' +
+            '<td><input  id="txtTotAfterTax' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="الصافي"></td>' +
             ' <input  id="txt_StatusFlag' + cnt + '" type="hidden" class="form-control"> ' +
             ' <input  id="txt_IDItem' + cnt + '" type="hidden" class="form-control"> ' +
             '</tr>';
@@ -343,7 +367,8 @@ namespace InvoiceTax {
 
 
  
-        $('#txtTax_Rate' + cnt).val('15');
+        $('#txtTax_Rate' + cnt).val($('#txtTaxPrc').val());
+        
 
         //$("#txtUnitpriceWithVat" + cnt).val((Number($("#txtPrice" + cnt).val()) * (Tax_Rate + 100) / 100).RoundToNum(2))
         //$("#txtPrice" + cnt).val((Number($("#txtUnitpriceWithVat" + cnt).val()) * 100 / (Tax_Rate + 100)).RoundToSt(2))
@@ -419,15 +444,16 @@ namespace InvoiceTax {
 
                 NetCount += Number($("#txtTotAfterTax" + i).val());
 
+                CountItems++;
             }
         }
-        //txtItemCount.value = CountItems.toString();
-        //txtPackageCount.value = PackageCount.toString();
-        //txtTotalDiscount.value = TotalDiscount.toString();
-        //txtTotalbefore.value = Totalbefore.toString();
-        //txtTotal.value = CountTotal.toString();
-        //txtTax.value = TaxCount.toString();
-        //txtNet.value = (Number(NetCount.RoundToSt(2))).RoundToSt(2);
+        txtItemCount.value = CountItems.toString();
+        txtPackageCount.value = PackageCount.toString();
+        txtTotalDiscount.value = TotalDiscount.toString();
+        txtTotalbefore.value = Totalbefore.toString();
+        txtTotal.value = CountTotal.toString();
+        txtTax.value = TaxCount.toString();
+        txtNet.value = (Number(NetCount.RoundToSt(2))).RoundToSt(2);
     }
     function AddNewRow() {
         $('paginationSwitch').addClass("display_none");
@@ -488,6 +514,7 @@ namespace InvoiceTax {
 
         });
     }
+    
     function Insert_Serial() {
 
         let Chack_Flag = false;
@@ -508,7 +535,6 @@ namespace InvoiceTax {
                 }
             }
         }
-
 
     }
     function Assign() {
@@ -538,8 +564,7 @@ namespace InvoiceTax {
         InvoiceModel.TaxCurrencyID = Number(ddlCurreny.value);
         InvoiceModel.ChargeReason = txtCompanysales.value;
         InvoiceModel.Remark = txtRemark.value;
-        InvoiceModel.TotalAmount = Number(txtNetBefore.value);
-        InvoiceModel.RoundingAmount = Number(txtAllDiscount.value);
+        InvoiceModel.TotalAmount = Number(txtNetBefore.value); 
         InvoiceModel.NetAfterVat = Number(txtNetAfterVat.value);
 
         //-------------------------(T E R M S & C O N D I T I O N S)-----------------------------------------------     
@@ -632,8 +657,7 @@ namespace InvoiceTax {
         txtlastdays.value = "";
         txtPlacedeliv.value = "";
         txtRemark.value = "";
-        txtNetBefore.value = "";
-        txtAllDiscount.value = "";
+        txtNetBefore.value = ""; 
         txtNetAfterVat.value = "";
         $("#Table_Data").html("");
         AddNewRow();
@@ -710,7 +734,11 @@ namespace InvoiceTax {
         }
 
     }
-
+    function btnClean_onclick() {
+        CountGrid = 0;
+        $("#Table_Data").html("");
+        AddNewRow();
+    }
 }
 
 
