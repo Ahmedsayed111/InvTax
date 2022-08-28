@@ -86,9 +86,8 @@ namespace Inv.API.Controllers
         }
 
 
-        public static string CreateCode(List<items> item, string Contenttokin)
+        public IHttpActionResult CreateCode(List<items> item, string Contenttokin)
         {
-
             ItemTax objlstItemTax = new ItemTax();
 
             List<items> itemsSing = new List<items>();
@@ -118,14 +117,27 @@ namespace Inv.API.Controllers
             //List<Passed> passed = new List<Passed>();
             if (response.IsSuccessful == true)
             {
-                Root3.PassedItems[0].itemCode;
+                string Code = "";
+                int x = 0;
+                for (int i = 0; i < Root3.PassedItems.Count; i++)
+                {
+                    if (x==0)
+                    {
+                        Code = Root3.PassedItems[i].itemCode;
+                    }
+                    else
+                    {
+                        Code = Code + ","+ Root3.PassedItems[i].itemCode;
+                    }
+                    x = 1;
+                    var s = db.Database.ExecuteSqlCommand("update Items set StatusCode = 1 where itemCode in ("+Code+")");
 
-
-                return Root3.ToString();
+                } 
+                return Ok(new BaseResponse(Root3.PassedItems.Count.ToString()));
             }
             else
             {
-                return response.Content.ToString();
+                return Ok(new BaseResponse(Root3.failedItems[0].errors[0].ToString())); 
             }
         }
 
@@ -148,7 +160,10 @@ namespace Inv.API.Controllers
 
         [HttpGet, AllowAnonymous]
         public IHttpActionResult DownloadList(string from, string to, string pageNo, string pageSize, int tyep, string ClientIDProd, string SecretIDProd, string RegistrationNumber, string PDFFolder)
-        {
+        { 
+            int tonum = Convert.ToUInt16(to);
+            int fromnum = Convert.ToUInt16(from); 
+            int numCount = (tonum - fromnum)+1; 
 
             var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(CreateTokin(ClientIDProd, SecretIDProd));
 
