@@ -220,7 +220,7 @@ var InvoiceTax;
             '</tr>';
         $("#Table_Data").append(html);
         for (var i = 0; i < I_D_UOMDetails.length; i++) {
-            $('#ddlTypeUom' + cnt + '').append('<option  value="' + I_D_UOMDetails[i].UomID + '">' + I_D_UOMDetails[i].DescE + '</option>');
+            $('#ddlTypeUom' + cnt + '').append('<option  value="' + I_D_UOMDetails[i].UomID + '">' + I_D_UOMDetails[i].DescA + '</option>');
         }
         $('#btnItem' + cnt).click(function (e) {
             sys.FindKey(Modules.Quotation, "btnItem", "", function () {
@@ -453,13 +453,13 @@ var InvoiceTax;
             invoiceItemSingleModel = new Sls_InvoiceDetail();
             StatusFlag = $("#txt_StatusFlag" + i).val();
             invoiceItemSingleModel.Name_Item = $("#txtServiceName" + i).val();
-            invoiceItemSingleModel.MinUnitPrice = Number($('option:selected', $("#ddlTypeuom" + i)).attr('data-minprice'));
+            invoiceItemSingleModel.MinUnitPrice = Number($('option:selected', $("#ddlTypeUom" + i)).attr('data-minprice'));
             if (StatusFlag == "i") {
                 invoiceItemSingleModel.InvoiceItemID = 0;
                 invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val();
                 invoiceItemSingleModel.Serial = $("#txtSerial" + i).val();
                 invoiceItemSingleModel.SoldQty = $('#txtQuantity' + i).val();
-                //invoiceItemSingleModel.StockSoldQty = Number($('option:selected', $("#ddlTypeuom" + i)).attr('data-onhandqty'));//
+                //invoiceItemSingleModel.StockSoldQty = Number($('option:selected', $("#ddlTypeUom" + i)).attr('data-onhandqty'));//
                 invoiceItemSingleModel.StockSoldQty = Number($('#txtQuantity' + i).val()); //
                 invoiceItemSingleModel.NetUnitPrice = $("#txtNetUnitPrice" + i).val();
                 invoiceItemSingleModel.Unitprice = $("#txtPrice" + i).val();
@@ -467,11 +467,11 @@ var InvoiceTax;
                 invoiceItemSingleModel.DiscountPrc = $("#txtDiscountPrc" + i).val();
                 invoiceItemSingleModel.DiscountAmount = $("#txtDiscountAmount" + i).val();
                 //----------------------------------------------------- 
-                invoiceItemSingleModel.UomID = Number($("#ddlTypeuom" + i).val());
+                invoiceItemSingleModel.UomID = Number($("#ddlTypeUom" + i).val());
                 invoiceItemSingleModel.NetUnitPriceWithVat = $("#txtPrice" + i).val();
                 invoiceItemSingleModel.BaseQty = 1;
                 invoiceItemSingleModel.BaseQtyPrice = $("#txtPrice" + i).val();
-                invoiceItemSingleModel.BaseQtyUomid = Number($("#ddlTypeuom" + i).val());
+                invoiceItemSingleModel.BaseQtyUomid = Number($("#ddlTypeUom" + i).val());
                 invoiceItemSingleModel.ChargeVatNatID = null;
                 invoiceItemSingleModel.DiscountVatNatID = null;
                 invoiceItemSingleModel.ChargeCode = null;

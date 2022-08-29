@@ -181,6 +181,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Domain\IQ_InvoiceHedar_Tax.cs">
+      <DependentUpon>InvModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Domain\IQ_Sls_InvoiceDetail_Tax.cs">
+      <DependentUpon>InvModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Domain\issuer.cs">
       <DependentUpon>InvModel.tt</DependentUpon>
     </Compile>

@@ -1092,6 +1092,145 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <Property Name="CompStatus" Type="int" Nullable="false" />
           <Property Name="LoginMsg" Type="varchar" MaxLength="106" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'InvoiceTax.dbo.IQ_InvoiceHedar_Tax' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="IQ_InvoiceHedar_Tax">
+          <Key>
+            <PropertyRef Name="InvoiceID" />
+            <PropertyRef Name="receiverID_rec" />
+            <PropertyRef Name="issuerID_iss" />
+          </Key>
+          <Property Name="CompCode" Type="int" />
+          <Property Name="InvoiceID" Type="int" Nullable="false" />
+          <Property Name="TrNo" Type="int" />
+          <Property Name="RefNO" Type="nvarchar" MaxLength="50" />
+          <Property Name="RefTrID" Type="int" />
+          <Property Name="TrDate" Type="smalldatetime" />
+          <Property Name="TrType" Type="int" />
+          <Property Name="IsCash" Type="bit" />
+          <Property Name="CustomerId" Type="int" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="100" />
+          <Property Name="TotalAmount" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="VatAmount" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="VatType" Type="int" />
+          <Property Name="DiscountAmount" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="NetAfterVat" Type="numeric" Precision="22" Scale="2" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="200" />
+          <Property Name="Status" Type="int" />
+          <Property Name="BranchCode" Type="int" />
+          <Property Name="TrTime" Type="time" Precision="7" />
+          <Property Name="TaxCurrencyID" Type="int" />
+          <Property Name="InvoiceCurrenyID" Type="int" />
+          <Property Name="ItemTotal" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="ItemAllowTotal" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="ItemDiscountTotal" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="ItemVatTotal" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="UUID" Type="nvarchar(max)" />
+          <Property Name="DocType" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoundingAmount" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="TimeUpload" Type="datetime" />
+          <Property Name="VersionInv" Type="nvarchar" MaxLength="50" />
+          <Property Name="GlobalInvoiceCounter" Type="int" />
+          <Property Name="receiverID_rec" Type="int" Nullable="false" />
+          <Property Name="branchID_rec" Type="int" />
+          <Property Name="country_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="governate_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="regionCity_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="street_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="buildingNumber_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="postalCode_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="floor_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="room_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="landmark_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="additionalInformation_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="type_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="id_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="name_rec" Type="nvarchar" MaxLength="50" />
+          <Property Name="issuerID_iss" Type="int" Nullable="false" />
+          <Property Name="branchID_iss" Type="int" />
+          <Property Name="country_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="governate_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="regionCity_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="street_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="buildingNumber_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="postalCode_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="floor_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="room_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="landmark_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="additionalInformation_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="type_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="id_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="name_iss" Type="nvarchar" MaxLength="50" />
+          <Property Name="CurrencyCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="DescA" Type="nvarchar" MaxLength="50" />
+          <Property Name="DescL" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'InvoiceTax.dbo.IQ_Sls_InvoiceDetail_Tax' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="IQ_Sls_InvoiceDetail_Tax">
+          <Key>
+            <PropertyRef Name="InvoiceID" />
+            <PropertyRef Name="InvoiceItemID" />
+          </Key>
+          <Property Name="InvoiceID" Type="int" Nullable="false" />
+          <Property Name="InvoiceItemID" Type="int" Nullable="false" />
+          <Property Name="ItemID" Type="int" />
+          <Property Name="UomID" Type="int" />
+          <Property Name="InvoiceSoldQty" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="SoldQty" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="Unitprice" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="DiscountPrc" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="DiscountAmount" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="NetUnitPrice" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="ItemTotal" Type="numeric" Precision="37" Scale="10" />
+          <Property Name="VatPrc" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="VatAmount" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="NetAfterVat" Type="numeric" Precision="38" Scale="10" />
+          <Property Name="StockSoldQty" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="StockUnitCost" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="VatApplied" Type="int" />
+          <Property Name="TotRetQty" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="Serial" Type="int" />
+          <Property Name="AllowAmount" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="AllowancePrc" Type="numeric" Precision="19" Scale="4" />
+          <Property Name="AllowanceBase" Type="numeric" Precision="19" Scale="4" />
+          <Property Name="AllowReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="AllowCode" Type="int" />
+          <Property Name="BaseQty" Type="numeric" Precision="19" Scale="4" />
+          <Property Name="BaseQtyUomid" Type="int" />
+          <Property Name="BaseQtyPrice" Type="numeric" Precision="19" Scale="4" />
+          <Property Name="BaseQtyDiscount" Type="numeric" Precision="19" Scale="4" />
+          <Property Name="DiscountPrcBase" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="DiscountVatNatID" Type="int" />
+          <Property Name="Discountreason" Type="nvarchar" MaxLength="200" />
+          <Property Name="DiscountCode" Type="int" />
+          <Property Name="ItemNetAmount" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="ChargeAmount" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="ChargePrc" Type="numeric" Precision="19" Scale="4" />
+          <Property Name="ChargeBase" Type="numeric" Precision="19" Scale="4" />
+          <Property Name="ChargeVatNatID" Type="int" />
+          <Property Name="ChargeVatPrc" Type="numeric" Precision="19" Scale="4" />
+          <Property Name="ChargeAfterVat" Type="numeric" Precision="19" Scale="2" />
+          <Property Name="ChargeReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="ChargeCode" Type="int" />
+          <Property Name="VatNatID" Type="int" />
+          <Property Name="UnitpriceWithVat" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="NetUnitPriceWithVat" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="Itemdesc" Type="nvarchar" MaxLength="500" />
+          <Property Name="itemCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="UnitCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="StatusCode" Type="int" />
+          <Property Name="activeTo" Type="datetime" />
+          <Property Name="activeFrom" Type="datetime" />
+          <Property Name="codeNameAr" Type="nvarchar(max)" />
+          <Property Name="codeName" Type="nvarchar(max)" />
+          <Property Name="parentCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="codeType" Type="nvarchar" MaxLength="50" />
+          <Property Name="UomCode" Type="nvarchar" MaxLength="25" />
+          <Property Name="DescA" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <Function Name="BSE_TafkeetArab" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar(max)">
           <Parameter Name="Curname" Type="nvarchar" Mode="In" />
           <Parameter Name="CurSmallName" Type="nvarchar" Mode="In" />
@@ -1386,6 +1525,136 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
     [I_VW_GetCompStatus].[CompStatus] AS [CompStatus], 
     [I_VW_GetCompStatus].[LoginMsg] AS [LoginMsg]
     FROM [dbo].[I_VW_GetCompStatus] AS [I_VW_GetCompStatus]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="IQ_InvoiceHedar_Tax" EntityType="Self.IQ_InvoiceHedar_Tax" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [IQ_InvoiceHedar_Tax].[CompCode] AS [CompCode], 
+    [IQ_InvoiceHedar_Tax].[InvoiceID] AS [InvoiceID], 
+    [IQ_InvoiceHedar_Tax].[TrNo] AS [TrNo], 
+    [IQ_InvoiceHedar_Tax].[RefNO] AS [RefNO], 
+    [IQ_InvoiceHedar_Tax].[RefTrID] AS [RefTrID], 
+    [IQ_InvoiceHedar_Tax].[TrDate] AS [TrDate], 
+    [IQ_InvoiceHedar_Tax].[TrType] AS [TrType], 
+    [IQ_InvoiceHedar_Tax].[IsCash] AS [IsCash], 
+    [IQ_InvoiceHedar_Tax].[CustomerId] AS [CustomerId], 
+    [IQ_InvoiceHedar_Tax].[CustomerName] AS [CustomerName], 
+    [IQ_InvoiceHedar_Tax].[TotalAmount] AS [TotalAmount], 
+    [IQ_InvoiceHedar_Tax].[VatAmount] AS [VatAmount], 
+    [IQ_InvoiceHedar_Tax].[VatType] AS [VatType], 
+    [IQ_InvoiceHedar_Tax].[DiscountAmount] AS [DiscountAmount], 
+    [IQ_InvoiceHedar_Tax].[NetAfterVat] AS [NetAfterVat], 
+    [IQ_InvoiceHedar_Tax].[Remark] AS [Remark], 
+    [IQ_InvoiceHedar_Tax].[Status] AS [Status], 
+    [IQ_InvoiceHedar_Tax].[BranchCode] AS [BranchCode], 
+    [IQ_InvoiceHedar_Tax].[TrTime] AS [TrTime], 
+    [IQ_InvoiceHedar_Tax].[TaxCurrencyID] AS [TaxCurrencyID], 
+    [IQ_InvoiceHedar_Tax].[InvoiceCurrenyID] AS [InvoiceCurrenyID], 
+    [IQ_InvoiceHedar_Tax].[ItemTotal] AS [ItemTotal], 
+    [IQ_InvoiceHedar_Tax].[ItemAllowTotal] AS [ItemAllowTotal], 
+    [IQ_InvoiceHedar_Tax].[ItemDiscountTotal] AS [ItemDiscountTotal], 
+    [IQ_InvoiceHedar_Tax].[ItemVatTotal] AS [ItemVatTotal], 
+    [IQ_InvoiceHedar_Tax].[UUID] AS [UUID], 
+    [IQ_InvoiceHedar_Tax].[DocType] AS [DocType], 
+    [IQ_InvoiceHedar_Tax].[RoundingAmount] AS [RoundingAmount], 
+    [IQ_InvoiceHedar_Tax].[TimeUpload] AS [TimeUpload], 
+    [IQ_InvoiceHedar_Tax].[VersionInv] AS [VersionInv], 
+    [IQ_InvoiceHedar_Tax].[GlobalInvoiceCounter] AS [GlobalInvoiceCounter], 
+    [IQ_InvoiceHedar_Tax].[receiverID_rec] AS [receiverID_rec], 
+    [IQ_InvoiceHedar_Tax].[branchID_rec] AS [branchID_rec], 
+    [IQ_InvoiceHedar_Tax].[country_rec] AS [country_rec], 
+    [IQ_InvoiceHedar_Tax].[governate_rec] AS [governate_rec], 
+    [IQ_InvoiceHedar_Tax].[regionCity_rec] AS [regionCity_rec], 
+    [IQ_InvoiceHedar_Tax].[street_rec] AS [street_rec], 
+    [IQ_InvoiceHedar_Tax].[buildingNumber_rec] AS [buildingNumber_rec], 
+    [IQ_InvoiceHedar_Tax].[postalCode_rec] AS [postalCode_rec], 
+    [IQ_InvoiceHedar_Tax].[floor_rec] AS [floor_rec], 
+    [IQ_InvoiceHedar_Tax].[room_rec] AS [room_rec], 
+    [IQ_InvoiceHedar_Tax].[landmark_rec] AS [landmark_rec], 
+    [IQ_InvoiceHedar_Tax].[additionalInformation_rec] AS [additionalInformation_rec], 
+    [IQ_InvoiceHedar_Tax].[type_rec] AS [type_rec], 
+    [IQ_InvoiceHedar_Tax].[id_rec] AS [id_rec], 
+    [IQ_InvoiceHedar_Tax].[name_rec] AS [name_rec], 
+    [IQ_InvoiceHedar_Tax].[issuerID_iss] AS [issuerID_iss], 
+    [IQ_InvoiceHedar_Tax].[branchID_iss] AS [branchID_iss], 
+    [IQ_InvoiceHedar_Tax].[country_iss] AS [country_iss], 
+    [IQ_InvoiceHedar_Tax].[governate_iss] AS [governate_iss], 
+    [IQ_InvoiceHedar_Tax].[regionCity_iss] AS [regionCity_iss], 
+    [IQ_InvoiceHedar_Tax].[street_iss] AS [street_iss], 
+    [IQ_InvoiceHedar_Tax].[buildingNumber_iss] AS [buildingNumber_iss], 
+    [IQ_InvoiceHedar_Tax].[postalCode_iss] AS [postalCode_iss], 
+    [IQ_InvoiceHedar_Tax].[floor_iss] AS [floor_iss], 
+    [IQ_InvoiceHedar_Tax].[room_iss] AS [room_iss], 
+    [IQ_InvoiceHedar_Tax].[landmark_iss] AS [landmark_iss], 
+    [IQ_InvoiceHedar_Tax].[additionalInformation_iss] AS [additionalInformation_iss], 
+    [IQ_InvoiceHedar_Tax].[type_iss] AS [type_iss], 
+    [IQ_InvoiceHedar_Tax].[id_iss] AS [id_iss], 
+    [IQ_InvoiceHedar_Tax].[name_iss] AS [name_iss], 
+    [IQ_InvoiceHedar_Tax].[CurrencyCode] AS [CurrencyCode], 
+    [IQ_InvoiceHedar_Tax].[DescA] AS [DescA], 
+    [IQ_InvoiceHedar_Tax].[DescL] AS [DescL], 
+    [IQ_InvoiceHedar_Tax].[Remarks] AS [Remarks]
+    FROM [dbo].[IQ_InvoiceHedar_Tax] AS [IQ_InvoiceHedar_Tax]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="IQ_Sls_InvoiceDetail_Tax" EntityType="Self.IQ_Sls_InvoiceDetail_Tax" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [IQ_Sls_InvoiceDetail_Tax].[InvoiceID] AS [InvoiceID], 
+    [IQ_Sls_InvoiceDetail_Tax].[InvoiceItemID] AS [InvoiceItemID], 
+    [IQ_Sls_InvoiceDetail_Tax].[ItemID] AS [ItemID], 
+    [IQ_Sls_InvoiceDetail_Tax].[UomID] AS [UomID], 
+    [IQ_Sls_InvoiceDetail_Tax].[InvoiceSoldQty] AS [InvoiceSoldQty], 
+    [IQ_Sls_InvoiceDetail_Tax].[SoldQty] AS [SoldQty], 
+    [IQ_Sls_InvoiceDetail_Tax].[Unitprice] AS [Unitprice], 
+    [IQ_Sls_InvoiceDetail_Tax].[DiscountPrc] AS [DiscountPrc], 
+    [IQ_Sls_InvoiceDetail_Tax].[DiscountAmount] AS [DiscountAmount], 
+    [IQ_Sls_InvoiceDetail_Tax].[NetUnitPrice] AS [NetUnitPrice], 
+    [IQ_Sls_InvoiceDetail_Tax].[ItemTotal] AS [ItemTotal], 
+    [IQ_Sls_InvoiceDetail_Tax].[VatPrc] AS [VatPrc], 
+    [IQ_Sls_InvoiceDetail_Tax].[VatAmount] AS [VatAmount], 
+    [IQ_Sls_InvoiceDetail_Tax].[NetAfterVat] AS [NetAfterVat], 
+    [IQ_Sls_InvoiceDetail_Tax].[StockSoldQty] AS [StockSoldQty], 
+    [IQ_Sls_InvoiceDetail_Tax].[StockUnitCost] AS [StockUnitCost], 
+    [IQ_Sls_InvoiceDetail_Tax].[VatApplied] AS [VatApplied], 
+    [IQ_Sls_InvoiceDetail_Tax].[TotRetQty] AS [TotRetQty], 
+    [IQ_Sls_InvoiceDetail_Tax].[Serial] AS [Serial], 
+    [IQ_Sls_InvoiceDetail_Tax].[AllowAmount] AS [AllowAmount], 
+    [IQ_Sls_InvoiceDetail_Tax].[AllowancePrc] AS [AllowancePrc], 
+    [IQ_Sls_InvoiceDetail_Tax].[AllowanceBase] AS [AllowanceBase], 
+    [IQ_Sls_InvoiceDetail_Tax].[AllowReason] AS [AllowReason], 
+    [IQ_Sls_InvoiceDetail_Tax].[AllowCode] AS [AllowCode], 
+    [IQ_Sls_InvoiceDetail_Tax].[BaseQty] AS [BaseQty], 
+    [IQ_Sls_InvoiceDetail_Tax].[BaseQtyUomid] AS [BaseQtyUomid], 
+    [IQ_Sls_InvoiceDetail_Tax].[BaseQtyPrice] AS [BaseQtyPrice], 
+    [IQ_Sls_InvoiceDetail_Tax].[BaseQtyDiscount] AS [BaseQtyDiscount], 
+    [IQ_Sls_InvoiceDetail_Tax].[DiscountPrcBase] AS [DiscountPrcBase], 
+    [IQ_Sls_InvoiceDetail_Tax].[DiscountVatNatID] AS [DiscountVatNatID], 
+    [IQ_Sls_InvoiceDetail_Tax].[Discountreason] AS [Discountreason], 
+    [IQ_Sls_InvoiceDetail_Tax].[DiscountCode] AS [DiscountCode], 
+    [IQ_Sls_InvoiceDetail_Tax].[ItemNetAmount] AS [ItemNetAmount], 
+    [IQ_Sls_InvoiceDetail_Tax].[ChargeAmount] AS [ChargeAmount], 
+    [IQ_Sls_InvoiceDetail_Tax].[ChargePrc] AS [ChargePrc], 
+    [IQ_Sls_InvoiceDetail_Tax].[ChargeBase] AS [ChargeBase], 
+    [IQ_Sls_InvoiceDetail_Tax].[ChargeVatNatID] AS [ChargeVatNatID], 
+    [IQ_Sls_InvoiceDetail_Tax].[ChargeVatPrc] AS [ChargeVatPrc], 
+    [IQ_Sls_InvoiceDetail_Tax].[ChargeAfterVat] AS [ChargeAfterVat], 
+    [IQ_Sls_InvoiceDetail_Tax].[ChargeReason] AS [ChargeReason], 
+    [IQ_Sls_InvoiceDetail_Tax].[ChargeCode] AS [ChargeCode], 
+    [IQ_Sls_InvoiceDetail_Tax].[VatNatID] AS [VatNatID], 
+    [IQ_Sls_InvoiceDetail_Tax].[UnitpriceWithVat] AS [UnitpriceWithVat], 
+    [IQ_Sls_InvoiceDetail_Tax].[NetUnitPriceWithVat] AS [NetUnitPriceWithVat], 
+    [IQ_Sls_InvoiceDetail_Tax].[Itemdesc] AS [Itemdesc], 
+    [IQ_Sls_InvoiceDetail_Tax].[itemCode] AS [itemCode], 
+    [IQ_Sls_InvoiceDetail_Tax].[description] AS [description], 
+    [IQ_Sls_InvoiceDetail_Tax].[UnitCode] AS [UnitCode], 
+    [IQ_Sls_InvoiceDetail_Tax].[StatusCode] AS [StatusCode], 
+    [IQ_Sls_InvoiceDetail_Tax].[activeTo] AS [activeTo], 
+    [IQ_Sls_InvoiceDetail_Tax].[activeFrom] AS [activeFrom], 
+    [IQ_Sls_InvoiceDetail_Tax].[codeNameAr] AS [codeNameAr], 
+    [IQ_Sls_InvoiceDetail_Tax].[codeName] AS [codeName], 
+    [IQ_Sls_InvoiceDetail_Tax].[parentCode] AS [parentCode], 
+    [IQ_Sls_InvoiceDetail_Tax].[codeType] AS [codeType], 
+    [IQ_Sls_InvoiceDetail_Tax].[UomCode] AS [UomCode], 
+    [IQ_Sls_InvoiceDetail_Tax].[DescA] AS [DescA]
+    FROM [dbo].[IQ_Sls_InvoiceDetail_Tax] AS [IQ_Sls_InvoiceDetail_Tax]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -2470,6 +2739,8 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <EntitySet Name="Sls_InvoiceDetail" EntityType="TaxModel.Sls_InvoiceDetail" />
           <EntitySet Name="Items1" EntityType="TaxModel.Items" />
           <EntitySet Name="G_Government" EntityType="TaxModel.G_Government" />
+          <EntitySet Name="IQ_InvoiceHedar_Tax" EntityType="TaxModel.IQ_InvoiceHedar_Tax" />
+          <EntitySet Name="IQ_Sls_InvoiceDetail_Tax" EntityType="TaxModel.IQ_Sls_InvoiceDetail_Tax" />
         </EntityContainer>
         <ComplexType Name="Prnt_Quotation_Result">
           <Property Type="Int32" Name="Comp" Nullable="true" />
@@ -2727,6 +2998,141 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
           <Property Name="Code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="DescA" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DescE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="IQ_InvoiceHedar_Tax">
+          <Key>
+            <PropertyRef Name="InvoiceID" />
+            <PropertyRef Name="receiverID_rec" />
+            <PropertyRef Name="issuerID_iss" />
+          </Key>
+          <Property Name="CompCode" Type="Int32" />
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="TrNo" Type="Int32" />
+          <Property Name="RefNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RefTrID" Type="Int32" />
+          <Property Name="TrDate" Type="DateTime" Precision="0" />
+          <Property Name="TrType" Type="Int32" />
+          <Property Name="IsCash" Type="Boolean" />
+          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="VatAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="VatType" Type="Int32" />
+          <Property Name="DiscountAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NetAfterVat" Type="Decimal" Precision="22" Scale="2" />
+          <Property Name="Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="BranchCode" Type="Int32" />
+          <Property Name="TrTime" Type="Time" Precision="7" />
+          <Property Name="TaxCurrencyID" Type="Int32" />
+          <Property Name="InvoiceCurrenyID" Type="Int32" />
+          <Property Name="ItemTotal" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ItemAllowTotal" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ItemDiscountTotal" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ItemVatTotal" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="UUID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoundingAmount" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="TimeUpload" Type="DateTime" Precision="3" />
+          <Property Name="VersionInv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GlobalInvoiceCounter" Type="Int32" />
+          <Property Name="receiverID_rec" Type="Int32" Nullable="false" />
+          <Property Name="branchID_rec" Type="Int32" />
+          <Property Name="country_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="governate_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="regionCity_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="street_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="buildingNumber_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="postalCode_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="floor_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="room_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="landmark_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="additionalInformation_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="type_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="name_rec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="issuerID_iss" Type="Int32" Nullable="false" />
+          <Property Name="branchID_iss" Type="Int32" />
+          <Property Name="country_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="governate_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="regionCity_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="street_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="buildingNumber_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="postalCode_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="floor_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="room_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="landmark_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="additionalInformation_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="type_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="name_iss" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CurrencyCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DescA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DescL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="IQ_Sls_InvoiceDetail_Tax">
+          <Key>
+            <PropertyRef Name="InvoiceID" />
+            <PropertyRef Name="InvoiceItemID" />
+          </Key>
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="InvoiceItemID" Type="Int32" Nullable="false" />
+          <Property Name="ItemID" Type="Int32" />
+          <Property Name="UomID" Type="Int32" />
+          <Property Name="InvoiceSoldQty" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="SoldQty" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Unitprice" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="DiscountPrc" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="DiscountAmount" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="NetUnitPrice" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="ItemTotal" Type="Decimal" Precision="37" Scale="10" />
+          <Property Name="VatPrc" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="VatAmount" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="NetAfterVat" Type="Decimal" Precision="38" Scale="10" />
+          <Property Name="StockSoldQty" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="StockUnitCost" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="VatApplied" Type="Int32" />
+          <Property Name="TotRetQty" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Serial" Type="Int32" />
+          <Property Name="AllowAmount" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="AllowancePrc" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="AllowanceBase" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="AllowReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AllowCode" Type="Int32" />
+          <Property Name="BaseQty" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="BaseQtyUomid" Type="Int32" />
+          <Property Name="BaseQtyPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="BaseQtyDiscount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="DiscountPrcBase" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="DiscountVatNatID" Type="Int32" />
+          <Property Name="Discountreason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DiscountCode" Type="Int32" />
+          <Property Name="ItemNetAmount" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ChargeAmount" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ChargePrc" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ChargeBase" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ChargeVatNatID" Type="Int32" />
+          <Property Name="ChargeVatPrc" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ChargeAfterVat" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ChargeReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ChargeCode" Type="Int32" />
+          <Property Name="VatNatID" Type="Int32" />
+          <Property Name="UnitpriceWithVat" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="NetUnitPriceWithVat" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Itemdesc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="itemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UnitCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusCode" Type="Int32" />
+          <Property Name="activeTo" Type="DateTime" Precision="3" />
+          <Property Name="activeFrom" Type="DateTime" Precision="3" />
+          <Property Name="codeNameAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="codeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="parentCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="codeType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UomCode" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="DescA" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3979,6 +4385,140 @@ warning 6002: The table/view 'InvoiceTax.dbo.I_VW_GetCompStatus' does not have a
                 <ScalarProperty Name="DescA" ColumnName="DescA" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IQ_InvoiceHedar_Tax">
+            <EntityTypeMapping TypeName="TaxModel.IQ_InvoiceHedar_Tax">
+              <MappingFragment StoreEntitySet="IQ_InvoiceHedar_Tax">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="DescL" ColumnName="DescL" />
+                <ScalarProperty Name="DescA" ColumnName="DescA" />
+                <ScalarProperty Name="CurrencyCode" ColumnName="CurrencyCode" />
+                <ScalarProperty Name="name_iss" ColumnName="name_iss" />
+                <ScalarProperty Name="id_iss" ColumnName="id_iss" />
+                <ScalarProperty Name="type_iss" ColumnName="type_iss" />
+                <ScalarProperty Name="additionalInformation_iss" ColumnName="additionalInformation_iss" />
+                <ScalarProperty Name="landmark_iss" ColumnName="landmark_iss" />
+                <ScalarProperty Name="room_iss" ColumnName="room_iss" />
+                <ScalarProperty Name="floor_iss" ColumnName="floor_iss" />
+                <ScalarProperty Name="postalCode_iss" ColumnName="postalCode_iss" />
+                <ScalarProperty Name="buildingNumber_iss" ColumnName="buildingNumber_iss" />
+                <ScalarProperty Name="street_iss" ColumnName="street_iss" />
+                <ScalarProperty Name="regionCity_iss" ColumnName="regionCity_iss" />
+                <ScalarProperty Name="governate_iss" ColumnName="governate_iss" />
+                <ScalarProperty Name="country_iss" ColumnName="country_iss" />
+                <ScalarProperty Name="branchID_iss" ColumnName="branchID_iss" />
+                <ScalarProperty Name="issuerID_iss" ColumnName="issuerID_iss" />
+                <ScalarProperty Name="name_rec" ColumnName="name_rec" />
+                <ScalarProperty Name="id_rec" ColumnName="id_rec" />
+                <ScalarProperty Name="type_rec" ColumnName="type_rec" />
+                <ScalarProperty Name="additionalInformation_rec" ColumnName="additionalInformation_rec" />
+                <ScalarProperty Name="landmark_rec" ColumnName="landmark_rec" />
+                <ScalarProperty Name="room_rec" ColumnName="room_rec" />
+                <ScalarProperty Name="floor_rec" ColumnName="floor_rec" />
+                <ScalarProperty Name="postalCode_rec" ColumnName="postalCode_rec" />
+                <ScalarProperty Name="buildingNumber_rec" ColumnName="buildingNumber_rec" />
+                <ScalarProperty Name="street_rec" ColumnName="street_rec" />
+                <ScalarProperty Name="regionCity_rec" ColumnName="regionCity_rec" />
+                <ScalarProperty Name="governate_rec" ColumnName="governate_rec" />
+                <ScalarProperty Name="country_rec" ColumnName="country_rec" />
+                <ScalarProperty Name="branchID_rec" ColumnName="branchID_rec" />
+                <ScalarProperty Name="receiverID_rec" ColumnName="receiverID_rec" />
+                <ScalarProperty Name="GlobalInvoiceCounter" ColumnName="GlobalInvoiceCounter" />
+                <ScalarProperty Name="VersionInv" ColumnName="VersionInv" />
+                <ScalarProperty Name="TimeUpload" ColumnName="TimeUpload" />
+                <ScalarProperty Name="RoundingAmount" ColumnName="RoundingAmount" />
+                <ScalarProperty Name="DocType" ColumnName="DocType" />
+                <ScalarProperty Name="UUID" ColumnName="UUID" />
+                <ScalarProperty Name="ItemVatTotal" ColumnName="ItemVatTotal" />
+                <ScalarProperty Name="ItemDiscountTotal" ColumnName="ItemDiscountTotal" />
+                <ScalarProperty Name="ItemAllowTotal" ColumnName="ItemAllowTotal" />
+                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
+                <ScalarProperty Name="InvoiceCurrenyID" ColumnName="InvoiceCurrenyID" />
+                <ScalarProperty Name="TaxCurrencyID" ColumnName="TaxCurrencyID" />
+                <ScalarProperty Name="TrTime" ColumnName="TrTime" />
+                <ScalarProperty Name="BranchCode" ColumnName="BranchCode" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="NetAfterVat" ColumnName="NetAfterVat" />
+                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
+                <ScalarProperty Name="VatType" ColumnName="VatType" />
+                <ScalarProperty Name="VatAmount" ColumnName="VatAmount" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="IsCash" ColumnName="IsCash" />
+                <ScalarProperty Name="TrType" ColumnName="TrType" />
+                <ScalarProperty Name="TrDate" ColumnName="TrDate" />
+                <ScalarProperty Name="RefTrID" ColumnName="RefTrID" />
+                <ScalarProperty Name="RefNO" ColumnName="RefNO" />
+                <ScalarProperty Name="TrNo" ColumnName="TrNo" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="CompCode" ColumnName="CompCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IQ_Sls_InvoiceDetail_Tax">
+            <EntityTypeMapping TypeName="TaxModel.IQ_Sls_InvoiceDetail_Tax">
+              <MappingFragment StoreEntitySet="IQ_Sls_InvoiceDetail_Tax">
+                <ScalarProperty Name="DescA" ColumnName="DescA" />
+                <ScalarProperty Name="UomCode" ColumnName="UomCode" />
+                <ScalarProperty Name="codeType" ColumnName="codeType" />
+                <ScalarProperty Name="parentCode" ColumnName="parentCode" />
+                <ScalarProperty Name="codeName" ColumnName="codeName" />
+                <ScalarProperty Name="codeNameAr" ColumnName="codeNameAr" />
+                <ScalarProperty Name="activeFrom" ColumnName="activeFrom" />
+                <ScalarProperty Name="activeTo" ColumnName="activeTo" />
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="UnitCode" ColumnName="UnitCode" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
+                <ScalarProperty Name="Itemdesc" ColumnName="Itemdesc" />
+                <ScalarProperty Name="NetUnitPriceWithVat" ColumnName="NetUnitPriceWithVat" />
+                <ScalarProperty Name="UnitpriceWithVat" ColumnName="UnitpriceWithVat" />
+                <ScalarProperty Name="VatNatID" ColumnName="VatNatID" />
+                <ScalarProperty Name="ChargeCode" ColumnName="ChargeCode" />
+                <ScalarProperty Name="ChargeReason" ColumnName="ChargeReason" />
+                <ScalarProperty Name="ChargeAfterVat" ColumnName="ChargeAfterVat" />
+                <ScalarProperty Name="ChargeVatPrc" ColumnName="ChargeVatPrc" />
+                <ScalarProperty Name="ChargeVatNatID" ColumnName="ChargeVatNatID" />
+                <ScalarProperty Name="ChargeBase" ColumnName="ChargeBase" />
+                <ScalarProperty Name="ChargePrc" ColumnName="ChargePrc" />
+                <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
+                <ScalarProperty Name="ItemNetAmount" ColumnName="ItemNetAmount" />
+                <ScalarProperty Name="DiscountCode" ColumnName="DiscountCode" />
+                <ScalarProperty Name="Discountreason" ColumnName="Discountreason" />
+                <ScalarProperty Name="DiscountVatNatID" ColumnName="DiscountVatNatID" />
+                <ScalarProperty Name="DiscountPrcBase" ColumnName="DiscountPrcBase" />
+                <ScalarProperty Name="BaseQtyDiscount" ColumnName="BaseQtyDiscount" />
+                <ScalarProperty Name="BaseQtyPrice" ColumnName="BaseQtyPrice" />
+                <ScalarProperty Name="BaseQtyUomid" ColumnName="BaseQtyUomid" />
+                <ScalarProperty Name="BaseQty" ColumnName="BaseQty" />
+                <ScalarProperty Name="AllowCode" ColumnName="AllowCode" />
+                <ScalarProperty Name="AllowReason" ColumnName="AllowReason" />
+                <ScalarProperty Name="AllowanceBase" ColumnName="AllowanceBase" />
+                <ScalarProperty Name="AllowancePrc" ColumnName="AllowancePrc" />
+                <ScalarProperty Name="AllowAmount" ColumnName="AllowAmount" />
+                <ScalarProperty Name="Serial" ColumnName="Serial" />
+                <ScalarProperty Name="TotRetQty" ColumnName="TotRetQty" />
+                <ScalarProperty Name="VatApplied" ColumnName="VatApplied" />
+                <ScalarProperty Name="StockUnitCost" ColumnName="StockUnitCost" />
+                <ScalarProperty Name="StockSoldQty" ColumnName="StockSoldQty" />
+                <ScalarProperty Name="NetAfterVat" ColumnName="NetAfterVat" />
+                <ScalarProperty Name="VatAmount" ColumnName="VatAmount" />
+                <ScalarProperty Name="VatPrc" ColumnName="VatPrc" />
+                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
+                <ScalarProperty Name="NetUnitPrice" ColumnName="NetUnitPrice" />
+                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
+                <ScalarProperty Name="DiscountPrc" ColumnName="DiscountPrc" />
+                <ScalarProperty Name="Unitprice" ColumnName="Unitprice" />
+                <ScalarProperty Name="SoldQty" ColumnName="SoldQty" />
+                <ScalarProperty Name="InvoiceSoldQty" ColumnName="InvoiceSoldQty" />
+                <ScalarProperty Name="UomID" ColumnName="UomID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="InvoiceItemID" ColumnName="InvoiceItemID" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

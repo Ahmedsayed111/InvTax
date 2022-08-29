@@ -74,6 +74,8 @@ namespace Inv.DAL.Domain
         public virtual DbSet<Sls_InvoiceDetail> Sls_InvoiceDetail { get; set; }
         public virtual DbSet<Items> Items1 { get; set; }
         public virtual DbSet<G_Government> G_Government { get; set; }
+        public virtual DbSet<IQ_InvoiceHedar_Tax> IQ_InvoiceHedar_Tax { get; set; }
+        public virtual DbSet<IQ_Sls_InvoiceDetail_Tax> IQ_Sls_InvoiceDetail_Tax { get; set; }
     
         [DbFunction("TaxEntities", "GFun_Companies")]
         public virtual IQueryable<GFun_Companies_Result> GFun_Companies(string userCode)
