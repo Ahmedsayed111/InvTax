@@ -1089,11 +1089,34 @@ var Items = /** @class */ (function (_super) {
         _this.StatusCode = 0;
         _this.StatusCodeDesc = "";
         _this.StatusFlag = "";
+        _this.StatusDesc = "";
         _this.StatusItem = false;
         return _this;
     }
     return Items;
 }(SecurityClass));
+var FailedItem = /** @class */ (function () {
+    function FailedItem() {
+        this.index = 0;
+        this.errors = new Array();
+    }
+    return FailedItem;
+}());
+var Passed = /** @class */ (function () {
+    function Passed() {
+        this.itemCode = "";
+        this.codeUsageRequestId = "";
+    }
+    return Passed;
+}());
+var Root3 = /** @class */ (function () {
+    function Root3() {
+        this.passedItemsCount = 0;
+        this.failedItems = new Array();
+        this.passedItems = new Array();
+    }
+    return Root3;
+}());
 var I_D_UOM = /** @class */ (function () {
     function I_D_UOM() {
         this.UomID = 0;

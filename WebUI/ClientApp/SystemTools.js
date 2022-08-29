@@ -9,8 +9,8 @@ var SystemTools = /** @class */ (function () {
         var apiUrl = $("#GetAPIUrl").val() + controller + "/" + action;
         return (apiUrl);
     };
-    SystemTools.prototype.apiUrlCore = function (controller, action) {
-        var apiUrl = $("#GetAPIUrlCore").val() + controller + "/" + action;
+    SystemTools.prototype.apiUrlCore = function () {
+        var apiUrl = $("#GetAPIUrlCore").val() + "WeatherForecast";
         return (apiUrl);
     };
     SystemTools.prototype.getJsonData = function (model, type) {

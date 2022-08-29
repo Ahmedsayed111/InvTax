@@ -33,6 +33,9 @@ var StockDef;
                 if (result.IsSuccess) {
                     debugger;
                     I_ItemDetails = result.Response;
+                    for (var i = 0; i < I_ItemDetails.length; i++) {
+                        I_ItemDetails[i].StatusCodeDesc = I_ItemDetails[i].StatusCode == 1 ? "تحت التجهيز" : I_ItemDetails[i].StatusCode == 0 ? "جديد" : "نشط";
+                    }
                     InitializeGridControl();
                 }
             }
@@ -64,7 +67,7 @@ var StockDef;
             { title: "نشط الي", Name: "activeTo", Type: "date", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
             { title: "الوصف", Name: "description", Type: "text", value: "", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
             { title: "الوحده", Name: "UnitCode", Type: "text", value: "", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "نشط", Name: "StatusCode", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
+            { title: "الحاله", Name: "StatusCodeDesc", value: "0", Type: "text", style: "width: 10%", Edit: false, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
             { title: "تنشيط", Name: "StatusItem", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.checkbox() },
         ];
         BindGridControl(Grid);
@@ -81,6 +84,13 @@ var StockDef;
             success: function (d) {
                 var result = d;
                 if (result.IsSuccess) {
+                    var res = result.Response;
+                    if (res.failedItems.length > 0) {
+                        DisplayMassage(res.failedItems[0].errors.toString(), '', MessageType.Succeed);
+                    }
+                    else {
+                        DisplayMassage('تم رفع عدد ' + 1 + ' كود ', '', MessageType.Succeed);
+                    }
                     GetAllItem();
                     DisplayDataGridControl(I_ItemDetails, Grid);
                 }

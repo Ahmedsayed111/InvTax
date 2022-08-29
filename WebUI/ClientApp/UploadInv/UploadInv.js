@@ -1,10 +1,9 @@
 /// 
 $(document).ready(function () {
-    UploadInv.InitalizeComponent();
+    LoadingInv.InitalizeComponent();
 });
-var UploadInv;
-(function (UploadInv) {
-    var sys = new SystemTools();
+var LoadingInv;
+(function (LoadingInv) {
     var TaxModel = new TaxTotal();
     var InvoiceModel = new Documente();
     var InvoiceItemsDetailsModel = new Array();
@@ -12,7 +11,6 @@ var UploadInv;
     var invoiceItemSingleModel = new InvoiceLine();
     var invoiceTaxSingleModel = new TaxableItem();
     var Model_root = new Root();
-    var ReportGrid = new JsGrid();
     var btnMargin;
     var btnPush;
     var btnRefrash;
@@ -34,9 +32,8 @@ var UploadInv;
     function InitalizeComponent() {
         InitalizeControls();
         InitializeEvents();
-        InitializeGrid(Model_root.documents);
     }
-    UploadInv.InitalizeComponent = InitalizeComponent;
+    LoadingInv.InitalizeComponent = InitalizeComponent;
     function InitalizeControls() {
         btnMargin = document.getElementById("btnMargin");
         btnPush = document.getElementById("btnPush");
@@ -58,7 +55,7 @@ var UploadInv;
         setTimeout(function () {
             debugger;
             var json_object = $('#xlx_json' + Type).val();
-            //let object = JSON.parse(json_object);
+            var object = JSON.parse(json_object);
             $('#upload' + Type).addClass('background_upload');
         }, 400);
     }
@@ -93,7 +90,6 @@ var UploadInv;
         }
         if (!IsNullOrEmpty(Msg))
             alert(Msg);
-        debugger;
         InitializeGrid(Model_root.documents);
         $("#totalaftartax").val(totalaftarall.toFixed(2));
         $("#totalouttax").val(totaloutall.toFixed(2));
@@ -261,57 +257,28 @@ var UploadInv;
         });
     }
     function InitializeGrid(dataSource) {
-        ReportGrid.OnRowDoubleClicked = function () { };
-        ReportGrid.ElementName = "LodGrid";
-        ReportGrid.PrimaryKey = "internalID";
-        ReportGrid.Paging = true;
-        ReportGrid.PageSize = 6;
-        ReportGrid.Sorting = true;
-        ReportGrid.InsertionMode = JsGridInsertionMode.Binding;
-        ReportGrid.Editing = false;
-        ReportGrid.Inserting = false;
-        ReportGrid.SelectedIndex = 1;
-        ReportGrid.SwitchingLanguageEnabled = false;
-        ReportGrid.OnItemEditing = function () { };
-        ReportGrid.Columns = [
-            { title: "Internal ID", name: "internalID", type: "text", width: "8%", },
-            { title: "Date", name: "dateTimeIssued", type: "text", width: "8%" },
-            {
-                title: "Receiver No.", css: "ColumPadding", name: "No", width: "8%",
-                itemTemplate: function (s, item) {
-                    var txt = document.createElement("label");
-                    txt.innerHTML = item.receiver.id;
-                    return txt;
-                }
-            },
-            {
-                title: "Receiver Name.", css: "ColumPadding", name: "Name", width: "20%",
-                itemTemplate: function (s, item) {
-                    var txt = document.createElement("label");
-                    txt.innerHTML = item.receiver.name;
-                    return txt;
-                }
-            },
-            {
-                title: "Receiver type.", css: "ColumPadding", name: "type", width: "8%",
-                itemTemplate: function (s, item) {
-                    var txt = document.createElement("label");
-                    txt.innerHTML = item.receiver.type;
-                    return txt;
-                }
-            },
-            //{ title: "Receiver No.", name: "receiver.id", type: "text", width: "8%" },
-            //{ title: "Receiver Name", name: "receiver.name", type: "text", width: "20%" },
-            //{ title: "Receiver Type", name: "receiver.type", type: "text", width: "8%" },
-            //Sum all all InvoiceLine/SalesTotal items
-            { title: "Total without Tax", name: "totalSalesAmount", type: "text", width: "8%" },
-            //TotalSales – TotalDiscount
-            //{ title: "Net Amount", name: "netAmount", type: "label", width: "8%" },
-            //Total amount of the invoice calculated as NetAmount + Totals of tax amounts. 5 decimal digits allowed.
-            { title: "Total with Tax", name: "totalAmount", type: "text", width: "8%" },
-        ];
-        ReportGrid.DataSource = dataSource;
-        ReportGrid.Bind();
+        $("#jsGrid").jsGrid({
+            width: "100%",
+            height: "auto",
+            sorting: true,
+            paging: true,
+            autoload: true,
+            pageSize: 10,
+            data: dataSource,
+            fields: [
+                { title: "Internal ID", name: "internalID", type: "label", width: "8%" },
+                { title: "Date", name: "dateTimeIssued", type: "label", width: "8%" },
+                { title: "Receiver No.", name: "receiver.id", type: "label", width: "8%" },
+                { title: "Receiver Name", name: "receiver.name", type: "label", width: "20%" },
+                { title: "Receiver Type", name: "receiver.type", type: "label", width: "8%" },
+                //Sum all all InvoiceLine/SalesTotal items
+                { title: "Total without Tax", name: "totalSalesAmount", type: "label", width: "8%" },
+                //TotalSales – TotalDiscount
+                //{ title: "Net Amount", name: "netAmount", type: "label", width: "8%" },
+                //Total amount of the invoice calculated as NetAmount + Totals of tax amounts. 5 decimal digits allowed.
+                { title: "Total with Tax", name: "totalAmount", type: "label", width: "8%" },
+            ]
+        });
     }
-})(UploadInv || (UploadInv = {}));
+})(LoadingInv || (LoadingInv = {}));
 //# sourceMappingURL=UploadInv.js.map
