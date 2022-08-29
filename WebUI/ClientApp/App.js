@@ -976,10 +976,10 @@ function WorningMessage(msg_Ar, msg_En, tit_ar, tit_en, OnOk) {
 function DisplayMassage(msg_Ar, msg_En, msg_type, OnOk) {
     var Env = GetSystemEnvironment();
     // msgtype : 1 : Sucess , 2: Fetal Error , 3: Data Entry Error 
-    if (Env.ScreenLanguage == "en")
-        $('#Text_Massage').html(msg_En);
-    else
-        $('#Text_Massage').html(msg_Ar);
+    //if (Env.ScreenLanguage == "en")
+    //    $('#Text_Massage').html(msg_En);
+    //else
+    $('#Text_Massage').html(msg_Ar);
     if (msg_type == '1') {
         $('#DivMassage').attr('class', 'col-lg-12  margingred  borderred');
         $('#DivMassage').attr('style', ' border-style: solid;border: solid;border-color: #5cb702; background-color : #009605 !important	');

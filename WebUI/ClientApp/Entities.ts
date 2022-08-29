@@ -1578,6 +1578,10 @@ class Sls_Ivoice extends SecurityClass {
         this.ItemDiscountTotal = 0;
         this.ItemVatTotal = 0;
         this.RoundingAmount = 0;
+        this.DocType = "";
+        this.UUID = "";
+        this.TimeUpload = "";
+        this.VersionInv = "";
     }
     public InvoiceID: number;
     public TrNo: number;
@@ -1661,7 +1665,13 @@ class Sls_Ivoice extends SecurityClass {
     public ItemDiscountTotal: number;
     public ItemVatTotal: number;
     public RoundingAmount: number;
+    public DocType: string;
+    public UUID: string;
+    public TimeUpload: string;
+    public VersionInv: string;
 }
+
+
 class Sls_InvoiceDetail extends SecurityClass {
     constructor() {
         super();

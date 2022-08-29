@@ -1003,6 +1003,10 @@ var Sls_Ivoice = /** @class */ (function (_super) {
         _this.ItemDiscountTotal = 0;
         _this.ItemVatTotal = 0;
         _this.RoundingAmount = 0;
+        _this.DocType = "";
+        _this.UUID = "";
+        _this.TimeUpload = "";
+        _this.VersionInv = "";
         return _this;
     }
     return Sls_Ivoice;

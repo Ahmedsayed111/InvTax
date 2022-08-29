@@ -30,14 +30,9 @@ var InvoiceTax;
     var txtDate;
     var txtRFQ;
     var ddlTypeInv;
+    var ddlTypePay;
     var txtCompanysales;
     var txtCompanyname;
-    var txtQutationNo;
-    var txtsalesVAT;
-    var txtfirstdays;
-    var txtsecounddays;
-    var txtlastdays;
-    var txtPlacedeliv;
     var txtRemark;
     var txtNetBefore;
     var txtNetAfterVat;
@@ -69,7 +64,7 @@ var InvoiceTax;
         FillddlCurreny();
         FillddlG_Codes();
         txtDate.value = GetDate();
-        ddlCurreny.value = "EGP";
+        ddlCurreny.value = "4";
     }
     InvoiceTax.InitalizeComponent = InitalizeComponent;
     function InitalizeControls() {
@@ -88,14 +83,9 @@ var InvoiceTax;
         txtDate = document.getElementById("txtDate");
         txtRFQ = document.getElementById("txtRFQ");
         ddlTypeInv = document.getElementById("ddlTypeInv");
+        ddlTypePay = document.getElementById("ddlTypePay");
         txtCompanysales = document.getElementById("txtCompanysales");
         txtCompanyname = document.getElementById("txtCompanyname");
-        txtQutationNo = document.getElementById("txtQutationNo");
-        txtsalesVAT = document.getElementById("txtsalesVAT");
-        txtfirstdays = document.getElementById("txtfirstdays");
-        txtsecounddays = document.getElementById("txtsecounddays");
-        txtlastdays = document.getElementById("txtlastdays");
-        txtPlacedeliv = document.getElementById("txtPlacedeliv");
         txtRemark = document.getElementById("txtRemark");
         txtNetBefore = document.getElementById("txtNetBefore");
         txtNetAfterVat = document.getElementById("txtNetAfterVat");
@@ -153,7 +143,7 @@ var InvoiceTax;
                 var result = d;
                 if (result.IsSuccess) {
                     I_D_CURRENCYDetails = result.Response;
-                    DocumentActions.FillCombowithdefult(I_D_CURRENCYDetails, ddlCurreny, "CUR_CODE", "DESCA", "Choose Currency");
+                    DocumentActions.FillCombowithdefult(I_D_CURRENCYDetails, ddlCurreny, "CurrencyID", "DescA", "اختار العمله");
                 }
             }
         });
@@ -225,10 +215,10 @@ var InvoiceTax;
             '<td><input  id="txtTax' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="الضريبه "></td>' +
             '<td><input  id="txtTotAfterTax' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="الصافي"></td>' +
             ' <input  id="txt_StatusFlag' + cnt + '" type="hidden" class="form-control"> ' +
-            ' <input  id="txt_IDItem' + cnt + '" type="hidden" class="form-control"> ' +
+            ' <input  id="txt_ItemID' + cnt + '" type="hidden" class="form-control"> ' +
+            ' <input  id="InvoiceItemID' + cnt + '" type="hidden" class="form-control"> ' +
             '</tr>';
         $("#Table_Data").append(html);
-        debugger;
         for (var i = 0; i < I_D_UOMDetails.length; i++) {
             $('#ddlTypeUom' + cnt + '').append('<option  value="' + I_D_UOMDetails[i].UomID + '">' + I_D_UOMDetails[i].DescE + '</option>');
         }
@@ -240,7 +230,7 @@ var InvoiceTax;
                 var description = String(ItemDetail[1]);
                 var UnitCode = String(ItemDetail[2]);
                 $('#btnItem' + cnt).html(description);
-                $('#txt_IDItem' + cnt).val(ItemID);
+                $('#txt_ItemID' + cnt).val(ItemID);
                 $('#ddlTypeUom' + cnt).val(UnitCode);
                 $('#ddlTypeUom' + cnt).val(UnitCode);
                 $('#QTY' + cnt).val('1');
@@ -353,28 +343,31 @@ var InvoiceTax;
         CountGrid++;
         Insert_Serial();
     }
-    function validationgrid(rowcount) {
-        if ($("#QTY" + rowcount).val().trim() == "" || Number($("#QTY" + rowcount).val()) <= 0) {
-            Errorinput($("#QTY" + rowcount));
-            DisplayMassage('Item quantity must be entered', 'Item quantity must be entered', MessageType.Error);
-            return false;
+    function Validation_Grid(rowcount) {
+        var Qty = Number($("#txtQuantity" + rowcount).val());
+        var Price = Number($("#txtPrice" + rowcount).val());
+        if ($("#txt_StatusFlag" + rowcount).val() == "d" || $("#txt_StatusFlag" + rowcount).val() == "m") {
+            return true;
         }
-        if ($("#Description" + rowcount).val().trim() == "") {
-            Errorinput($("#Description" + rowcount));
-            DisplayMassage('Item Describtion must be entered', 'Item Describtion must be entered', MessageType.Error);
-            return false;
+        else {
+            if ($("#txt_ItemID" + rowcount).val() == "" || $("#txt_ItemID" + rowcount).val() == "0" || $("#txt_ItemID" + rowcount).val() == null) {
+                DisplayMassage(" برجاء ادخال الصنف", "Please enter the type", MessageType.Error);
+                Errorinput($("#btnItem" + rowcount));
+                return false;
+            }
+            else if (Qty == 0) {
+                DisplayMassage(" برجاء ادخال الكمية المباعة", "Please enter the Quantity sold", MessageType.Error);
+                Errorinput($("#txtQuantity" + rowcount));
+                return false;
+            }
+            else if (Price == 0) {
+                DisplayMassage(" برجاء ادخال السعر", "Please enter the Price", MessageType.Error);
+                Errorinput($("#txtPrice" + rowcount));
+                Errorinput($("#txtUnitpriceWithVat" + rowcount));
+                return false;
+            }
+            return true;
         }
-        if ($("#ddlTypeUom" + rowcount).val().trim() == "") {
-            Errorinput($("#ddlTypeUom" + rowcount));
-            DisplayMassage('The unit must be selected', 'The unit must be selected', MessageType.Error);
-            return false;
-        }
-        //if ($("#UnitPrice" + rowcount).val().trim() == "" || Number($("#UnitPrice" + rowcount).val()) <= 0) {
-        //    Errorinput($("#UnitPrice" + rowcount));
-        //    DisplayMassage('Item Price must be entered', 'Item Price must be entered', MessageType.Error);
-        //    return false;
-        //}
-        return true;
     }
     function DeleteRow(RecNo) {
         WorningMessage("Do you want to delete?", "Do you want to delete?", "warning", "warning", function () {
@@ -412,52 +405,121 @@ var InvoiceTax;
         }
     }
     function Assign() {
-        //var StatusFlag: String;
+        var StatusFlag;
         InvoiceModel = new Sls_Ivoice();
         InvoiceItemsDetailsModel = new Array();
-        TaxableSinglModel = new TaxableItem();
+        MasterDetailsModel = new SlsInvoiceMasterDetails();
         TaxableModel = new Array();
+        MasterDetailsModel.Token = "HGFD-" + SysSession.CurrentEnvironment.Token;
+        MasterDetailsModel.UserCode = SysSession.CurrentEnvironment.UserCode;
         InvoiceModel.CustomerId = CustomerId == 0 ? null : CustomerId;
-        InvoiceModel.Status = 1;
         InvoiceModel.CompCode = Number(compcode);
         InvoiceModel.BranchCode = Number(BranchCode);
-        var InvoiceNumber = Number(txtQutationNo.value);
-        InvoiceModel.TrNo = InvoiceNumber;
-        InvoiceModel.CreatedAt = DateTimeFormat(Date().toString());
-        InvoiceModel.CreatedBy = sys.SysSession.CurrentEnvironment.UserCode;
-        InvoiceModel.TrType = 1; //0 invoice 1 return     
+        InvoiceModel.TrType = 0; //0 invoice 1 return
+        InvoiceModel.SlsInvSrc = 1; // 1 from store 2 from van  
+        InvoiceModel.StoreId = $('#ddlStore').val(); //main store
+        InvoiceModel.PaymentMeansTypeCode = ddlTypePay.value == '0' ? 2 : 1; //  Cash or   Credit
+        if (ddlTypePay.value == "0") {
+            InvoiceModel.IsCash = false;
+        }
+        else {
+            InvoiceModel.IsCash = true;
+        }
+        InvoiceModel.DocType = ddlTypeInv.value;
+        ///////////////
+        debugger;
         InvoiceModel.InvoiceID = 0;
+        InvoiceModel.StoreId = 1;
         InvoiceModel.TrDate = txtDate.value;
-        InvoiceModel.RefNO = txtRFQ.value;
-        InvoiceModel.SalesmanId = 1;
-        InvoiceModel.IsCash = Number(ddlTypeInv.value) == 1 ? true : false;
-        InvoiceModel.TaxCurrencyID = Number(ddlCurreny.value);
-        InvoiceModel.ChargeReason = txtCompanysales.value;
+        InvoiceModel.CommitionAmount = 0;
         InvoiceModel.Remark = txtRemark.value;
-        InvoiceModel.TotalAmount = Number(txtNetBefore.value);
-        InvoiceModel.NetAfterVat = Number(txtNetAfterVat.value);
-        //-------------------------(T E R M S & C O N D I T I O N S)-----------------------------------------------     
-        InvoiceModel.ContractNo = txtsalesVAT.value; //----------------- include sales VAT.
-        InvoiceModel.PurchaseorderNo = txtfirstdays.value; //----------------- days starting from the delivery date.
-        InvoiceModel.ChargeVatPrc = Number(txtsecounddays.value); //----------------- days from offer date.
-        InvoiceModel.ChargeAfterVat = Number(txtlastdays.value); //----------------- days from purchase order.
-        InvoiceModel.PrevInvoiceHash = txtPlacedeliv.value; //----------------- Place of delivery.
+        InvoiceModel.CardAmount = 0;
+        InvoiceModel.CashAmount = Number(txtNet.value);
+        InvoiceModel.CustomerName = txtCompanysales.value;
+        InvoiceModel.TaxCurrencyID = Number(ddlCurreny.value);
+        InvoiceModel.InvoiceCurrenyID = Number(ddlCurreny.value);
+        //InvoiceModel.CardAmount = $('#txtCardMoney').val().trim() == '' ? 0 : $('#txtCardMoney').val();
+        //InvoiceModel.CashAmount = $('#txtCashMoney').val().trim() == '' ? 0 : $('#txtCashMoney').val();
+        //InvoiceModel.TaxCurrencyID = Number(SysSession.CurrentEnvironment.I_Control[0].Currencyid);
+        //InvoiceModel.InvoiceCurrenyID = Number(SysSession.CurrentEnvironment.I_Control[0].Currencyid);
+        InvoiceModel.InvoiceTypeCode = Number(SysSession.CurrentEnvironment.InvoiceTypeCode);
+        InvoiceModel.TotalAmount = Number(txtTotal.value);
+        InvoiceModel.NetAfterVat = Number(txtNet.value);
+        InvoiceModel.VatAmount = Number(txtTax.value);
+        InvoiceModel.ItemDiscountTotal = Number(txtTotalDiscount.value);
+        InvoiceModel.Status = 0;
         // Details
         for (var i = 0; i < CountGrid; i++) {
-            var StatusFlag = $("#txt_StatusFlag" + i).val();
+            invoiceItemSingleModel = new Sls_InvoiceDetail();
+            StatusFlag = $("#txt_StatusFlag" + i).val();
+            invoiceItemSingleModel.Name_Item = $("#txtServiceName" + i).val();
+            invoiceItemSingleModel.MinUnitPrice = Number($('option:selected', $("#ddlTypeuom" + i)).attr('data-minprice'));
             if (StatusFlag == "i") {
-                invoiceItemSingleModel = new Sls_InvoiceDetail();
                 invoiceItemSingleModel.InvoiceItemID = 0;
-                invoiceItemSingleModel.Serial = Number($("#serial" + i).val());
-                invoiceItemSingleModel.SoldQty = Number($('#QTY' + i).val());
-                invoiceItemSingleModel.Itemdesc = $("#Description" + i).val();
-                invoiceItemSingleModel.NetUnitPrice = Number($("#UnitPrice" + i).val());
-                invoiceItemSingleModel.ItemTotal = Number($("#Totalprice" + i).val());
-                invoiceItemSingleModel.DiscountPrc = Number($("#DiscountPrc" + i).val());
-                invoiceItemSingleModel.DiscountAmount = Number($("#DiscountAmount" + i).val());
-                invoiceItemSingleModel.NetAfterVat = Number($("#Net" + i).val());
-                invoiceItemSingleModel.UomID = Number($("#ddlTypeUom" + i).val());
+                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val();
+                invoiceItemSingleModel.Serial = $("#txtSerial" + i).val();
+                invoiceItemSingleModel.SoldQty = $('#txtQuantity' + i).val();
+                //invoiceItemSingleModel.StockSoldQty = Number($('option:selected', $("#ddlTypeuom" + i)).attr('data-onhandqty'));//
+                invoiceItemSingleModel.StockSoldQty = Number($('#txtQuantity' + i).val()); //
+                invoiceItemSingleModel.NetUnitPrice = $("#txtNetUnitPrice" + i).val();
+                invoiceItemSingleModel.Unitprice = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.UnitpriceWithVat = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.DiscountPrc = $("#txtDiscountPrc" + i).val();
+                invoiceItemSingleModel.DiscountAmount = $("#txtDiscountAmount" + i).val();
+                //----------------------------------------------------- 
+                invoiceItemSingleModel.UomID = Number($("#ddlTypeuom" + i).val());
+                invoiceItemSingleModel.NetUnitPriceWithVat = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.BaseQty = 1;
+                invoiceItemSingleModel.BaseQtyPrice = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.BaseQtyUomid = Number($("#ddlTypeuom" + i).val());
+                invoiceItemSingleModel.ChargeVatNatID = null;
+                invoiceItemSingleModel.DiscountVatNatID = null;
+                invoiceItemSingleModel.ChargeCode = null;
+                //-----------------------------------------------------
+                invoiceItemSingleModel.VatPrc = $("#txtTax_Rate" + i).val();
+                invoiceItemSingleModel.VatAmount = $("#txtTax" + i).val();
+                invoiceItemSingleModel.ItemTotal = invoiceItemSingleModel.Unitprice * invoiceItemSingleModel.SoldQty;
+                invoiceItemSingleModel.TotRetQty = $("#txtReturnQuantity" + i).val();
+                invoiceItemSingleModel.StatusFlag = StatusFlag.toString();
                 InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
+            }
+            if (StatusFlag == "u") {
+                var invoiceItemId = $("#InvoiceItemID" + i).val();
+                invoiceItemSingleModel.InvoiceItemID = invoiceItemId;
+                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val();
+                invoiceItemSingleModel.Serial = $("#txtSerial" + i).val();
+                invoiceItemSingleModel.SoldQty = $('#txtQuantity' + i).val();
+                invoiceItemSingleModel.StockSoldQty = Number($('#txtQuantity' + i).val()); //
+                invoiceItemSingleModel.NetUnitPrice = $("#txtNetUnitPrice" + i).val();
+                invoiceItemSingleModel.Unitprice = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.UnitpriceWithVat = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.DiscountPrc = $("#txtDiscountPrc" + i).val();
+                invoiceItemSingleModel.DiscountAmount = $("#txtDiscountAmount" + i).val();
+                //-----------------------------------------------------
+                invoiceItemSingleModel.UomID = Number($("#ddlTypeUom" + i).val());
+                invoiceItemSingleModel.NetUnitPriceWithVat = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.BaseQty = 1;
+                invoiceItemSingleModel.BaseQtyPrice = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.BaseQtyUomid = Number($("#ddlTypeUom" + i).val());
+                invoiceItemSingleModel.ChargeVatNatID = null;
+                invoiceItemSingleModel.DiscountVatNatID = null;
+                invoiceItemSingleModel.ChargeCode = null;
+                //-----------------------------------------------------
+                var VatNatID = Number($("#txtTax_Rate" + i).attr('data-VatNatID'));
+                invoiceItemSingleModel.VatPrc = $("#txtTax_Rate" + i).val();
+                invoiceItemSingleModel.VatAmount = $("#txtTax" + i).val();
+                invoiceItemSingleModel.ItemTotal = invoiceItemSingleModel.Unitprice * invoiceItemSingleModel.SoldQty;
+                invoiceItemSingleModel.TotRetQty = $("#txtReturnQuantity" + i).val();
+                invoiceItemSingleModel.StatusFlag = StatusFlag.toString();
+                InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
+            }
+            if (StatusFlag == "d") {
+                if ($("#InvoiceItemID" + i).val() != "") {
+                    var deletedID = $("#InvoiceItemID" + i).val();
+                    invoiceItemSingleModel.StatusFlag = StatusFlag.toString();
+                    invoiceItemSingleModel.InvoiceItemID = deletedID;
+                    InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
+                }
             }
         }
         TaxableSinglModel.InvoiceID = 0;
@@ -497,6 +559,7 @@ var InvoiceTax;
         });
     }
     function success_insert() {
+        btnClean_onclick();
         txtDate.value = GetDate();
         CountGrid = 0;
         CustomerId = 0;
@@ -504,15 +567,16 @@ var InvoiceTax;
         txtRFQ.value = "";
         txtCompanysales.value = "";
         txtCompanyname.value = "";
-        txtQutationNo.value = "";
-        txtsalesVAT.value = "";
-        txtfirstdays.value = "";
-        txtsecounddays.value = "";
-        txtlastdays.value = "";
-        txtPlacedeliv.value = "";
         txtRemark.value = "";
         txtNetBefore.value = "";
         txtNetAfterVat.value = "";
+        txtItemCount.value = "";
+        txtPackageCount.value = "";
+        txtTotalDiscount.value = "";
+        txtTotalbefore.value = "";
+        txtTotal.value = "";
+        txtTax.value = "";
+        txtNet.value = "";
         $("#Table_Data").html("");
         AddNewRow();
     }
@@ -526,22 +590,17 @@ var InvoiceTax;
         }
         if (txtDate.value.trim() == "") {
             Errorinput(txtDate);
-            DisplayMassage('Date must be entered', 'Date must be entered', MessageType.Error);
+            DisplayMassage('برجاء ادخال التاريخ', 'Date must be entered', MessageType.Error);
             return false;
         }
         if (txtCompanyname.value.trim() == "") {
             Errorinput(txtCompanyname);
-            DisplayMassage('Company must be choosed', 'Company must be choosed', MessageType.Error);
+            DisplayMassage('برجاء ادخال العميل', 'Company must be choosed', MessageType.Error);
             return false;
         }
         if (txtCompanysales.value.trim() == "") {
             Errorinput(txtCompanysales);
-            DisplayMassage('Company sales man must be choosed', 'Company sales man must be choosed', MessageType.Error);
-            return false;
-        }
-        if (txtRFQ.value.trim() == "") {
-            Errorinput(txtRFQ);
-            DisplayMassage(' RFQ must be entered', ' RFQ must be entered', MessageType.Error);
+            DisplayMassage('  برجاء ادخال اسم البائع', ' RFQ must be entered', MessageType.Error);
             return false;
         }
         if (count == 0) {
@@ -572,10 +631,12 @@ var InvoiceTax;
         return true;
     }
     function btnsave_onclick() {
+        if (!validation())
+            return;
         var CanAdd = true;
         if (CountGrid > 0) {
             for (var i = 0; i < CountGrid; i++) {
-                CanAdd = validationgrid(i);
+                CanAdd = Validation_Grid(i);
                 if (CanAdd == false) {
                     break;
                 }
