@@ -1,20 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using APIETAX.CustomModel;
+using Microsoft.AspNetCore.Mvc;
 
-namespace eTaxAPI.Controllers
+namespace APIETAX.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    };
 
         private readonly ILogger<WeatherForecastController> _logger;
 
@@ -22,11 +18,12 @@ namespace eTaxAPI.Controllers
         {
             _logger = logger;
         }
-
         [HttpGet]
-        //[Route("Get")]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<WeatherForecast> Get(int Comp, int Optype, int InvoiceID)
         {
+
+           
+
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -35,6 +32,16 @@ namespace eTaxAPI.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+        [HttpGet(Name = "GetWeatherForecast")]
+        public string Get (int Comp, int Optype, int InvoiceID)
+        {
+            I_ControlTax newI_ControlTax = new I_ControlTax();
+            newI_ControlTax = HomeSendinvoce.GetControlTax(1);
+            HomeSendinvoce.sendinvoce(Comp, Optype, InvoiceID);
+
+            return "";
+           
         }
     }
 }

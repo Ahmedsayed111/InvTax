@@ -132,6 +132,7 @@ namespace HomeComponent {
         btn_loguotuser.onclick = LogoutUserApi;
         //CheckTime(); 
         App.Startup();
+        GetTest();
  
     }
     
@@ -579,6 +580,43 @@ namespace HomeComponent {
         //document.cookie = "Privilage=" + null + ";expires=Fri, 31 Dec 2030 23:59:59 GMT;path=/";
         window.open(Url.Action("LoginIndex", "Login"), "_self");
 
+    }
+
+    function GetTest() {
+        debugger
+
+        //$.ajax({
+        //    type: "get",
+        //    url: "http://localhost:5082/api/WeatherForecast",
+        //    data: {},
+        //    success: function (data, status) {
+        //        if (status == "success") {
+        //            alert("ok");
+        //        }
+        //    },
+        //    error: function (e) {
+        //        alert("error");
+        //    },
+        //    complete: function () {
+
+        //    }
+        //});
+        var url_ ="http://localhost:5082/WeatherForecast";
+        Ajax.Callsync({
+            type: "Get",
+            url: url_,// sys.apiUrlCore("WeatherForecast", "Get"),
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Accept': 'application/json; charset=utf-8',
+                'Content-Type': 'application/json'
+            },
+            success: (d) => {
+                let result = d as BaseResponse;
+                if (result.IsSuccess) {
+                    debugger 
+                }
+            }
+        });
     }
 
 }

@@ -110,6 +110,7 @@ var HomeComponent;
         btn_loguotuser.onclick = LogoutUserApi;
         //CheckTime(); 
         App.Startup();
+        GetTest();
     }
     HomeComponent.InitalizeComponent = InitalizeComponent;
     function LogoutUserApi() {
@@ -515,5 +516,39 @@ var HomeComponent;
         window.open(Url.Action("LoginIndex", "Login"), "_self");
     }
     HomeComponent.MassageCheckTime = MassageCheckTime;
+    function GetTest() {
+        debugger;
+        //$.ajax({
+        //    type: "get",
+        //    url: "http://localhost:5082/api/WeatherForecast",
+        //    data: {},
+        //    success: function (data, status) {
+        //        if (status == "success") {
+        //            alert("ok");
+        //        }
+        //    },
+        //    error: function (e) {
+        //        alert("error");
+        //    },
+        //    complete: function () {
+        //    }
+        //});
+        var url_ = "http://localhost:5082/WeatherForecast";
+        Ajax.Callsync({
+            type: "Get",
+            url: url_,
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Accept': 'application/json; charset=utf-8',
+                'Content-Type': 'application/json'
+            },
+            success: function (d) {
+                var result = d;
+                if (result.IsSuccess) {
+                    debugger;
+                }
+            }
+        });
+    }
 })(HomeComponent || (HomeComponent = {}));
 //# sourceMappingURL=HomeComponent.js.map

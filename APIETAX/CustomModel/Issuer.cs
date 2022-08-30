@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+
+using System.Text;
+
+namespace APIETAX.CustomModel
+{
+ 
+    public partial class Issuer
+    {
+        public Address address { get; set; }
+        public string type { get; set; }
+        public string id { get; set; }
+        public string name { get; set; }
+    }
+}
