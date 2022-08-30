@@ -1251,9 +1251,9 @@ function WorningMessage(msg_Ar: string, msg_En: string, tit_ar: string = "تنب
 function DisplayMassage(msg_Ar: string, msg_En: string, msg_type: string, OnOk?: () => void) {
     var Env = GetSystemEnvironment();
     // msgtype : 1 : Sucess , 2: Fetal Error , 3: Data Entry Error 
-    if (Env.ScreenLanguage == "en")
-        $('#Text_Massage').html(msg_En);
-    else
+    //if (Env.ScreenLanguage == "en")
+    //    $('#Text_Massage').html(msg_En);
+    //else
         $('#Text_Massage').html(msg_Ar);
 
     if (msg_type == '1') {

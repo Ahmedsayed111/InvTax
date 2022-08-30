@@ -658,6 +658,7 @@ function ErrorinputGrid(input, NameTable, Mess) {
     }
 }
 function ValidationGrid(Grid, Newobject) {
+    debugger;
     var obj = Grid.Column;
     var NameTable = Grid.ESG.NameTable;
     var LastCountGrid = Grid.ESG.LastCounter;
@@ -665,84 +666,87 @@ function ValidationGrid(Grid, Newobject) {
     FlagValid = true;
     for (var i = 0; i < LastCountGrid; i++) {
         var cnt = i;
-        for (var u = 0; u < obj.length; u++) {
-            var Model = JSON.parse(JSON.stringify(obj[u]));
-            var element = document.getElementById('' + NameTable + '_' + Model.Name + cnt);
-            if (element != null) {
-                var con = Model.Validation.conation;
-                var Con_Value = Model.Validation.Con_Value;
-                var Mess = Model.Validation.Mess;
-                if (Model.ColumnType.NameType == 'Input') {
-                    if (con != null) {
-                        if (con[0] == '>') {
-                            if (Number(element.value) > Number(Con_Value)) {
-                                ErrorinputGrid(element, NameTable, Mess);
-                                FlagValid = false;
-                                break;
+        var StatusFlag = $("#StatusFlag_" + NameTable + '_' + cnt).val();
+        if (StatusFlag != "d" && StatusFlag != "m") {
+            for (var u = 0; u < obj.length; u++) {
+                var Model = JSON.parse(JSON.stringify(obj[u]));
+                var element = document.getElementById('' + NameTable + '_' + Model.Name + cnt);
+                if (element != null) {
+                    var con = Model.Validation.conation;
+                    var Con_Value = Model.Validation.Con_Value;
+                    var Mess = Model.Validation.Mess == undefined ? 'يجب ادخال قيمة في ( ' + Model.title + ' )' : Model.Validation.Con_Value;
+                    if (Model.ColumnType.NameType == 'Input') {
+                        if (con != null) {
+                            if (con[0] == '>') {
+                                if (Number(element.value) > Number(Con_Value)) {
+                                    ErrorinputGrid(element, NameTable, Mess);
+                                    FlagValid = false;
+                                    break;
+                                }
                             }
-                        }
-                        else if (con[0] == '>=') {
-                            if (Number(element.value) >= Number(Con_Value)) {
-                                ErrorinputGrid(element, NameTable, Mess);
-                                FlagValid = false;
-                                break;
+                            else if (con[0] == '>=') {
+                                if (Number(element.value) >= Number(Con_Value)) {
+                                    ErrorinputGrid(element, NameTable, Mess);
+                                    FlagValid = false;
+                                    break;
+                                }
                             }
-                        }
-                        else if (con[0] == '<=') {
-                            if (Number(element.value) <= Number(Con_Value)) {
-                                ErrorinputGrid(element, NameTable, Mess);
-                                FlagValid = false;
-                                break;
+                            else if (con[0] == '<=') {
+                                if (Number(element.value) <= Number(Con_Value)) {
+                                    ErrorinputGrid(element, NameTable, Mess);
+                                    FlagValid = false;
+                                    break;
+                                }
                             }
-                        }
-                        else if (con[0] == '<') {
-                            if (Number(element.value) < Number(Con_Value)) {
-                                ErrorinputGrid(element, NameTable, Mess);
-                                FlagValid = false;
-                                break;
+                            else if (con[0] == '<') {
+                                if (Number(element.value) < Number(Con_Value)) {
+                                    ErrorinputGrid(element, NameTable, Mess);
+                                    FlagValid = false;
+                                    break;
+                                }
                             }
-                        }
-                        else if (con[0] == '==') {
-                            if (element.value == Con_Value) {
-                                ErrorinputGrid(element, NameTable, Mess);
-                                FlagValid = false;
-                                break;
+                            else if (con[0] == '==') {
+                                if (element.value == Con_Value) {
+                                    ErrorinputGrid(element, NameTable, Mess);
+                                    FlagValid = false;
+                                    break;
+                                }
                             }
-                        }
-                        else if (con[0] == '=') {
-                            if (element.value == Con_Value) {
-                                ErrorinputGrid(element, NameTable, Mess);
-                                FlagValid = false;
-                                break;
+                            else if (con[0] == '=') {
+                                if (element.value == Con_Value) {
+                                    ErrorinputGrid(element, NameTable, Mess);
+                                    FlagValid = false;
+                                    break;
+                                }
+                            }
+                            else {
+                                if (Number(element.value) == 0) {
+                                    ErrorinputGrid(element, NameTable, Mess);
+                                    FlagValid = false;
+                                    break;
+                                }
                             }
                         }
                         else {
-                            if (Number(element.value) >= 0) {
+                            if (Number(element.value) == 0) {
                                 ErrorinputGrid(element, NameTable, Mess);
                                 FlagValid = false;
                                 break;
                             }
                         }
                     }
-                    else {
-                        if (Number(element.value) < 0) {
-                            ErrorinputGrid(element, NameTable, Mess);
+                    if (Model.ColumnType.NameType == 'Dropdown') {
+                        if (element.value == 'null' || element.value == null || element.value.trim() == '') {
+                            ErrorinputGrid(element, NameTable, 'يجب ادخال قيمة في ( ' + Model.title + ' )');
                             FlagValid = false;
                             break;
                         }
                     }
                 }
-                if (Model.ColumnType.NameType == 'Dropdown') {
-                    if (element.value == 'null') {
-                        ErrorinputGrid(element, NameTable, 'يبجب ان يكون فيها قيمه');
-                        FlagValid = false;
-                        break;
-                    }
-                }
             }
-        }
-        if (FlagValid == false) {
-            break;
+            if (FlagValid == false) {
+                break;
+            }
         }
     }
     return FlagValid;
@@ -765,7 +769,11 @@ function ComputeTotalGridControl(Grid, Newobject) {
         Model["Ser"] += 1;
     }
     Grid.ESG.TotalModel = Model;
-    Grid.ESG.OnfunctionTotal();
+    try {
+        Grid.ESG.OnfunctionTotal();
+    }
+    catch (e) {
+    }
     return Grid.ESG.TotalModel;
 }
 function EditGridControl(Grid) {

@@ -260,9 +260,9 @@ namespace Inv.API.Controllers
         [HttpGet, AllowAnonymous]
         public IHttpActionResult GetAllCurreny()
         {
-            string query = "select * from I_D_CURRENCY ";
+            string query = "select * from G_Currency ";
 
-            var res = db.Database.SqlQuery<I_D_CURRENCY>(query).ToList();
+            var res = db.Database.SqlQuery<G_Currency>(query).ToList();
             return Ok(new BaseResponse(res));
         }
 

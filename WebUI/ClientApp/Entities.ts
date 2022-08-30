@@ -1578,6 +1578,10 @@ class Sls_Ivoice extends SecurityClass {
         this.ItemDiscountTotal = 0;
         this.ItemVatTotal = 0;
         this.RoundingAmount = 0;
+        this.DocType = "";
+        this.UUID = "";
+        this.TimeUpload = "";
+        this.VersionInv = "";
     }
     public InvoiceID: number;
     public TrNo: number;
@@ -1661,7 +1665,13 @@ class Sls_Ivoice extends SecurityClass {
     public ItemDiscountTotal: number;
     public ItemVatTotal: number;
     public RoundingAmount: number;
+    public DocType: string;
+    public UUID: string;
+    public TimeUpload: string;
+    public VersionInv: string;
 }
+
+
 class Sls_InvoiceDetail extends SecurityClass {
     constructor() {
         super();
@@ -1787,6 +1797,7 @@ class Items extends SecurityClass {
         this.StatusCode = 0;   
         this.StatusCodeDesc = "";   
         this.StatusFlag = "";
+        this.StatusDesc = "";
         this.StatusItem = false;
     }
     public ItemID: number;
@@ -1802,10 +1813,38 @@ class Items extends SecurityClass {
     public UnitCode: string; 
     public StatusCode = 0;  
     public StatusCodeDesc: string;
+    public StatusDesc: string;
     public StatusFlag: string;
     public StatusItem: boolean;
 }        
+ class FailedItem {
+    constructor() {
+        this.index = 0;
+        this.errors = new Array<string>();
+    }
+    public index: number;
+    public errors: Array<string>;
+}
 
+class Passed {
+    constructor() {
+        this.itemCode = "";
+        this.codeUsageRequestId = "";    
+    }
+    public itemCode: string;
+    public codeUsageRequestId: string;
+}
+class Root3 {
+    constructor() {
+        this.passedItemsCount = 0;
+        this.failedItems = new Array<FailedItem>();
+        this.passedItems = new Array<Passed>();
+
+    }
+    public passedItemsCount: number;
+    public failedItems: Array<FailedItem>;
+    public passedItems: Array<Passed>;
+}
 class I_D_UOM {
     constructor() {
         this.UomID = 0;
