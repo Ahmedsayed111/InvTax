@@ -31,6 +31,14 @@ var Keys = {
     Enter: "Enter"
 };
 
+var setVal = function (value: any): any {
+
+    let Input = this;
+    value == null || Number(value) == 0 ? Input.value = '' : Input.value = value;
+    return value;
+};
+
+
 function IsNullOrEmpty(value: string): boolean {
     if (value == null || value == "")
         return true;

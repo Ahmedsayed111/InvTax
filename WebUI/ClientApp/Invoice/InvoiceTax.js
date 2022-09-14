@@ -438,6 +438,7 @@ var InvoiceTax;
         InvoiceModel.CustomerName = txtCompanysales.value;
         InvoiceModel.TaxCurrencyID = Number(ddlCurreny.value);
         InvoiceModel.InvoiceCurrenyID = Number(ddlCurreny.value);
+        InvoiceModel.RoundingAmount = Number($('#txtTaxPrc').val());
         //InvoiceModel.CardAmount = $('#txtCardMoney').val().trim() == '' ? 0 : $('#txtCardMoney').val();
         //InvoiceModel.CashAmount = $('#txtCashMoney').val().trim() == '' ? 0 : $('#txtCashMoney').val();
         //InvoiceModel.TaxCurrencyID = Number(SysSession.CurrentEnvironment.I_Control[0].Currencyid);

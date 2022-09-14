@@ -16,7 +16,8 @@ namespace QuotationView {
     var Selecteditem: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
     var Invoice: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
     var InvQuotation: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
-    var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>();
+    var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>(); 
+    var CustomerDetailnew: Array<receiver> = new Array<receiver>();
 
     var btnCustSrchFilter: HTMLButtonElement;
     var btnFilter: HTMLButtonElement;
@@ -47,7 +48,7 @@ namespace QuotationView {
         FromDate.value = DateStartMonth();
         ToDate.value = ConvertToDateDash(GetDate()) <= ConvertToDateDash(SysSession.CurrentEnvironment.EndDate) ? GetDate() : SysSession.CurrentEnvironment.EndDate;
 
-
+        
         Display();
 
         FillddlUom();
@@ -87,21 +88,16 @@ namespace QuotationView {
         Display();
 
     }
-
-    function FillddlUom() {
-
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrl("SlsTrSales", "GetAllUOM"), 
-            success: (d) => {
-                let result = d as BaseResponse;
-                if (result.IsSuccess) {
-                    I_D_UOMDetails = result.Response as Array<I_D_UOM>;
-                }
-            }
-        });
-    }
+     
     function Display() {
+
+
+        $('#viewmail').removeClass('active in');
+        $('#sendmail').addClass('active in');
+
+        $('#btnQuotations').removeClass('active');
+        $('#btnInvoice').addClass('active');
+
 
         RFQFilter = txtRFQFilter.value;
         FromDat = FromDate.value;
@@ -121,12 +117,12 @@ namespace QuotationView {
                     Invoice = new Array<Sls_Ivoice>();
                     InvQuotation = new Array<Sls_Ivoice>();
 
-                    InvQuotation = InvoiceDisplay;
+                    Invoice = InvoiceDisplay;
 
 
-                    Invoice = InvoiceDisplay.filter(x => x.TrType == 1 && x.CashBoxID != null).sort(function (a, b) { return b.CashBoxID - a.CashBoxID; });
-                    ReportGrid.DataSource = InvQuotation;
-                    ReportGrid.Bind();
+                    //Invoice = InvoiceDisplay.filter(x => x.TrType == 1 && x.CashBoxID != null).sort(function (a, b) { return b.CashBoxID - a.CashBoxID; });
+                    //ReportGrid.DataSource = InvQuotation;
+                    //ReportGrid.Bind();
 
                     ReportGridInv.DataSource = Invoice;
                     ReportGridInv.Bind();
@@ -149,6 +145,7 @@ namespace QuotationView {
                     $('#txtUpdatedAt').prop("value", '');
 
                     //$('.Done').addClass("display_none");
+
                 }
             }
         });
@@ -327,10 +324,17 @@ namespace QuotationView {
         ReportGridInv.OnItemEditing = () => { };
         ReportGridInv.Columns = [
             { title: "الرقم", name: "InvoiceID", type: "text", width: "5%", visible: false },
-            { title: "INV.No", name: "CashBoxID", type: "text", width: "5%" },
-            { title: "RFQ", name: "RefNO", type: "text", width: "8%" },
-            { title: "PurNo", name: "TaxNotes", type: "text", width: "8%" },
-            { title: "Date", name: "CustomerMobileNo", type: "text", width: "7%" },
+            { title: "INV.No", name: "TrNo", type: "text", width: "5%" },
+            {
+                title: "Date",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+                    txt.innerHTML = DateFormat( item.TrDate);
+                     
+                    return txt;
+                }
+            },
             { title: "TotalAmount", name: "NetAfterVat", type: "text", width: "10%" },
             {
                 title: "Review",
@@ -566,6 +570,8 @@ namespace QuotationView {
         $('#btnQuotations').removeClass('active');
         $('#btnInvoice').removeClass('active');
 
+        $('#Div_Fillter').addClass('display_none');
+        $('#Div_Views').attr('style', 'width: 100% !important;');
 
 
         InitalizeComponentInvoice();
@@ -582,32 +588,34 @@ namespace QuotationView {
         debugger
 
         DocumentActions.RenderFromModel(Selected_Data[0]);
+         
 
-        if (Selected_Data[0].TrType == 1) {
-            txtDate.value = DateFormat(Selected_Data[0].DeliveryEndDate);
-        }
-        else {
-            txtDate.value = DateFormat(Selected_Data[0].TrDate);
-        }
+        txtDate.value = DateFormat(Selected_Data[0].TrDate);
 
 
         GlobalinvoiceID = Selected_Data[0].InvoiceID;
         CustomerId = Selected_Data[0].CustomerId;
-        txtQutationNo.value = Selected_Data[0].TrNo.toString();
+        //txtQutationNo.value = Selected_Data[0].TrNo.toString();
         txtRFQ.value = Selected_Data[0].RefNO;
-        txtCompanysales.value = Selected_Data[0].ChargeReason;
+        txtCompanysales.value = Selected_Data[0].CustomerName;
         txtRemark.value = Selected_Data[0].Remark;
         GetCustomer();
-        txtNetBefore.value = Selected_Data[0].TotalAmount.toString();
-        txtAllDiscount.value = Selected_Data[0].RoundingAmount.toString();
-        txtNetAfterVat.value = Selected_Data[0].NetAfterVat.toString();
-        //-------------------------(T E R M S & C O N D I T I O N S)-----------------------------------------------     
-        txtsalesVAT.value = Selected_Data[0].ContractNo.toString(); //----------------- include sales VAT.
-        txtfirstdays.value = Selected_Data[0].PurchaseorderNo.toString(); //----------------- days starting from the delivery date.
-        txtsecounddays.value = Selected_Data[0].ChargeVatPrc.toString(); //----------------- days from offer date.
-        txtlastdays.value = Selected_Data[0].ChargeAfterVat.toString(); //----------------- days from purchase order.
-        txtPlacedeliv.value = Selected_Data[0].PrevInvoiceHash.toString(); //----------------- Place of delivery.
+        ddlCurreny.value = setVal(Selected_Data[0].InvoiceCurrenyID.toString());
+        ddlTypePay.value = Selected_Data[0].IsCash == false ? '0' :'1';
+        ddlStatas.value = setVal(Selected_Data[0].Status);
+        ddlTypeInv.value = setVal(Selected_Data[0].DocType);
+        txtTaxPrc.value = setVal(Selected_Data[0].RoundingAmount);
 
+        //ddlValueTax.value = setVal(Selected_Data[0].Status);
+        //ddlTypeTax.value = setVal(Selected_Data[0].Status);
+        //ddlDisTax.value = setVal(Selected_Data[0].Status);
+        //ddlTypeDis.value = setVal(Selected_Data[0].Status);
+
+        //txtNetBefore.value = Selected_Data[0].TotalAmount.toString();
+        ////txtAllDiscount.value = Selected_Data[0].RoundingAmount.toString();
+        //txtNetAfterVat.value = Selected_Data[0].NetAfterVat.toString();
+        ////-------------------------(T E R M S & C O N D I T I O N S)-----------------------------------------------     
+       
         Ajax.Callsync({
             type: "Get",
             url: sys.apiUrl("SlsTrSales", "GetSlsInvoiceItem"),
@@ -636,8 +644,8 @@ namespace QuotationView {
             success: (d) => {
                 let result = d as BaseResponse;
                 if (result.IsSuccess) {
-                    CustomerDetailnew = result.Response as Array<Customer>;
-                    txtCompanyname.value = CustomerDetailnew[0].NAMEE;
+                    CustomerDetailnew = result.Response as Array<receiver>;
+                    txtCompanyname.value = CustomerDetailnew[0].name;
                     $('#btnCustSrch').attr('disabled', 'disabled');
                     $('#txtCompanyname').attr('disabled', 'disabled');
                 }
@@ -647,8 +655,7 @@ namespace QuotationView {
     function Display_GridConrtol(cnt) {
 
 
-        $("#txt_StatusFlag" + cnt).val("");
-
+        $("#txt_StatusFlag" + cnt).val(""); 
         $("#InvoiceItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].InvoiceItemID);
         $("#txt_ItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].ItemID);
         $("#serial" + cnt).prop("value", InvItemsDetailsModel[cnt].Serial);
@@ -742,45 +749,78 @@ namespace QuotationView {
     }
 
     /*@* ---------------------------------------Eidt Invoice------------------------------------------*@*/
-
+     
     var InvoiceItemsDetailsModel: Array<Sls_InvoiceDetail> = new Array<Sls_InvoiceDetail>();
     var invoiceItemSingleModel: Sls_InvoiceDetail = new Sls_InvoiceDetail();
     var InvoiceModel: Sls_Ivoice = new Sls_Ivoice();
     var MasterDetailsModel: SlsInvoiceMasterDetails = new SlsInvoiceMasterDetails();
     var CustomerDetail: Array<Customer> = new Array<Customer>();
-    var CustomerDetailnew: Array<Customer> = new Array<Customer>();
+    var ItemDetail: Array<Items> = new Array<Items>();
+    var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>();
+    var I_D_CURRENCYDetails: Array<G_Currency> = new Array<G_Currency>();
+    var G_CodesDetails: Array<G_Codes> = new Array<G_Codes>();
+    var TaxableModel: Array<TaxableItem> = new Array<TaxableItem>();
+    var TaxableSinglModel: TaxableItem = new TaxableItem();
 
     var CountGrid = 0;
+    var compcode: number;//SharedSession.CurrentEnvironment.CompCode;
+    var BranchCode: number;//SharedSession.CurrentEnvironment.CompCode;
     var btnAddDetails: HTMLButtonElement;
     var btnsave: HTMLButtonElement;
     var btnClean: HTMLButtonElement;
     var CustomerId: number = 0;
     var btnCustSrch: HTMLButtonElement;
+    var btnprint: HTMLButtonElement;
     var invoiceID: number = 0;
     var txtDate: HTMLInputElement;
     var txtRFQ: HTMLInputElement;
+    var ddlTypeInv: HTMLInputElement;
+    var ddlTypePay: HTMLInputElement;
     var txtCompanysales: HTMLInputElement;
     var txtCompanyname: HTMLInputElement;
-    var txtQutationNo: HTMLInputElement;
-    var txtsalesVAT: HTMLInputElement;
-    var txtfirstdays: HTMLInputElement;
-    var txtsecounddays: HTMLInputElement;
-    var txtlastdays: HTMLInputElement;
-    var txtPlacedeliv: HTMLInputElement;
+
     var txtRemark: HTMLInputElement;
     var txtNetBefore: HTMLInputElement;
-    var txtAllDiscount: HTMLInputElement;
     var txtNetAfterVat: HTMLInputElement;
+
+    var txtTaxPrc: HTMLInputElement;
+    var txtItemCount: HTMLInputElement;
+    var txtPackageCount: HTMLInputElement;
+    var txtTotalDiscount: HTMLInputElement;
+    var txtTotalbefore: HTMLInputElement;
+    var txtTotal: HTMLInputElement;
+    var txtTax: HTMLInputElement;
+    var txtNet: HTMLInputElement;
+
+
+
+    var ddlStatas: HTMLSelectElement;
+    var ddlCurreny: HTMLSelectElement;
+    var ddlValueTax: HTMLSelectElement;
+    var ddlTypeTax: HTMLSelectElement;
+    var ddlDisTax: HTMLSelectElement;
+    var ddlTypeDis: HTMLSelectElement;
+
+    var include = "";
+    var Tax;
+    var TaxType;
     var include = "";
 
     export function InitalizeComponentInvoice() {
 
+        //alert(SysSession.CurrentEnvironment.issuer.buildingNumber)
 
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
         InitalizeControlsInvoice();
         InitalizeEventsInvoice();
+        FillddlUom();
+        AddNewRow();
+        FillddlCurreny();
+        FillddlG_Codes();
+        txtDate.value = GetDate();
 
+        ddlCurreny.value = "4";
     }
     function InitalizeControlsInvoice() {
         // ;
@@ -788,45 +828,163 @@ namespace QuotationView {
         btnCustSrch = document.getElementById("btnCustSrch") as HTMLButtonElement;
         btnsave = document.getElementById("btnsave") as HTMLButtonElement;
         btnClean = document.getElementById("btnClean") as HTMLButtonElement;
+        btnprint = document.getElementById("btnprint") as HTMLButtonElement;
         // inputs
+        ddlStatas = document.getElementById("ddlStatas") as HTMLSelectElement;
+        ddlCurreny = document.getElementById("ddlCurreny") as HTMLSelectElement;
+        ddlValueTax = document.getElementById("ddlValueTax") as HTMLSelectElement;
+        ddlTypeTax = document.getElementById("ddlTypeTax") as HTMLSelectElement;
+        ddlDisTax = document.getElementById("ddlDisTax") as HTMLSelectElement;
+        ddlTypeDis = document.getElementById("ddlTypeDis") as HTMLSelectElement;
+
         txtDate = document.getElementById("txtDate") as HTMLInputElement;
         txtRFQ = document.getElementById("txtRFQ") as HTMLInputElement;
+        ddlTypeInv = document.getElementById("ddlTypeInv") as HTMLInputElement;
+        ddlTypePay = document.getElementById("ddlTypePay") as HTMLInputElement;
         txtCompanysales = document.getElementById("txtCompanysales") as HTMLInputElement;
         txtCompanyname = document.getElementById("txtCompanyname") as HTMLInputElement;
-        txtQutationNo = document.getElementById("txtQutationNo") as HTMLInputElement;
-        txtsalesVAT = document.getElementById("txtsalesVAT") as HTMLInputElement;
-        txtfirstdays = document.getElementById("txtfirstdays") as HTMLInputElement;
-        txtsecounddays = document.getElementById("txtsecounddays") as HTMLInputElement;
-        txtlastdays = document.getElementById("txtlastdays") as HTMLInputElement;
-        txtPlacedeliv = document.getElementById("txtPlacedeliv") as HTMLInputElement;
+
         txtRemark = document.getElementById("txtRemark") as HTMLInputElement;
         txtNetBefore = document.getElementById("txtNetBefore") as HTMLInputElement;
-        txtAllDiscount = document.getElementById("txtAllDiscount") as HTMLInputElement;
         txtNetAfterVat = document.getElementById("txtNetAfterVat") as HTMLInputElement;
+
+        txtTaxPrc = document.getElementById("txtTaxPrc") as HTMLInputElement;
+        txtItemCount = document.getElementById("txtItemCount") as HTMLInputElement;
+        txtPackageCount = document.getElementById("txtPackageCount") as HTMLInputElement;
+        txtTotalDiscount = document.getElementById("txtTotalDiscount") as HTMLInputElement;
+        txtTotalbefore = document.getElementById("txtTotalbefore") as HTMLInputElement;
+        txtTotal = document.getElementById("txtTotal") as HTMLInputElement;
+        txtTax = document.getElementById("txtTax") as HTMLInputElement;
+        txtNet = document.getElementById("txtNet") as HTMLInputElement;
+
+
+
     }
     function InitalizeEventsInvoice() {
 
         btnAddDetails.onclick = AddNewRow;//
         btnCustSrch.onclick = btnCustSrch_onClick;
         btnsave.onclick = btnsave_onclick;
-        btnClean.onclick = success_insert;
-        txtAllDiscount.onkeyup = computeTotal;
+        btnClean.onclick = btnClean_onclick;
+        //btnprint.onclick = btnprint_onclick;
+        ddlValueTax.onchange = ddlValueTax_onchange;
+        ddlDisTax.onchange = ddlDisTax_onchange;
+        txtTaxPrc.onkeyup = txtTaxPrc_onchange;
     }
+    function txtTaxPrc_onchange() {
+
+        for (let i = 0; i < CountGrid; i++) {
+            var flagvalue = $("#txt_StatusFlag" + i).val();
+            if (flagvalue != "d" && flagvalue != "m") {
+                totalRow(i, true);
+            }
+        }
+
+    }
+    function ddlDisTax_onchange() {
+
+        let DisTax = ddlDisTax.value;
+        let TaxT1 = TaxType.filter(x => x.StdCode == DisTax)
+
+        $('#ddlTypeDis').html('')
+        for (var i = 0; i < TaxT1.length; i++) {
+            $('#ddlTypeDis').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+        }
+
+        if (ddlDisTax.value == 'null') {
+            $('#ddlTypeDis').append('<option value="null"> Choose Tax </option>');
+        }
+    }
+    function ddlValueTax_onchange() {
+        let ValueTax = ddlValueTax.value;
+        let TaxT1 = TaxType.filter(x => x.StdCode == ValueTax)
+
+        $('#ddlTypeTax').html('')
+        for (var i = 0; i < TaxT1.length; i++) {
+            $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+        }
+
+
+    }
+    function FillddlCurreny() {
+
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("SlsTrSales", "GetAllCurreny"),
+            success: (d) => {
+                let result = d as BaseResponse;
+                if (result.IsSuccess) {
+                    I_D_CURRENCYDetails = result.Response as Array<G_Currency>;
+                    DocumentActions.FillCombowithdefult(I_D_CURRENCYDetails, ddlCurreny, "CurrencyID", "DescA", "اختار العمله");
+                }
+            }
+        });
+    }
+
+    function FillddlG_Codes() {
+
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("SlsTrSales", "GetAllG_Codes"),
+            success: (d) => {
+                let result = d as BaseResponse;
+                if (result.IsSuccess) {
+                    G_CodesDetails = result.Response as Array<G_Codes>;
+
+                    Tax = G_CodesDetails.filter(x => x.CodeType == 'Taxtypes')
+                    TaxType = G_CodesDetails.filter(x => x.CodeType == 'TaxSubtypes')
+                    let TaxT1 = TaxType.filter(x => x.StdCode == 'T1')
+
+                    $('#ddlValueTax').html('')
+                    $('#ddlTypeTax').html('')
+
+                    for (var i = 0; i < Tax.length; i++) {
+                        $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+                        $('#ddlDisTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+                    }
+
+                    for (var i = 0; i < TaxType.length; i++) {
+
+                        $('#ddlTypeDis').append('<option   value="' + TaxType[i].SubCode + '">' + TaxType[i].DescA + '</option>');
+
+                    }
+
+                    for (var i = 0; i < TaxT1.length; i++) {
+                        $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+                    }
+
+
+
+                    $('#ddlValueTax').val('T1')
+                    $('#ddlTypeTax').val('V009')
+
+                }
+            }
+        });
+    }
+
+    function FillddlUom() {
+
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("SlsTrSales", "GetAllUOM"),
+            success: (d) => {
+                let result = d as BaseResponse;
+                if (result.IsSuccess) {
+                    I_D_UOMDetails = result.Response as Array<I_D_UOM>;
+                }
+            }
+        });
+    }
+
     function btnCustSrch_onClick() {
         sys.FindKey(Modules.Quotation, "btnCustSrch", "", () => {
 
             CustomerDetail = SearchGrid.SearchDataGrid.SelectedKey;
             console.log(CustomerDetail);
             CustomerId = Number(CustomerDetail[0]);
-            alert(String(CustomerDetail[2]));
             txtCompanyname.value = String(CustomerDetail[2]);
-            include = String(CustomerDetail[3]);
-            if (include == "true") {
-                txtsalesVAT.value = "include";
-            } else {
-                txtsalesVAT.value = "not include";
-            }
-            computeTotal();
+
         });
     }
     function BuildControls(cnt: number) {
@@ -835,157 +993,249 @@ namespace QuotationView {
         html = '<tr id= "No_Row' + cnt + '" class="  animated zoomIn ">' +
 
             '<td><button id="btn_minus' + cnt + '" type="button" class="btn btn-custon-four btn-danger"><i class="fa fa-minus-circle"></i></button></td>' +
-            '<td><input  id="serial' + cnt + '" disabled="disabled"  type="text" class="form-control" placeholder="SR"></td>' +
-            '<td><input  id="QTY' + cnt + '" type="number" class="form-control" placeholder="QTY"></td>' +
-            '<td> <textarea id="Description' + cnt + '" name="Description" type="text" class="form-control" style="height:34px" placeholder="Description" spellcheck="false"></textarea></td>' +
-
-
-            '<td><select id="ddlTypeUom' + cnt + '" class="form-control"> <option value="null"> Choose Uom </option></select></td>' +
-
-
-            '<td><input  id="UnitPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="Unit Price"></td>' +
-            '<td><input  id="Totalprice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="Total price"></td>' +
-            '<td><input  id="DiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="DiscountPrc%"></td>' +
-            '<td><input  id="DiscountAmount' + cnt + '" value="0"  disabled type="number" class="form-control" placeholder="DiscountAmount"></td>' +
-            '<td><input  id="Net' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="Net"></td>' +
+            '<td><input  id="txtSerial' + cnt + '" disabled="disabled"  type="text" class="form-control" placeholder="SR"></td>' +
+            '<td><button id="btnItem' + cnt + '" class="btn btn-custon-four btn-success oo"  style="height:34px;width: 235px;background-color: #3bafda;font-weight: bold;font-size: 18px;"  > بحـث الصنــف </button></td>' +
+            //'<td> <textarea id="Description' + cnt + '" name="Description" type="text" class="form-control" style="height:34px" placeholder="Description" spellcheck="false"></textarea></td>' +
+            '<td><select id="ddlTypeUom' + cnt + '" class="form-control"> <option value="null"> أختر الوحده  </option></select></td>' +
+            '<td><input  id="txtQuantity' + cnt + '" type="number" class="form-control" placeholder="الكميه"></td>' +
+            '<td><input  id="txtPrice' + cnt + '" value="0" type="number" class="form-control" placeholder="السعر  "></td>' +
+            '<td><input  id="txtDiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="الخصم%"></td>' +
+            '<td><input  id="txtDiscountAmount' + cnt + '" value="0" type="number" class="form-control" placeholder="مبلغ الخصم"></td>' +
+            '<td><input  id="txtNetUnitPrice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="السعر بعد الخصم "></td>' +
+            '<td><input  id="txtTotal' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="الاجمالي  "></td>' +
+            '<td><input  id="txtTax_Rate' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="   نسبة الضريبه  "></td>' +
+            '<td><input  id="txtTax' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="الضريبه "></td>' +
+            '<td><input  id="txtTotAfterTax' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="الصافي"></td>' +
             ' <input  id="txt_StatusFlag' + cnt + '" type="hidden" class="form-control"> ' +
-            ' <input  id="InvoiceItemID' + cnt + '" type="hidden" class="form-control"> ' +
             ' <input  id="txt_ItemID' + cnt + '" type="hidden" class="form-control"> ' +
+            ' <input  id="InvoiceItemID' + cnt + '" type="hidden" class="form-control"> ' +
             '</tr>';
         $("#Table_Data").append(html);
 
-
         for (var i = 0; i < I_D_UOMDetails.length; i++) {
 
-            $('#ddlTypeUom' + cnt + '').append('<option  value="' + I_D_UOMDetails[i].UomID + '">' + I_D_UOMDetails[i].DescE + '</option>');
+
+            $('#ddlTypeUom' + cnt + '').append('<option  value="' + I_D_UOMDetails[i].UomID + '">' + I_D_UOMDetails[i].DescA + '</option>');
 
         }
 
+        $('#btnItem' + cnt).click(function (e) {
 
-        $("#Description" + cnt).on('keyup', function (e) {
-            if ($("#txt_StatusFlag" + cnt).val() != "i")
-                $("#txt_StatusFlag" + cnt).val("u");
+            sys.FindKey(Modules.Quotation, "btnItem", "", () => {
 
-        });
-        $("#ddlTypeUom" + cnt).on('change', function (e) {
-            if ($("#txt_StatusFlag" + cnt).val() != "i")
-                $("#txt_StatusFlag" + cnt).val("u");
+                ItemDetail = SearchGrid.SearchDataGrid.SelectedKey;
+                console.log(ItemDetail);
 
+
+                let ItemID = Number(ItemDetail[0]);
+                let description = String(ItemDetail[1]);
+                let UnitCode = String(ItemDetail[2]);
+
+                $('#btnItem' + cnt).html(description)
+                $('#txt_ItemID' + cnt).val(ItemID)
+                $('#ddlTypeUom' + cnt).val(UnitCode)
+                $('#ddlTypeUom' + cnt).val(UnitCode)
+                $('#QTY' + cnt).val('1')
+
+
+                totalRow(cnt, true);
+            });
         });
-        $("#UnitPrice" + cnt).on('keyup', function (e) {
-            if ($("#txt_StatusFlag" + cnt).val() != "i")
-                $("#txt_StatusFlag" + cnt).val("u");
-            computeRows(cnt);
-        });
-        $("#QTY" + cnt).on('keyup', function (e) {
-            if ($("#txt_StatusFlag" + cnt).val() != "i")
-                $("#txt_StatusFlag" + cnt).val("u");
-            computeRows(cnt);
-        });
-        $("#DiscountAmount" + cnt).on('keyup', function (e) {
-            if ($("#txt_StatusFlag" + cnt).val() != "i")
-                $("#txt_StatusFlag" + cnt).val("u");
-            computeRows(cnt);
-        });
-        $("#DiscountPrc" + cnt).on('keyup', function (e) {
+
+        $("#txtPrice" + cnt).on('keyup', function (e) {
             if ($("#txt_StatusFlag" + cnt).val() != "i")
                 $("#txt_StatusFlag" + cnt).val("u");
 
-            if (Number($("#DiscountPrc" + cnt).val()) < 0 || $("#DiscountPrc" + cnt).val().trim() == "") {
-                $("#DiscountPrc" + cnt).val("0");
+            totalRow(cnt, true);
+        });
+        $("#txtQuantity" + cnt).on('keyup', function (e) {
+            if ($("#txt_StatusFlag" + cnt).val() != "i")
+                $("#txt_StatusFlag" + cnt).val("u");
+
+            totalRow(cnt, true);
+        });
+
+
+        $("#txtDiscountPrc" + cnt).on('keyup', function () {
+            if ($("#txt_StatusFlag" + cnt).val() != "i")
+                $("#txt_StatusFlag" + cnt).val("u");
+
+
+            if (Number($("#txtDiscountPrc" + cnt).val()) < 0 || $("#txtDiscountPrc" + cnt).val().trim() == "") {
+                $("#txtDiscountPrc" + cnt).val("0");
             }
             if (Number($("#DiscountPrc" + cnt).val()) > 100) {
-                $("#DiscountPrc" + cnt).val("100");
+                $("#txtDiscountPrc" + cnt).val("100");
             }
-            computeRows(cnt);
 
+            totalRow(cnt, true);
         });
-        $("#btn_minus" + cnt).click(function (e) {
+        $("#txtDiscountAmount" + cnt).on('keyup', function () {
             if ($("#txt_StatusFlag" + cnt).val() != "i")
                 $("#txt_StatusFlag" + cnt).val("u");
+
+
+            let txtPrice = Number($("#txtPrice" + cnt).val());
+            let txtDiscountAmount = Number($("#txtDiscountAmount" + cnt).val());
+
+            $("#txtDiscountPrc" + cnt).val(((txtDiscountAmount / txtPrice) * 100).RoundToSt(2));
+
+            $("#txtNetUnitPrice" + cnt).val((txtPrice - txtDiscountAmount).RoundToSt(2));
+
+
+            totalRow(cnt, false);
+
+        });
+
+
+
+
+        $("#btn_minus" + cnt).click(function (e) {
+
             DeleteRow(cnt);
         });
 
         return;
     }
-    function computeRows(cnt: number) {
+    function totalRow(cnt: number, flagDiscountAmount: boolean) {
+        debugger
 
-        $("#Totalprice" + cnt).val(Number($("#UnitPrice" + cnt).val()) * (Number($("#QTY" + cnt).val())));
-        $("#DiscountAmount" + cnt).val(Number($("#DiscountPrc" + cnt).val()) * Number($("#Totalprice" + cnt).val()) / 100);
-        $("#Net" + cnt).val(Number($("#Totalprice" + cnt).val()) - (Number($("#DiscountAmount" + cnt).val())));
-        computeTotal();
+
+
+        $('#txtTax_Rate' + cnt).val($('#txtTaxPrc').val());
+
+
+        //$("#txtUnitpriceWithVat" + cnt).val((Number($("#txtPrice" + cnt).val()) * (Tax_Rate + 100) / 100).RoundToNum(2))
+        //$("#txtPrice" + cnt).val((Number($("#txtUnitpriceWithVat" + cnt).val()) * 100 / (Tax_Rate + 100)).RoundToSt(2))
+
+        //-------------------------
+
+
+        let txtPrice = Number($("#txtPrice" + cnt).val());
+        let txtDiscountPrc = Number($("#txtDiscountPrc" + cnt).val());
+
+        if (flagDiscountAmount) {
+            $("#txtDiscountAmount" + cnt).val(((txtDiscountPrc * txtPrice) / 100).RoundToSt(2));
+            $("#txtNetUnitPrice" + cnt).val((txtPrice - ((txtDiscountPrc * txtPrice) / 100)).RoundToSt(2));
+        }
+        else {
+
+            let txtDiscountAmount = Number($("#txtDiscountAmount" + cnt).val());
+            $("#txtDiscountPrc" + cnt).val(((txtDiscountAmount / txtPrice) * 100).RoundToSt(2));
+            $("#txtNetUnitPrice" + cnt).val((txtPrice - txtDiscountAmount).RoundToSt(2));
+        }
+
+
+
+
+        var txtQuantityValue = $("#txtQuantity" + cnt).val();
+        var txtPriceValue = $("#txtNetUnitPrice" + cnt).val();
+
+
+
+        var total = Number(txtQuantityValue) * Number(txtPriceValue);
+        var VatPrc = $("#txtTax_Rate" + cnt).val();
+        var vatAmount = Number(total) * VatPrc / 100;
+        $("#txtTax" + cnt).val(vatAmount.RoundToSt(2));
+        var total = Number(txtQuantityValue) * Number(txtPriceValue);
+        $("#txtTotal" + cnt).val(total.RoundToSt(2));
+
+        var totalAfterVat = Number(vatAmount.RoundToSt(2)) + Number(total.RoundToSt(2));
+        $("#txtTotAfterTax" + cnt).val(totalAfterVat.RoundToSt(2));
+
+
+
+        ComputeTotals();
+
+
     }
-    function computeTotal() {
+
+    function ComputeTotals() {
+        debugger
+        let PackageCount = 0;
+        let CountTotal = 0;
+        let TotalDiscount = 0;
+        let Totalbefore = 0;
+        let TaxCount = 0;
         let NetCount = 0;
+        let CountItems = 0;
         for (let i = 0; i < CountGrid; i++) {
-            if ($("#txt_StatusFlag" + i).val() != 'm' && $("#txt_StatusFlag" + i).val() != 'd') {
-                NetCount += Number($("#Net" + i).val());
-                NetCount = Number(NetCount.toFixed(2).toString());
+            var flagvalue = $("#txt_StatusFlag" + i).val();
+            if (flagvalue != "d" && flagvalue != "m") {
+                PackageCount += Number($("#txtQuantity" + i).val());
+                PackageCount = Number(PackageCount.RoundToSt(2).toString());
+
+                Totalbefore += (Number($("#txtQuantity" + i).val()) * Number($("#txtPrice" + i).val()));
+                Totalbefore = Number(Totalbefore.RoundToSt(2).toString());
+
+                TotalDiscount += (Number($("#txtQuantity" + i).val()) * Number($("#txtDiscountAmount" + i).val()));
+                TotalDiscount = Number(TotalDiscount.RoundToSt(2).toString());
+
+                CountTotal += Number($("#txtTotal" + i).val());
+                CountTotal = Number(CountTotal.RoundToSt(2).toString());
+
+                TaxCount += Number($("#txtTax" + i).val());
+                TaxCount = Number(TaxCount.RoundToSt(2).toString());
+
+                NetCount += Number($("#txtTotAfterTax" + i).val());
+
+                CountItems++;
             }
         }
-        if (include == "true") {
-            NetCount = NetCount + ((NetCount * 14) / 100);
-        }
-        txtNetBefore.value = NetCount.toString();
-
-
-        let Net = (Number(txtNetBefore.value) - Number(txtAllDiscount.value)).toFixed(2);
-        txtNetAfterVat.value = Net.toString();
+        txtItemCount.value = CountItems.toString();
+        txtPackageCount.value = PackageCount.toString();
+        txtTotalDiscount.value = TotalDiscount.toString();
+        txtTotalbefore.value = Totalbefore.toString();
+        txtTotal.value = CountTotal.toString();
+        txtTax.value = TaxCount.toString();
+        txtNet.value = (Number(NetCount.RoundToSt(2))).RoundToSt(2);
     }
     function AddNewRow() {
         $('paginationSwitch').addClass("display_none");
         $('.no-records-found').addClass("display_none");
 
-        let CanAdd: boolean = true;
-        if (CountGrid > 0) {
-            for (var i = 0; i < CountGrid; i++) {
-                CanAdd = validationgrid(i);
-                if (CanAdd == false) {
-                    break;
-                }
-            }
-        }
-        if (CanAdd) {
 
-            BuildControls(CountGrid);
-            $("#txt_StatusFlag" + CountGrid).val("i"); //In Insert mode 
-            CountGrid++;
-            Insert_Serial();
-        }
+
+        BuildControls(CountGrid);
+        $("#txt_StatusFlag" + CountGrid).val("i"); //In Insert mode 
+        CountGrid++;
+        Insert_Serial();
+
 
     }
-    function validationgrid(rowcount: number) {
+    function Validation_Grid(rowcount: number) {
 
-        if ($("#QTY" + rowcount).val().trim() == "" || Number($("#QTY" + rowcount).val()) <= 0) {
-            Errorinput($("#QTY" + rowcount));
-            DisplayMassage('Item quantity must be entered', 'Item quantity must be entered', MessageType.Error);
-            return false;
-        }
-        if ($("#Description" + rowcount).val().trim() == "") {
-            Errorinput($("#Description" + rowcount));
-            DisplayMassage('Item Describtion must be entered', 'Item Describtion must be entered', MessageType.Error);
-            return false;
-        }
+        var Qty: number = Number($("#txtQuantity" + rowcount).val());
+        var Price: number = Number($("#txtPrice" + rowcount).val());
+        if ($("#txt_StatusFlag" + rowcount).val() == "d" || $("#txt_StatusFlag" + rowcount).val() == "m") {
+            return true;
+        } else {
 
-        if ($("#ddlTypeUom" + rowcount).val().trim() == "null") {
-            Errorinput($("#ddlTypeUom" + rowcount));
-            DisplayMassage('Item Describtion must be entered', 'Item Describtion must be entered', MessageType.Error);
-            return false;
+            if ($("#txt_ItemID" + rowcount).val() == "" || $("#txt_ItemID" + rowcount).val() == "0" || $("#txt_ItemID" + rowcount).val() == null) {
+                DisplayMassage(" برجاء ادخال الصنف", "Please enter the type", MessageType.Error);
+                Errorinput($("#btnItem" + rowcount));
+                return false
+            }
+            else if (Qty == 0) {
+                DisplayMassage(" برجاء ادخال الكمية المباعة", "Please enter the Quantity sold", MessageType.Error);
+                Errorinput($("#txtQuantity" + rowcount));
+                return false
+            }
+            else if (Price == 0) {
+                DisplayMassage(" برجاء ادخال السعر", "Please enter the Price", MessageType.Error);
+                Errorinput($("#txtPrice" + rowcount));
+                Errorinput($("#txtUnitpriceWithVat" + rowcount));
+                return false
+            }
+            return true;
         }
-        //if ($("#UnitPrice" + rowcount).val().trim() == "" || Number($("#UnitPrice" + rowcount).val()) <= 0) {
-        //    Errorinput($("#UnitPrice" + rowcount));
-        //    DisplayMassage('Item Price must be entered', 'Item Price must be entered', MessageType.Error);
-        //    return false;
-        //}
-
-        return true;
     }
     function DeleteRow(RecNo: number) {
 
         WorningMessage("Do you want to delete?", "Do you want to delete?", "warning", "warning", () => {
             $("#txt_StatusFlag" + RecNo).val() == 'i' ? $("#txt_StatusFlag" + RecNo).val('m') : $("#txt_StatusFlag" + RecNo).val('d');
-            computeRows(RecNo);
-            computeTotal();
+
+            ComputeTotals();
             $("#serial" + RecNo).val("99");
             $("#QTY" + RecNo).val("99");
             $("#Description" + RecNo).val("99");
@@ -999,127 +1249,199 @@ namespace QuotationView {
 
         });
     }
+
     function Insert_Serial() {
 
-
+        let Chack_Flag = false;
+        let flagval = "";
         let Ser = 1;
         for (let i = 0; i < CountGrid; i++) {
-            if ($("#txt_StatusFlag" + i).val() != 'm' && $("#txt_StatusFlag" + i).val() != 'd') {
-                $("#serial" + i).val(Ser);
+            flagval = $("#txt_StatusFlag" + i).val();
+            if (flagval != "d" && flagval != "m") {
+                $("#txtSerial" + i).val(Ser);
                 Ser++;
             }
-            if ($("#txt_StatusFlag" + i).val() != 'i' && $("#txt_StatusFlag" + i).val() != 'm' && $("#txt_StatusFlag" + i).val() != 'd') {
-                $("#txt_StatusFlag" + i).val('u');
+            if (flagval == 'd' || flagval == 'm' || flagval == 'i') {
+                Chack_Flag = true
+            }
+            if (Chack_Flag) {
+                if ($("#txt_StatusFlag" + i).val() != 'i' && $("#txt_StatusFlag" + i).val() != 'm' && $("#txt_StatusFlag" + i).val() != 'd') {
+                    $("#txt_StatusFlag" + i).val('u');
+                }
             }
         }
 
     }
+
     function Assign() {
-        //var StatusFlag: String;
+        var StatusFlag: String;
         InvoiceModel = new Sls_Ivoice();
         InvoiceItemsDetailsModel = new Array<Sls_InvoiceDetail>();
+        MasterDetailsModel = new SlsInvoiceMasterDetails();
+        TaxableModel = new Array<TaxableItem>();
 
+
+
+        MasterDetailsModel.Token = "HGFD-" + SysSession.CurrentEnvironment.Token;
+        MasterDetailsModel.UserCode = SysSession.CurrentEnvironment.UserCode;
 
         InvoiceModel.CustomerId = CustomerId == 0 ? null : CustomerId;
-        InvoiceModel.InvoiceID = GlobalinvoiceID;
-        InvoiceModel.Status = 1;
+
         InvoiceModel.CompCode = Number(compcode);
         InvoiceModel.BranchCode = Number(BranchCode);
-        var InvoiceNumber = Number(txtQutationNo.value);
-        InvoiceModel.TrNo = Selected_Data[0].TrNo;
-        InvoiceModel.CreatedAt = Selected_Data[0].CreatedAt;
-        InvoiceModel.CreatedBy = Selected_Data[0].CreatedBy;
-        InvoiceModel.TaxNotes = Selected_Data[0].TaxNotes;
-        InvoiceModel.TrType = Selected_Data[0].TrType == null ? 0 : Selected_Data[0].TrType //0 invoice 1 return    
-        InvoiceModel.CashBoxID = Selected_Data[0].CashBoxID == null ? 0 : Selected_Data[0].CashBoxID //0 TrNo invoice 1 return  
 
-
-        if (Selected_Data[0].TrType == 1) {
-
-            InvoiceModel.DeliveryEndDate = txtDate.value;
-            InvoiceModel.TrDate = Selected_Data[0].TrDate == null ? '' : Selected_Data[0].TrDate // DeliveryEndDate  return
+        InvoiceModel.TrType = 0//0 invoice 1 return
+        InvoiceModel.SlsInvSrc = 1   // 1 from store 2 from van  
+        InvoiceModel.StoreId = $('#ddlStore').val();//main store
+        InvoiceModel.PaymentMeansTypeCode = ddlTypePay.value == '0' ? 2 : 1; //  Cash or   Credit
+        if (ddlTypePay.value == "0") {
+            InvoiceModel.IsCash = false;
+        } else {
+            InvoiceModel.IsCash = true;
         }
-        else {
-            InvoiceModel.DeliveryEndDate = Selected_Data[0].DeliveryEndDate == null ? '' : Selected_Data[0].DeliveryEndDate // DeliveryDate  return
-            InvoiceModel.TrDate = txtDate.value;
-        }
-        //InvoiceModel.DeliveryDate = Selected_Data[0].DeliveryDate == null ? '' : Selected_Data[0].DeliveryDate // DeliveryDate  return
 
-        InvoiceModel.RefNO = txtRFQ.value;
-        InvoiceModel.SalesmanId = 1;
-        InvoiceModel.ChargeReason = txtCompanysales.value;
+        InvoiceModel.DocType = ddlTypeInv.value;
+        ///////////////
+        debugger
+        InvoiceModel.InvoiceID = 0;
+        InvoiceModel.StoreId = 1;
+        InvoiceModel.TrDate = txtDate.value;
+        InvoiceModel.CommitionAmount = 0;
         InvoiceModel.Remark = txtRemark.value;
-        InvoiceModel.TotalAmount = Number(txtNetBefore.value);
-        InvoiceModel.RoundingAmount = Number(txtAllDiscount.value);
-        InvoiceModel.NetAfterVat = Number(txtNetAfterVat.value);
-        //-------------------------(T E R M S & C O N D I T I O N S)-----------------------------------------------     
-        InvoiceModel.ContractNo = txtsalesVAT.value;       //----------------- include sales VAT.
-        InvoiceModel.PurchaseorderNo = txtfirstdays.value;      //----------------- days starting from the delivery date.
-        InvoiceModel.ChargeVatPrc = Number(txtsecounddays.value);    //----------------- days from offer date.
-        InvoiceModel.ChargeAfterVat = Number(txtlastdays.value);       //----------------- days from purchase order.
-        InvoiceModel.PrevInvoiceHash = txtPlacedeliv.value;//----------------- Place of delivery.
+        InvoiceModel.CardAmount = 0;
+        InvoiceModel.CashAmount = Number(txtNet.value);
+        InvoiceModel.CustomerName = txtCompanysales.value;
+        InvoiceModel.TaxCurrencyID = Number(ddlCurreny.value);
+        InvoiceModel.InvoiceCurrenyID = Number(ddlCurreny.value);
+        //InvoiceModel.CardAmount = $('#txtCardMoney').val().trim() == '' ? 0 : $('#txtCardMoney').val();
+        //InvoiceModel.CashAmount = $('#txtCashMoney').val().trim() == '' ? 0 : $('#txtCashMoney').val();
+        //InvoiceModel.TaxCurrencyID = Number(SysSession.CurrentEnvironment.I_Control[0].Currencyid);
+        //InvoiceModel.InvoiceCurrenyID = Number(SysSession.CurrentEnvironment.I_Control[0].Currencyid);
+        InvoiceModel.InvoiceTypeCode = Number(SysSession.CurrentEnvironment.InvoiceTypeCode);
 
-        InvoiceModel.UpdatedBy = SysSession.CurrentEnvironment.UserCode;
-        InvoiceModel.UpdatedAt = DateTimeFormat(Date().toString());
+
+        InvoiceModel.TotalAmount = Number(txtTotal.value);
+        InvoiceModel.NetAfterVat = Number(txtNet.value);
+        InvoiceModel.VatAmount = Number(txtTax.value);
+        InvoiceModel.ItemDiscountTotal = Number(txtTotalDiscount.value);
+
+
+
+
+        InvoiceModel.Status = 0;
+
 
         // Details
         for (var i = 0; i < CountGrid; i++) {
-            let StatusFlag = $("#txt_StatusFlag" + i).val();
+            invoiceItemSingleModel = new Sls_InvoiceDetail();
+            StatusFlag = $("#txt_StatusFlag" + i).val();
+
+            invoiceItemSingleModel.Name_Item = $("#txtServiceName" + i).val();
+            invoiceItemSingleModel.MinUnitPrice = Number($('option:selected', $("#ddlTypeUom" + i)).attr('data-minprice'));
+
+
+
             if (StatusFlag == "i") {
-                invoiceItemSingleModel = new Sls_InvoiceDetail();
-
-                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val()
-                invoiceItemSingleModel.InvoiceItemID = Number($("#InvoiceItemID" + i).val());
-                invoiceItemSingleModel.Serial = Number($("#serial" + i).val());
-                invoiceItemSingleModel.SoldQty = Number($('#QTY' + i).val());
-                invoiceItemSingleModel.Itemdesc = $("#Description" + i).val();
+                invoiceItemSingleModel.InvoiceItemID = 0;
+                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val();
+                invoiceItemSingleModel.Serial = $("#txtSerial" + i).val();
+                invoiceItemSingleModel.SoldQty = $('#txtQuantity' + i).val();
+                //invoiceItemSingleModel.StockSoldQty = Number($('option:selected', $("#ddlTypeUom" + i)).attr('data-onhandqty'));//
+                invoiceItemSingleModel.StockSoldQty = Number($('#txtQuantity' + i).val());//
+                invoiceItemSingleModel.NetUnitPrice = $("#txtNetUnitPrice" + i).val();
+                invoiceItemSingleModel.Unitprice = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.UnitpriceWithVat = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.DiscountPrc = $("#txtDiscountPrc" + i).val();
+                invoiceItemSingleModel.DiscountAmount = $("#txtDiscountAmount" + i).val();
+                //----------------------------------------------------- 
                 invoiceItemSingleModel.UomID = Number($("#ddlTypeUom" + i).val());
-                invoiceItemSingleModel.NetUnitPrice = Number($("#UnitPrice" + i).val());
-                invoiceItemSingleModel.ItemTotal = Number($("#Totalprice" + i).val());
-                invoiceItemSingleModel.DiscountPrc = Number($("#DiscountPrc" + i).val());
-                invoiceItemSingleModel.DiscountAmount = Number($("#DiscountAmount" + i).val());
-                invoiceItemSingleModel.NetAfterVat = Number($("#Net" + i).val());
-                invoiceItemSingleModel.StatusFlag = StatusFlag;
+                invoiceItemSingleModel.NetUnitPriceWithVat = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.BaseQty = 1;
+                invoiceItemSingleModel.BaseQtyPrice = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.BaseQtyUomid = Number($("#ddlTypeUom" + i).val());
+                invoiceItemSingleModel.ChargeVatNatID = null;
+                invoiceItemSingleModel.DiscountVatNatID = null;
+                invoiceItemSingleModel.ChargeCode = null;
+                //-----------------------------------------------------
+
+                invoiceItemSingleModel.VatPrc = $("#txtTax_Rate" + i).val();
+                invoiceItemSingleModel.VatAmount = $("#txtTax" + i).val();
+                invoiceItemSingleModel.ItemTotal = invoiceItemSingleModel.Unitprice * invoiceItemSingleModel.SoldQty;
+                invoiceItemSingleModel.TotRetQty = $("#txtReturnQuantity" + i).val();
+                invoiceItemSingleModel.StatusFlag = StatusFlag.toString();
                 InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
 
             }
-
             if (StatusFlag == "u") {
-                invoiceItemSingleModel = new Sls_InvoiceDetail();
-
-                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val()
-                invoiceItemSingleModel.InvoiceItemID = Number($("#InvoiceItemID" + i).val());
-                invoiceItemSingleModel.Serial = Number($("#serial" + i).val());
-                invoiceItemSingleModel.SoldQty = Number($('#QTY' + i).val());
-                invoiceItemSingleModel.Itemdesc = $("#Description" + i).val();
+                var invoiceItemId = $("#InvoiceItemID" + i).val()
+                invoiceItemSingleModel.InvoiceItemID = invoiceItemId;
+                invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val();
+                invoiceItemSingleModel.Serial = $("#txtSerial" + i).val();
+                invoiceItemSingleModel.SoldQty = $('#txtQuantity' + i).val();
+                invoiceItemSingleModel.StockSoldQty = Number($('#txtQuantity' + i).val());//
+                invoiceItemSingleModel.NetUnitPrice = $("#txtNetUnitPrice" + i).val();
+                invoiceItemSingleModel.Unitprice = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.UnitpriceWithVat = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.DiscountPrc = $("#txtDiscountPrc" + i).val();
+                invoiceItemSingleModel.DiscountAmount = $("#txtDiscountAmount" + i).val();
+                //-----------------------------------------------------
                 invoiceItemSingleModel.UomID = Number($("#ddlTypeUom" + i).val());
-                invoiceItemSingleModel.NetUnitPrice = Number($("#UnitPrice" + i).val());
-                invoiceItemSingleModel.ItemTotal = Number($("#Totalprice" + i).val());
-                invoiceItemSingleModel.DiscountPrc = Number($("#DiscountPrc" + i).val());
-                invoiceItemSingleModel.DiscountAmount = Number($("#DiscountAmount" + i).val());
-                invoiceItemSingleModel.NetAfterVat = Number($("#Net" + i).val());
-                invoiceItemSingleModel.StatusFlag = StatusFlag;
+                invoiceItemSingleModel.NetUnitPriceWithVat = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.BaseQty = 1;
+                invoiceItemSingleModel.BaseQtyPrice = $("#txtPrice" + i).val();
+                invoiceItemSingleModel.BaseQtyUomid = Number($("#ddlTypeUom" + i).val());
+                invoiceItemSingleModel.ChargeVatNatID = null;
+                invoiceItemSingleModel.DiscountVatNatID = null;
+                invoiceItemSingleModel.ChargeCode = null;
+                //-----------------------------------------------------
 
+                let VatNatID = Number($("#txtTax_Rate" + i).attr('data-VatNatID'));
+                invoiceItemSingleModel.VatPrc = $("#txtTax_Rate" + i).val();
+                invoiceItemSingleModel.VatAmount = $("#txtTax" + i).val();
+                invoiceItemSingleModel.ItemTotal = invoiceItemSingleModel.Unitprice * invoiceItemSingleModel.SoldQty;
+                invoiceItemSingleModel.TotRetQty = $("#txtReturnQuantity" + i).val();
+                invoiceItemSingleModel.StatusFlag = StatusFlag.toString();
                 InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
-
             }
-
             if (StatusFlag == "d") {
-                invoiceItemSingleModel = new Sls_InvoiceDetail();
-                invoiceItemSingleModel.InvoiceItemID = Number($("#InvoiceItemID" + i).val());
-                invoiceItemSingleModel.StatusFlag = StatusFlag;
-                InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
+                if ($("#InvoiceItemID" + i).val() != "") {
+                    var deletedID = $("#InvoiceItemID" + i).val();
+                    invoiceItemSingleModel.StatusFlag = StatusFlag.toString();
+                    invoiceItemSingleModel.InvoiceItemID = deletedID;
+                    InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
+                }
             }
         }
+
+
+        TaxableSinglModel.InvoiceID = 0
+        TaxableSinglModel.subType = ddlTypeTax.value
+        TaxableSinglModel.taxType = ddlValueTax.value
+        TaxableModel.push(TaxableSinglModel);
+
+
+        if (ddlDisTax.value != 'null' && ddlTypeDis.value != 'null') {
+
+            TaxableSinglModel.InvoiceID = 0
+            TaxableSinglModel.subType = ddlTypeDis.value
+            TaxableSinglModel.taxType = ddlDisTax.value
+            TaxableModel.push(TaxableSinglModel);
+        }
+
+
         MasterDetailsModel.Sls_Ivoice = InvoiceModel;
         MasterDetailsModel.Sls_InvoiceDetail = InvoiceItemsDetailsModel;
+        MasterDetailsModel.TaxableItem = TaxableModel;
+
     }
-    function Update() {
+
+    function insert() {
         if (!validation()) return;
+
         Assign();
         Ajax.Callsync({
             type: "POST",
-            url: sys.apiUrl("SlsTrSales", "updateInvoiceMasterDetail"),
+            url: sys.apiUrl("SlsTrSales", "InsertInvoiceMasterDetail"),
             data: JSON.stringify(MasterDetailsModel),
             success: (d) => {
                 let result = d as BaseResponse;
@@ -1141,70 +1463,116 @@ namespace QuotationView {
 
     }
     function success_insert() {
-        //InitializeGridQuotation();
-
+        btnClean_onclick();
+        txtDate.value = GetDate();
+        CountGrid = 0;
         CustomerId = 0;
-        Display();
-        $('#viewmail').addClass('active in');
-        $('#sendmail').removeClass('active in');
+        invoiceID = 0;
+        txtRFQ.value = "";
+        txtCompanysales.value = "";
+        txtCompanyname.value = "";
+        txtRemark.value = "";
+        txtNetBefore.value = "";
+        txtNetAfterVat.value = "";
+
+        txtItemCount.value = "";
+        txtPackageCount.value = "";
+        txtTotalDiscount.value = "";
+        txtTotalbefore.value = "";
+        txtTotal.value = "";
+        txtTax.value = "";
+        txtNet.value = "";
+
+
+        $("#Table_Data").html("");
+        AddNewRow();
+    }
+    function validation() {
+
+        let count = 0;
+        for (var i = 0; i < CountGrid; i++) {
+            let StatusFlag = $("#txt_StatusFlag" + i).val();
+            if (StatusFlag != "m" && StatusFlag != "d") {
+                count++;
+            }
+        }
+
+        if (txtDate.value.trim() == "") {
+            Errorinput(txtDate);
+            DisplayMassage('برجاء ادخال التاريخ', 'Date must be entered', MessageType.Error);
+            return false;
+        }
+        if (txtCompanyname.value.trim() == "") {
+            Errorinput(txtCompanyname);
+            DisplayMassage('برجاء ادخال العميل', 'Company must be choosed', MessageType.Error);
+            return false;
+        }
+        if (txtCompanysales.value.trim() == "") {
+            Errorinput(txtCompanysales);
+            DisplayMassage('  برجاء ادخال اسم البائع', ' RFQ must be entered', MessageType.Error);
+            return false;
+        }
+
+        if (count == 0) {
+            Errorinput(btnAddDetails);
+            DisplayMassage('يجب ادخال  بينات الفاتوره', 'يجب ادخال  بينات الفاتوره', MessageType.Error);
+            return false;
+        }
+        //if (txtsalesVAT.value.trim() == "") {
+        //    Errorinput(txtsalesVAT);
+        //    DisplayMassage('Vat include or not must be entered', ' Vat include or not must be entered', MessageType.Error);
+        //    return false;
+        //}
+        //if (txtfirstdays.value.trim() == "") {
+        //    Errorinput(txtfirstdays);
+        //    DisplayMassage('days starting from the delivery date must be entered', 'days starting from the delivery date must be entered', MessageType.Error);
+        //    return false;
+        //}
+        //if (txtsecounddays.value.trim() == "") {
+        //    Errorinput(txtsecounddays);
+        //    DisplayMassage('Offer validity days from offer date must be entered', ' Offer validity days from offer date must be entered', MessageType.Error);
+        //    return false;
+        //}
+        //if (txtlastdays.value.trim() == "") {
+        //    Errorinput(txtlastdays);
+        //    DisplayMassage('Place of delivery must be entered', ' Place of delivery must be entered', MessageType.Error);
+        //    return false;
+        //}
+        return true;
+    }
+    function btnsave_onclick() {
+
+        if (!validation()) return
+
+        let CanAdd: boolean = true;
+        if (CountGrid > 0) {
+            for (var i = 0; i < CountGrid; i++) {
+                CanAdd = Validation_Grid(i);
+                if (CanAdd == false) {
+                    break;
+                }
+            }
+        }
+        if (CanAdd) {
+            insert();
+        }
+
+    }
+    function btnClean_onclick() {
+         
+        $('#viewmail').removeClass('active in');
+        $('#sendmail').addClass('active in');
         $('#composemail').removeClass('active in');
 
         $('#btnQuotations').addClass('active');
         $('#btnInvoice').removeClass('active');
 
+        $('#Div_Fillter').removeClass('display_none');
+        $('#Div_Views').attr('style', '');
 
-        $('#txtCreatedBy').prop("value", Selected_Data[0].CreatedBy);
-        $('#txtCreatedAt').prop("value", Selected_Data[0].CreatedAt);
-
-        $('#txtUpdatedBy').prop("value", SysSession.CurrentEnvironment.UserCode);
-        $('#txtUpdatedAt').prop("value", DateTimeFormat(Date().toString()));
-    }
-    function validation() {
-
-        if (txtDate.value.trim() == "") {
-            Errorinput(txtDate);
-            DisplayMassage('Date must be entered', 'Date must be entered', MessageType.Error);
-            return false;
-        }
-        if (txtCompanyname.value.trim() == "") {
-            Errorinput(txtCompanyname);
-            DisplayMassage('Company must be choosed', 'Company must be choosed', MessageType.Error);
-            return false;
-        }
-        if (txtCompanysales.value.trim() == "") {
-            Errorinput(txtCompanysales);
-            DisplayMassage('Company sales man must be choosed', 'Company sales man must be choosed', MessageType.Error);
-            return false;
-        }
-        if (txtRFQ.value.trim() == "") {
-            Errorinput(txtRFQ);
-            DisplayMassage(' RFQ must be entered', ' RFQ must be entered', MessageType.Error);
-            return false;
-        }
-        if (txtsalesVAT.value.trim() == "") {
-            Errorinput(txtsalesVAT);
-            DisplayMassage('Vat include or not must be entered', ' Vat include or not must be entered', MessageType.Error);
-            return false;
-        }
-        if (txtfirstdays.value.trim() == "") {
-            Errorinput(txtfirstdays);
-            DisplayMassage('days starting from the delivery date must be entered', 'days starting from the delivery date must be entered', MessageType.Error);
-            return false;
-        }
-        if (txtsecounddays.value.trim() == "") {
-            Errorinput(txtsecounddays);
-            DisplayMassage('Offer validity days from offer date must be entered', ' Offer validity days from offer date must be entered', MessageType.Error);
-            return false;
-        }
-        if (txtlastdays.value.trim() == "") {
-            Errorinput(txtlastdays);
-            DisplayMassage('Place of delivery must be entered', ' Place of delivery must be entered', MessageType.Error);
-            return false;
-        }
-        return true;
-    }
-    function btnsave_onclick() {
-        Update();
+        CountGrid = 0;
+        $("#Table_Data").html("");
+        AddNewRow();
     }
 
     //----------------------------------------------------------------------------------------------------

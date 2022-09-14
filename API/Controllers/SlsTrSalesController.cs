@@ -269,9 +269,9 @@ namespace Inv.API.Controllers
         [HttpGet, AllowAnonymous]
         public IHttpActionResult GetCustomer(int id)
         {
-            string query = "select * from Customer where  CustomerId = " + id + "";
+            string query = "select * from receiver where  receiverID = " + id + "";
 
-            var res = db.Database.SqlQuery<Customer>(query).ToList();
+            var res = db.Database.SqlQuery<receiver>(query).ToList();
             return Ok(new BaseResponse(res));
         }
         [HttpGet, AllowAnonymous]

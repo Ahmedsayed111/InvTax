@@ -37,7 +37,49 @@
     }
 }
 */
- 
+
+
+
+.dess {
+    width: 15% !important;
+}
+
+.uom {
+    width: 11% !important;
+}
+
+.des {
+    width: 9% !important;
+}
+
+.Net {
+    width: 15% !important;
+}
+
+.QTY {
+    width: 11% !important;
+}
+
+.Zero {
+    width: 7% !important;
+}
+
+.Tax {
+    width: 7% !important;
+}
+
+.Price {
+    width: 9% !important;
+}
+
+.SR {
+    width: 4% !important;
+}
+
+th {
+    text-align: right !important;
+}
+
 
 html, body {
     font-family: 'Open Sans', sans-serif;

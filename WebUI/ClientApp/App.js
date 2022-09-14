@@ -27,6 +27,11 @@ var MessageType = {
 var Keys = {
     Enter: "Enter"
 };
+var setVal = function (value) {
+    var Input = this;
+    value == null || Number(value) == 0 ? Input.value = '' : Input.value = value;
+    return value;
+};
 function IsNullOrEmpty(value) {
     if (value == null || value == "")
         return true;
