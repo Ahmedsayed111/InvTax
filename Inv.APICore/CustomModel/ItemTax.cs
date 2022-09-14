@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Inv.APICore.CustomModel
+namespace APIETAX.CustomModel
 {
     using System;
     using System.Collections.Generic;

@@ -68,12 +68,12 @@ namespace Inv.DAL.Domain
         public virtual DbSet<GQ_Notifications> GQ_Notifications { get; set; }
         public virtual DbSet<GQ_ReportWebSetting> GQ_ReportWebSetting { get; set; }
         public virtual DbSet<I_VW_GetCompStatus> I_VW_GetCompStatus { get; set; }
-        public virtual DbSet<I_Control> I_Control { get; set; }
         public virtual DbSet<G_Currency> G_Currency { get; set; }
         public virtual DbSet<I_D_CURRENCY> I_D_CURRENCY { get; set; }
         public virtual DbSet<Sls_InvoiceDetail> Sls_InvoiceDetail { get; set; }
         public virtual DbSet<Items> Items1 { get; set; }
         public virtual DbSet<G_Government> G_Government { get; set; }
+        public virtual DbSet<I_Control> I_Control { get; set; }
         public virtual DbSet<IQ_InvoiceHedar_Tax> IQ_InvoiceHedar_Tax { get; set; }
         public virtual DbSet<IQ_Sls_InvoiceDetail_Tax> IQ_Sls_InvoiceDetail_Tax { get; set; }
     

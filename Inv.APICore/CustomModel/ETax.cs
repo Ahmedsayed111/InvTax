@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Inv.APICore.CustomModel
+namespace APIETAX.CustomModel
 {
     internal class ETax
     {
