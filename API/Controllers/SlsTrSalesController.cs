@@ -97,11 +97,7 @@ namespace Inv.API.Controllers
                 try
                 {
 
-                    string st = SystemToolsController.GenerateGuid();
-                    updatedObj.Sls_Ivoice.DocUUID = st;
-
-                    var tm = DateTime.Now.ToString("HH:mm:ss");
-                    updatedObj.Sls_Ivoice.TrTime = TimeSpan.Parse(tm);
+                 
 
                     //update Master
                     var Sls_TR_Invoice = SlsTrSalesService.Update(updatedObj.Sls_Ivoice);
@@ -135,6 +131,9 @@ namespace Inv.API.Controllers
                         db.Database.ExecuteSqlCommand(query);
 
                     }
+
+                    string query11 = "delete [dbo].[taxableItems] where InvoiceID = " + Sls_TR_Invoice.InvoiceID + "";
+                    db.Database.ExecuteSqlCommand(query11);
 
 
                     for (int i = 0; i < updatedObj.taxableItem.Count; i++)
@@ -173,18 +172,7 @@ namespace Inv.API.Controllers
         {
              
              
-            string s = @"SELECT   [InvoiceID] ,[TrNo]  ,[RefNO]  ,[RefTrID] , TrDate
-                      ,CONVERT(varchar, TrDate, 103) as TrDateH ,[TrType] ,[IsCash] ,[SlsInvType] ,[SlsInvSrc]  ,[CashBoxID] ,[CustomerId]
-                      ,[CustomerName] ,[DeliveryEndDate]  ,[SalesmanId] ,[StoreId] ,[OperationId] ,[TotalAmount]
-                      ,[VatAmount] ,[VatType] ,[DiscountAmount] ,[DiscountPrc]  ,[NetAfterVat]   ,[CommitionAmount]  ,[CashAmount]
-                      ,[CardAmount] ,[BankTfAmount]  ,[BankAccount] ,[TotalPaidAmount] ,[RemainAmount]  ,[Remark]
-                      ,[Status] ,[IsPosted] ,[VoucherNo] ,[VoucherType] ,[CreatedAt]  ,[CreatedBy] ,[UpdatedAt] ,[UpdatedBy]
-                      ,[CompCode] ,[BranchCode]  ,[DocNo] ,[DocUUID] ,[TrTime] ,[InvoiceTypeCode] ,[InvoiceTransCode]  ,[TaxNotes]
-                      ,[TaxCurrencyID] ,[InvoiceCurrenyID] ,[ContractNo] ,[PurchaseorderNo] ,[GlobalInvoiceCounter] ,[PrevInvoiceHash]  ,[QRCode]
-                      ,[CryptographicStamp]  ,[DeliveryDate]  ,CONVERT(varchar, DeliveryEndDate, 103) as CustomerMobileNo ,[PaymentMeansTypeCode],[CRDBReasoncode],[PaymentTerms],[PaymentTermsID],[AllowAmount],[AllowPrc]
-                      ,[AllowBase]      ,[AllowVatNatID],[AllowVatPrc],[AllowAfterVat],[AllowReason],[AllowCode],[ChargeAmount],[ChargePrc],[ChargeBase],[ChargeVatNatID]
-                      ,[ChargeVatPrc],[ChargeAfterVat],[ChargeReason],[ChargeCode],[ItemTotal],[ItemAllowTotal],[ItemDiscountTotal],[ItemVatTotal],[RoundingAmount],DocType,UUID,TimeUpload,VersionInv
-                      FROM  Sls_Ivoice where   ";
+            string s = @"SELECT  * FROM  Sls_Ivoice where   ";
 
             string condition = "";
             string Customer = "";
@@ -307,9 +295,24 @@ namespace Inv.API.Controllers
         [HttpGet, AllowAnonymous]
         public IHttpActionResult GetSlsInvoiceItem(int invoiceID)
         {
+             
+            string query1 = "Select * from IQ_Sls_InvoiceDetail_Tax where InvoiceID = "+ invoiceID;
 
-            var res = db.Sls_InvoiceDetail.Where(x => x.InvoiceID == invoiceID).ToList();
-            return Ok(new BaseResponse(res));
+            var res1 = db.Database.SqlQuery<IQ_Sls_InvoiceDetail_Tax>(query1).ToList();
+
+
+            string query2 = "Select * from taxableItems where InvoiceID = " + invoiceID;
+
+            var res2 = db.Database.SqlQuery<taxableItem>(query2).ToList();
+
+
+            DetailsAndTaxabl Model = new DetailsAndTaxabl();
+
+            Model.IQ_Sls_InvoiceDetail_Tax = res1;
+            Model.taxableItem = res2; 
+
+
+            return Ok(new BaseResponse(Model));
         }
          
         [HttpPost, AllowAnonymous]

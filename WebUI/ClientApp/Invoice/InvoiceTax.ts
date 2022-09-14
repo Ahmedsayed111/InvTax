@@ -405,8 +405,7 @@ namespace InvoiceTax {
         ComputeTotals();
 
 
-    }
-
+    } 
     function ComputeTotals() {
         debugger
         let PackageCount = 0;

@@ -14,6 +14,7 @@ var QuotationView;
     var InvQuotation = new Array();
     var I_D_UOMDetails = new Array();
     var CustomerDetailnew = new Array();
+    var DisplayDetailsAndTaxabl = new DetailsAndTaxabl();
     var btnCustSrchFilter;
     var btnFilter;
     var btnRefrash;
@@ -471,7 +472,7 @@ var QuotationView;
         txtDate.value = DateFormat(Selected_Data[0].TrDate);
         GlobalinvoiceID = Selected_Data[0].InvoiceID;
         CustomerId = Selected_Data[0].CustomerId;
-        //txtQutationNo.value = Selected_Data[0].TrNo.toString();
+        $('#TrNo').html('رقم الفاتوره ( ' + Selected_Data[0].TrNo.toString() + ' )');
         txtRFQ.value = Selected_Data[0].RefNO;
         txtCompanysales.value = Selected_Data[0].CustomerName;
         txtRemark.value = Selected_Data[0].Remark;
@@ -481,13 +482,10 @@ var QuotationView;
         ddlStatas.value = setVal(Selected_Data[0].Status);
         ddlTypeInv.value = setVal(Selected_Data[0].DocType);
         txtTaxPrc.value = setVal(Selected_Data[0].RoundingAmount);
-        //ddlValueTax.value = setVal(Selected_Data[0].Status);
-        //ddlTypeTax.value = setVal(Selected_Data[0].Status);
-        //ddlDisTax.value = setVal(Selected_Data[0].Status);
-        //ddlTypeDis.value = setVal(Selected_Data[0].Status);
-        //txtNetBefore.value = Selected_Data[0].TotalAmount.toString();
-        ////txtAllDiscount.value = Selected_Data[0].RoundingAmount.toString();
-        //txtNetAfterVat.value = Selected_Data[0].NetAfterVat.toString();
+        txtTotal.value = setVal(Selected_Data[0].TotalAmount);
+        txtNet.value = setVal(Selected_Data[0].NetAfterVat);
+        txtTax.value = setVal(Selected_Data[0].VatAmount);
+        txtTotalDiscount.value = setVal(Selected_Data[0].ItemDiscountTotal);
         ////-------------------------(T E R M S & C O N D I T I O N S)-----------------------------------------------     
         Ajax.Callsync({
             type: "Get",
@@ -496,17 +494,58 @@ var QuotationView;
             success: function (d) {
                 var result = d;
                 if (result.IsSuccess) {
-                    InvItemsDetailsModel = result.Response;
+                    DisplayDetailsAndTaxabl = result.Response;
+                    InvItemsDetailsModel = DisplayDetailsAndTaxabl.IQ_Sls_InvoiceDetail_Tax;
                     CountGrid = 0;
                     $("#Table_Data").html("");
-                    for (var i = 0; i < InvItemsDetailsModel.length; i++) {
-                        BuildControls(i);
-                        Display_GridConrtol(i);
+                    for (var i_1 = 0; i_1 < InvItemsDetailsModel.length; i_1++) {
+                        BuildControls(i_1);
+                        Display_GridConrtol(i_1);
+                        CountGrid++;
                     }
-                    CountGrid = InvItemsDetailsModel.length;
+                    var tax = DisplayDetailsAndTaxabl.taxableItem;
+                    ddlValueTax.value = tax[0].taxType;
+                    var ValueTax_1 = ddlValueTax.value;
+                    var TaxT1 = TaxType.filter(function (x) { return x.StdCode == ValueTax_1; });
+                    $('#ddlTypeTax').html('');
+                    for (var i = 0; i < TaxT1.length; i++) {
+                        $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+                    }
+                    ddlTypeTax.value = tax[0].subType;
+                    if (tax.length > 1) {
+                        ddlDisTax.value = tax[1].taxType;
+                        var DisTax_1 = ddlDisTax.value;
+                        var TaxT2 = TaxType.filter(function (x) { return x.StdCode == DisTax_1; });
+                        $('#ddlTypeDis').html('');
+                        for (var i = 0; i < TaxT2.length; i++) {
+                            $('#ddlTypeDis').append('<option   value="' + TaxT2[i].SubCode + '">' + TaxT2[i].DescA + '</option>');
+                        }
+                        if (ddlDisTax.value == 'null') {
+                            $('#ddlTypeDis').append('<option value="null"> Choose Tax </option>');
+                        }
+                        ddlTypeDis.value = tax[1].subType;
+                    }
+                    ComputeTotals();
                 }
             }
         });
+    }
+    function Display_GridConrtol(cnt) {
+        $("#txt_StatusFlag" + cnt).val("");
+        $("#InvoiceItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].InvoiceItemID);
+        $("#txt_ItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].ItemID);
+        $("#txtSerial" + cnt).prop("value", InvItemsDetailsModel[cnt].Serial);
+        $("#btnItem" + cnt).html(InvItemsDetailsModel[cnt].description);
+        $("#ddlTypeUom" + cnt).prop("value", InvItemsDetailsModel[cnt].UomID);
+        $("#txtQuantity" + cnt).prop("value", InvItemsDetailsModel[cnt].SoldQty);
+        $("#txtPrice" + cnt).prop("value", InvItemsDetailsModel[cnt].Unitprice);
+        $("#txtNetUnitPrice" + cnt).prop("value", InvItemsDetailsModel[cnt].NetUnitPrice);
+        $("#txtDiscountPrc" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountPrc);
+        $("#txtDiscountAmount" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountAmount);
+        $("#txtTax_Rate" + cnt).prop("value", InvItemsDetailsModel[cnt].VatPrc);
+        $("#txtTax_Rate" + cnt).prop("value", InvItemsDetailsModel[cnt].VatPrc);
+        $("#txtTax" + cnt).prop("value", InvItemsDetailsModel[cnt].VatAmount);
+        totalRow(cnt, true);
     }
     function GetCustomer() {
         Ajax.Callsync({
@@ -523,20 +562,6 @@ var QuotationView;
                 }
             }
         });
-    }
-    function Display_GridConrtol(cnt) {
-        $("#txt_StatusFlag" + cnt).val("");
-        $("#InvoiceItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].InvoiceItemID);
-        $("#txt_ItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].ItemID);
-        $("#serial" + cnt).prop("value", InvItemsDetailsModel[cnt].Serial);
-        $("#QTY" + cnt).prop("value", InvItemsDetailsModel[cnt].SoldQty);
-        $("#Description" + cnt).prop("value", InvItemsDetailsModel[cnt].Itemdesc);
-        $("#ddlTypeUom" + cnt).prop("value", InvItemsDetailsModel[cnt].UomID);
-        $("#UnitPrice" + cnt).prop("value", InvItemsDetailsModel[cnt].NetUnitPrice);
-        $("#Totalprice" + cnt).prop("value", InvItemsDetailsModel[cnt].ItemTotal);
-        $("#DiscountPrc" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountPrc);
-        $("#DiscountAmount" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountAmount);
-        $("#Net" + cnt).prop("value", InvItemsDetailsModel[cnt].NetAfterVat);
     }
     function PrintInvoice(btnId) {
         if (!SysSession.CurrentPrivileges.PrintOut)
@@ -635,8 +660,6 @@ var QuotationView;
     var txtCompanysales;
     var txtCompanyname;
     var txtRemark;
-    var txtNetBefore;
-    var txtNetAfterVat;
     var txtTaxPrc;
     var txtItemCount;
     var txtPackageCount;
@@ -690,8 +713,6 @@ var QuotationView;
         txtCompanysales = document.getElementById("txtCompanysales");
         txtCompanyname = document.getElementById("txtCompanyname");
         txtRemark = document.getElementById("txtRemark");
-        txtNetBefore = document.getElementById("txtNetBefore");
-        txtNetAfterVat = document.getElementById("txtNetAfterVat");
         txtTaxPrc = document.getElementById("txtTaxPrc");
         txtItemCount = document.getElementById("txtItemCount");
         txtPackageCount = document.getElementById("txtPackageCount");
@@ -1031,7 +1052,8 @@ var QuotationView;
         InvoiceModel.DocType = ddlTypeInv.value;
         ///////////////
         debugger;
-        InvoiceModel.InvoiceID = 0;
+        InvoiceModel.TrNo = Number(Selected_Data[0].TrNo);
+        InvoiceModel.InvoiceID = Selected_Data[0].InvoiceID;
         InvoiceModel.StoreId = 1;
         InvoiceModel.TrDate = txtDate.value;
         InvoiceModel.CommitionAmount = 0;
@@ -1041,6 +1063,7 @@ var QuotationView;
         InvoiceModel.CustomerName = txtCompanysales.value;
         InvoiceModel.TaxCurrencyID = Number(ddlCurreny.value);
         InvoiceModel.InvoiceCurrenyID = Number(ddlCurreny.value);
+        InvoiceModel.RoundingAmount = Number($('#txtTaxPrc').val());
         //InvoiceModel.CardAmount = $('#txtCardMoney').val().trim() == '' ? 0 : $('#txtCardMoney').val();
         //InvoiceModel.CashAmount = $('#txtCashMoney').val().trim() == '' ? 0 : $('#txtCashMoney').val();
         //InvoiceModel.TaxCurrencyID = Number(SysSession.CurrentEnvironment.I_Control[0].Currencyid);
@@ -1145,7 +1168,7 @@ var QuotationView;
         Assign();
         Ajax.Callsync({
             type: "POST",
-            url: sys.apiUrl("SlsTrSales", "InsertInvoiceMasterDetail"),
+            url: sys.apiUrl("SlsTrSales", "updateInvoiceMasterDetail"),
             data: JSON.stringify(MasterDetailsModel),
             success: function (d) {
                 var result = d;
@@ -1171,8 +1194,6 @@ var QuotationView;
         txtCompanysales.value = "";
         txtCompanyname.value = "";
         txtRemark.value = "";
-        txtNetBefore.value = "";
-        txtNetAfterVat.value = "";
         txtItemCount.value = "";
         txtPackageCount.value = "";
         txtTotalDiscount.value = "";
@@ -1182,6 +1203,8 @@ var QuotationView;
         txtNet.value = "";
         $("#Table_Data").html("");
         AddNewRow();
+        Display();
+        btnClean_onclick();
     }
     function validation() {
         var count = 0;
