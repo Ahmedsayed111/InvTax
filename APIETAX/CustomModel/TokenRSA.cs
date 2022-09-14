@@ -8,16 +8,16 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-namespace Inv.APICore
+namespace APIETAX
 {
     public class TokenRSA : RSA
     {
         private readonly X509Certificate2 _certificate;
-        private readonly ISession _session;
+        private readonly Net.Pkcs11Interop.HighLevelAPI.ISession _session;
         private readonly ISlot _slot;
         private readonly IObjectHandle _privateKeyHandle;
 
-        public TokenRSA(X509Certificate2 certificate, ISession session, ISlot slot, IObjectHandle privateKeyHandle)
+        public TokenRSA(X509Certificate2 certificate, Net.Pkcs11Interop.HighLevelAPI.ISession session, ISlot slot, IObjectHandle privateKeyHandle)
         {
             _certificate = certificate;
             _session = session;

@@ -694,6 +694,10 @@
           <Property Name="ISCustVendorInGL" Type="bit" />
           <Property Name="ClientID" Type="nvarchar(max)" />
           <Property Name="ClientSecret" Type="nvarchar(max)" />
+          <Property Name="ActivityCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="TypeVersion" Type="nvarchar" MaxLength="20" />
+          <Property Name="TokenPinCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="Tokentype" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="I_D_CURRENCY">
           <Key>
@@ -1165,6 +1169,13 @@ warning 6002: The table/view 'InvoiceTax.dbo.IQ_InvoiceHedar_Tax' does not have 
           <Property Name="DescA" Type="nvarchar" MaxLength="50" />
           <Property Name="DescL" Type="nvarchar" MaxLength="50" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="150" />
+          <Property Name="ClientSecret" Type="nvarchar(max)" />
+          <Property Name="ClientID" Type="nvarchar(max)" />
+          <Property Name="DocPDFFolder" Type="nvarchar" MaxLength="100" />
+          <Property Name="ActivityCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="TypeVersion" Type="nvarchar" MaxLength="20" />
+          <Property Name="TokenPinCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="Tokentype" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'InvoiceTax.dbo.IQ_Sls_InvoiceDetail_Tax' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1592,7 +1603,14 @@ warning 6002: The table/view 'InvoiceTax.dbo.IQ_Sls_InvoiceDetail_Tax' does not 
     [IQ_InvoiceHedar_Tax].[CurrencyCode] AS [CurrencyCode], 
     [IQ_InvoiceHedar_Tax].[DescA] AS [DescA], 
     [IQ_InvoiceHedar_Tax].[DescL] AS [DescL], 
-    [IQ_InvoiceHedar_Tax].[Remarks] AS [Remarks]
+    [IQ_InvoiceHedar_Tax].[Remarks] AS [Remarks], 
+    [IQ_InvoiceHedar_Tax].[ClientSecret] AS [ClientSecret], 
+    [IQ_InvoiceHedar_Tax].[ClientID] AS [ClientID], 
+    [IQ_InvoiceHedar_Tax].[DocPDFFolder] AS [DocPDFFolder], 
+    [IQ_InvoiceHedar_Tax].[ActivityCode] AS [ActivityCode], 
+    [IQ_InvoiceHedar_Tax].[TypeVersion] AS [TypeVersion], 
+    [IQ_InvoiceHedar_Tax].[TokenPinCode] AS [TokenPinCode], 
+    [IQ_InvoiceHedar_Tax].[Tokentype] AS [Tokentype]
     FROM [dbo].[IQ_InvoiceHedar_Tax] AS [IQ_InvoiceHedar_Tax]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="IQ_Sls_InvoiceDetail_Tax" EntityType="Self.IQ_Sls_InvoiceDetail_Tax" store:Type="Views" store:Schema="dbo">
@@ -2733,12 +2751,12 @@ warning 6002: The table/view 'InvoiceTax.dbo.IQ_Sls_InvoiceDetail_Tax' does not 
             <Parameter Name="RepType" Mode="In" Type="Int32" />
             <Parameter Name="TRId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="I_Control" EntityType="TaxModel.I_Control" />
           <EntitySet Name="G_Currency" EntityType="TaxModel.G_Currency" />
           <EntitySet Name="I_D_CURRENCY" EntityType="TaxModel.I_D_CURRENCY" />
           <EntitySet Name="Sls_InvoiceDetail" EntityType="TaxModel.Sls_InvoiceDetail" />
           <EntitySet Name="Items1" EntityType="TaxModel.Items" />
           <EntitySet Name="G_Government" EntityType="TaxModel.G_Government" />
+          <EntitySet Name="I_Control" EntityType="TaxModel.I_Control" />
           <EntitySet Name="IQ_InvoiceHedar_Tax" EntityType="TaxModel.IQ_InvoiceHedar_Tax" />
           <EntitySet Name="IQ_Sls_InvoiceDetail_Tax" EntityType="TaxModel.IQ_Sls_InvoiceDetail_Tax" />
         </EntityContainer>
@@ -2824,58 +2842,6 @@ warning 6002: The table/view 'InvoiceTax.dbo.IQ_Sls_InvoiceDetail_Tax' does not 
           <Property Type="String" Name="DescE" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="UomCode" Nullable="true" MaxLength="25" />
         </ComplexType>
-        <EntityType Name="I_Control">
-          <Key>
-            <PropertyRef Name="CompCode" />
-          </Key>
-          <Property Name="CompCode" Type="Int32" Nullable="false" />
-          <Property Name="DefSlsVatType" Type="Int32" />
-          <Property Name="DefPurVatType" Type="Int32" />
-          <Property Name="IsVat" Type="Boolean" />
-          <Property Name="MobileLength" Type="Int32" />
-          <Property Name="IDLength" Type="Int32" />
-          <Property Name="SendSMS" Type="Boolean" />
-          <Property Name="SendPublicSMS" Type="Boolean" />
-          <Property Name="NotePeriodinSec" Type="Int32" />
-          <Property Name="DashBoardPeriodinSec" Type="Int32" />
-          <Property Name="MaxYearlyMSGs" Type="Int32" />
-          <Property Name="UsedMSGs" Type="Int32" />
-          <Property Name="UserTimeZoneUTCDiff" Type="Int32" />
-          <Property Name="ServerTimeZoneUTCDiff" Type="Int32" />
-          <Property Name="SaudiNationID" Type="Int32" />
-          <Property Name="WebCustomerWebsite" Type="Boolean" />
-          <Property Name="MembeshiptStartDate" Type="DateTime" Precision="0" />
-          <Property Name="MembeshipEndDate" Type="DateTime" Precision="0" />
-          <Property Name="MembershipAllanceDays" Type="Int32" />
-          <Property Name="MembershipreadOnlyDays" Type="Int32" />
-          <Property Name="IsFreePurchaseReturn" Type="Boolean" />
-          <Property Name="IsFreeSalesReturn" Type="Boolean" />
-          <Property Name="ExceedMinPricePassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SysTimeOut" Type="Int32" />
-          <Property Name="NationalityID" Type="Int32" />
-          <Property Name="Currencyid" Type="Int32" />
-          <Property Name="DocPDFFolder" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ClientID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ClientSecret" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GL_VoucherCCType" Type="Int32" />
-          <Property Name="GL_VoucherCCDT_Type" Type="Int32" />
-          <Property Name="Gl_JournalOpenType" Type="Int32" />
-          <Property Name="GL_JournalMonthlyNo" Type="Boolean" />
-          <Property Name="GL_JournalMonthlyNoWidth" Type="Int32" />
-          <Property Name="GL_JournalSaveUnbalanced" Type="Boolean" />
-          <Property Name="IsLocalBranchCustomer" Type="Boolean" />
-          <Property Name="InvoiceTypeCode" Type="Int32" />
-          <Property Name="InvoiceTransCode" Type="Int32" />
-          <Property Name="InvoiceWithoutCust" Type="Boolean" />
-          <Property Name="IvoiceDateEditable" Type="Boolean" />
-          <Property Name="InvoiceLineDiscount" Type="Boolean" />
-          <Property Name="InvoiceLineAllowance" Type="Boolean" />
-          <Property Name="InvoiceTotalAllowance" Type="Boolean" />
-          <Property Name="InvoiceTotalCharge" Type="Boolean" />
-          <Property Name="OperationPriceWithVAT" Type="Boolean" />
-          <Property Name="SalesPriceWithVAT" Type="Boolean" />
-          <Property Name="ISCustVendorInGL" Type="Boolean" />
-        </EntityType>
         <EntityType Name="G_Currency">
           <Key>
             <PropertyRef Name="CurrencyID" />
@@ -2999,6 +2965,62 @@ warning 6002: The table/view 'InvoiceTax.dbo.IQ_Sls_InvoiceDetail_Tax' does not 
           <Property Name="DescA" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DescE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="I_Control">
+          <Key>
+            <PropertyRef Name="CompCode" />
+          </Key>
+          <Property Name="CompCode" Type="Int32" Nullable="false" />
+          <Property Name="DefSlsVatType" Type="Int32" />
+          <Property Name="DefPurVatType" Type="Int32" />
+          <Property Name="IsVat" Type="Boolean" />
+          <Property Name="MobileLength" Type="Int32" />
+          <Property Name="IDLength" Type="Int32" />
+          <Property Name="SendSMS" Type="Boolean" />
+          <Property Name="SendPublicSMS" Type="Boolean" />
+          <Property Name="NotePeriodinSec" Type="Int32" />
+          <Property Name="DashBoardPeriodinSec" Type="Int32" />
+          <Property Name="MaxYearlyMSGs" Type="Int32" />
+          <Property Name="UsedMSGs" Type="Int32" />
+          <Property Name="UserTimeZoneUTCDiff" Type="Int32" />
+          <Property Name="ServerTimeZoneUTCDiff" Type="Int32" />
+          <Property Name="SaudiNationID" Type="Int32" />
+          <Property Name="WebCustomerWebsite" Type="Boolean" />
+          <Property Name="MembeshiptStartDate" Type="DateTime" Precision="0" />
+          <Property Name="MembeshipEndDate" Type="DateTime" Precision="0" />
+          <Property Name="MembershipAllanceDays" Type="Int32" />
+          <Property Name="MembershipreadOnlyDays" Type="Int32" />
+          <Property Name="IsFreePurchaseReturn" Type="Boolean" />
+          <Property Name="IsFreeSalesReturn" Type="Boolean" />
+          <Property Name="ExceedMinPricePassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GL_VoucherCCType" Type="Int32" />
+          <Property Name="GL_VoucherCCDT_Type" Type="Int32" />
+          <Property Name="Gl_JournalOpenType" Type="Int32" />
+          <Property Name="GL_JournalMonthlyNo" Type="Boolean" />
+          <Property Name="GL_JournalMonthlyNoWidth" Type="Int32" />
+          <Property Name="GL_JournalSaveUnbalanced" Type="Boolean" />
+          <Property Name="IsLocalBranchCustomer" Type="Boolean" />
+          <Property Name="SysTimeOut" Type="Int32" />
+          <Property Name="NationalityID" Type="Int32" />
+          <Property Name="Currencyid" Type="Int32" />
+          <Property Name="InvoiceTypeCode" Type="Int32" />
+          <Property Name="InvoiceTransCode" Type="Int32" />
+          <Property Name="InvoiceWithoutCust" Type="Boolean" />
+          <Property Name="IvoiceDateEditable" Type="Boolean" />
+          <Property Name="InvoiceLineDiscount" Type="Boolean" />
+          <Property Name="InvoiceLineAllowance" Type="Boolean" />
+          <Property Name="InvoiceTotalAllowance" Type="Boolean" />
+          <Property Name="InvoiceTotalCharge" Type="Boolean" />
+          <Property Name="OperationPriceWithVAT" Type="Boolean" />
+          <Property Name="SalesPriceWithVAT" Type="Boolean" />
+          <Property Name="DocPDFFolder" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ISCustVendorInGL" Type="Boolean" />
+          <Property Name="ClientID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientSecret" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActivityCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TypeVersion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TokenPinCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Tokentype" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="IQ_InvoiceHedar_Tax">
           <Key>
             <PropertyRef Name="InvoiceID" />
@@ -3070,6 +3092,13 @@ warning 6002: The table/view 'InvoiceTax.dbo.IQ_Sls_InvoiceDetail_Tax' does not 
           <Property Name="DescA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DescL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ClientSecret" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocPDFFolder" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ActivityCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TypeVersion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TokenPinCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Tokentype" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="IQ_Sls_InvoiceDetail_Tax">
           <Key>
@@ -4209,59 +4238,6 @@ warning 6002: The table/view 'InvoiceTax.dbo.IQ_Sls_InvoiceDetail_Tax' does not 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="I_Control">
-            <EntityTypeMapping TypeName="TaxModel.I_Control">
-              <MappingFragment StoreEntitySet="I_Control">
-                <ScalarProperty Name="ISCustVendorInGL" ColumnName="ISCustVendorInGL" />
-                <ScalarProperty Name="SalesPriceWithVAT" ColumnName="SalesPriceWithVAT" />
-                <ScalarProperty Name="OperationPriceWithVAT" ColumnName="OperationPriceWithVAT" />
-                <ScalarProperty Name="InvoiceTotalCharge" ColumnName="InvoiceTotalCharge" />
-                <ScalarProperty Name="InvoiceTotalAllowance" ColumnName="InvoiceTotalAllowance" />
-                <ScalarProperty Name="InvoiceLineAllowance" ColumnName="InvoiceLineAllowance" />
-                <ScalarProperty Name="InvoiceLineDiscount" ColumnName="InvoiceLineDiscount" />
-                <ScalarProperty Name="IvoiceDateEditable" ColumnName="IvoiceDateEditable" />
-                <ScalarProperty Name="InvoiceWithoutCust" ColumnName="InvoiceWithoutCust" />
-                <ScalarProperty Name="InvoiceTransCode" ColumnName="InvoiceTransCode" />
-                <ScalarProperty Name="InvoiceTypeCode" ColumnName="InvoiceTypeCode" />
-                <ScalarProperty Name="IsLocalBranchCustomer" ColumnName="IsLocalBranchCustomer" />
-                <ScalarProperty Name="GL_JournalSaveUnbalanced" ColumnName="GL_JournalSaveUnbalanced" />
-                <ScalarProperty Name="GL_JournalMonthlyNoWidth" ColumnName="GL_JournalMonthlyNoWidth" />
-                <ScalarProperty Name="GL_JournalMonthlyNo" ColumnName="GL_JournalMonthlyNo" />
-                <ScalarProperty Name="Gl_JournalOpenType" ColumnName="Gl_JournalOpenType" />
-                <ScalarProperty Name="GL_VoucherCCDT_Type" ColumnName="GL_VoucherCCDT_Type" />
-                <ScalarProperty Name="GL_VoucherCCType" ColumnName="GL_VoucherCCType" />
-                <ScalarProperty Name="ClientSecret" ColumnName="ClientSecret" />
-                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
-                <ScalarProperty Name="DocPDFFolder" ColumnName="DocPDFFolder" />
-                <ScalarProperty Name="Currencyid" ColumnName="Currencyid" />
-                <ScalarProperty Name="NationalityID" ColumnName="NationalityID" />
-                <ScalarProperty Name="SysTimeOut" ColumnName="SysTimeOut" />
-                <ScalarProperty Name="ExceedMinPricePassword" ColumnName="ExceedMinPricePassword" />
-                <ScalarProperty Name="IsFreeSalesReturn" ColumnName="IsFreeSalesReturn" />
-                <ScalarProperty Name="IsFreePurchaseReturn" ColumnName="IsFreePurchaseReturn" />
-                <ScalarProperty Name="MembershipreadOnlyDays" ColumnName="MembershipreadOnlyDays" />
-                <ScalarProperty Name="MembershipAllanceDays" ColumnName="MembershipAllanceDays" />
-                <ScalarProperty Name="MembeshipEndDate" ColumnName="MembeshipEndDate" />
-                <ScalarProperty Name="MembeshiptStartDate" ColumnName="MembeshiptStartDate" />
-                <ScalarProperty Name="WebCustomerWebsite" ColumnName="WebCustomerWebsite" />
-                <ScalarProperty Name="SaudiNationID" ColumnName="SaudiNationID" />
-                <ScalarProperty Name="ServerTimeZoneUTCDiff" ColumnName="ServerTimeZoneUTCDiff" />
-                <ScalarProperty Name="UserTimeZoneUTCDiff" ColumnName="UserTimeZoneUTCDiff" />
-                <ScalarProperty Name="UsedMSGs" ColumnName="UsedMSGs" />
-                <ScalarProperty Name="MaxYearlyMSGs" ColumnName="MaxYearlyMSGs" />
-                <ScalarProperty Name="DashBoardPeriodinSec" ColumnName="DashBoardPeriodinSec" />
-                <ScalarProperty Name="NotePeriodinSec" ColumnName="NotePeriodinSec" />
-                <ScalarProperty Name="SendPublicSMS" ColumnName="SendPublicSMS" />
-                <ScalarProperty Name="SendSMS" ColumnName="SendSMS" />
-                <ScalarProperty Name="IDLength" ColumnName="IDLength" />
-                <ScalarProperty Name="MobileLength" ColumnName="MobileLength" />
-                <ScalarProperty Name="IsVat" ColumnName="IsVat" />
-                <ScalarProperty Name="DefPurVatType" ColumnName="DefPurVatType" />
-                <ScalarProperty Name="DefSlsVatType" ColumnName="DefSlsVatType" />
-                <ScalarProperty Name="CompCode" ColumnName="CompCode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="G_Currency">
             <EntityTypeMapping TypeName="TaxModel.G_Currency">
               <MappingFragment StoreEntitySet="G_Currency">
@@ -4388,9 +4364,73 @@ warning 6002: The table/view 'InvoiceTax.dbo.IQ_Sls_InvoiceDetail_Tax' does not 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="I_Control">
+            <EntityTypeMapping TypeName="TaxModel.I_Control">
+              <MappingFragment StoreEntitySet="I_Control">
+                <ScalarProperty Name="Tokentype" ColumnName="Tokentype" />
+                <ScalarProperty Name="TokenPinCode" ColumnName="TokenPinCode" />
+                <ScalarProperty Name="TypeVersion" ColumnName="TypeVersion" />
+                <ScalarProperty Name="ActivityCode" ColumnName="ActivityCode" />
+                <ScalarProperty Name="ClientSecret" ColumnName="ClientSecret" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ISCustVendorInGL" ColumnName="ISCustVendorInGL" />
+                <ScalarProperty Name="DocPDFFolder" ColumnName="DocPDFFolder" />
+                <ScalarProperty Name="SalesPriceWithVAT" ColumnName="SalesPriceWithVAT" />
+                <ScalarProperty Name="OperationPriceWithVAT" ColumnName="OperationPriceWithVAT" />
+                <ScalarProperty Name="InvoiceTotalCharge" ColumnName="InvoiceTotalCharge" />
+                <ScalarProperty Name="InvoiceTotalAllowance" ColumnName="InvoiceTotalAllowance" />
+                <ScalarProperty Name="InvoiceLineAllowance" ColumnName="InvoiceLineAllowance" />
+                <ScalarProperty Name="InvoiceLineDiscount" ColumnName="InvoiceLineDiscount" />
+                <ScalarProperty Name="IvoiceDateEditable" ColumnName="IvoiceDateEditable" />
+                <ScalarProperty Name="InvoiceWithoutCust" ColumnName="InvoiceWithoutCust" />
+                <ScalarProperty Name="InvoiceTransCode" ColumnName="InvoiceTransCode" />
+                <ScalarProperty Name="InvoiceTypeCode" ColumnName="InvoiceTypeCode" />
+                <ScalarProperty Name="Currencyid" ColumnName="Currencyid" />
+                <ScalarProperty Name="NationalityID" ColumnName="NationalityID" />
+                <ScalarProperty Name="SysTimeOut" ColumnName="SysTimeOut" />
+                <ScalarProperty Name="IsLocalBranchCustomer" ColumnName="IsLocalBranchCustomer" />
+                <ScalarProperty Name="GL_JournalSaveUnbalanced" ColumnName="GL_JournalSaveUnbalanced" />
+                <ScalarProperty Name="GL_JournalMonthlyNoWidth" ColumnName="GL_JournalMonthlyNoWidth" />
+                <ScalarProperty Name="GL_JournalMonthlyNo" ColumnName="GL_JournalMonthlyNo" />
+                <ScalarProperty Name="Gl_JournalOpenType" ColumnName="Gl_JournalOpenType" />
+                <ScalarProperty Name="GL_VoucherCCDT_Type" ColumnName="GL_VoucherCCDT_Type" />
+                <ScalarProperty Name="GL_VoucherCCType" ColumnName="GL_VoucherCCType" />
+                <ScalarProperty Name="ExceedMinPricePassword" ColumnName="ExceedMinPricePassword" />
+                <ScalarProperty Name="IsFreeSalesReturn" ColumnName="IsFreeSalesReturn" />
+                <ScalarProperty Name="IsFreePurchaseReturn" ColumnName="IsFreePurchaseReturn" />
+                <ScalarProperty Name="MembershipreadOnlyDays" ColumnName="MembershipreadOnlyDays" />
+                <ScalarProperty Name="MembershipAllanceDays" ColumnName="MembershipAllanceDays" />
+                <ScalarProperty Name="MembeshipEndDate" ColumnName="MembeshipEndDate" />
+                <ScalarProperty Name="MembeshiptStartDate" ColumnName="MembeshiptStartDate" />
+                <ScalarProperty Name="WebCustomerWebsite" ColumnName="WebCustomerWebsite" />
+                <ScalarProperty Name="SaudiNationID" ColumnName="SaudiNationID" />
+                <ScalarProperty Name="ServerTimeZoneUTCDiff" ColumnName="ServerTimeZoneUTCDiff" />
+                <ScalarProperty Name="UserTimeZoneUTCDiff" ColumnName="UserTimeZoneUTCDiff" />
+                <ScalarProperty Name="UsedMSGs" ColumnName="UsedMSGs" />
+                <ScalarProperty Name="MaxYearlyMSGs" ColumnName="MaxYearlyMSGs" />
+                <ScalarProperty Name="DashBoardPeriodinSec" ColumnName="DashBoardPeriodinSec" />
+                <ScalarProperty Name="NotePeriodinSec" ColumnName="NotePeriodinSec" />
+                <ScalarProperty Name="SendPublicSMS" ColumnName="SendPublicSMS" />
+                <ScalarProperty Name="SendSMS" ColumnName="SendSMS" />
+                <ScalarProperty Name="IDLength" ColumnName="IDLength" />
+                <ScalarProperty Name="MobileLength" ColumnName="MobileLength" />
+                <ScalarProperty Name="IsVat" ColumnName="IsVat" />
+                <ScalarProperty Name="DefPurVatType" ColumnName="DefPurVatType" />
+                <ScalarProperty Name="DefSlsVatType" ColumnName="DefSlsVatType" />
+                <ScalarProperty Name="CompCode" ColumnName="CompCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="IQ_InvoiceHedar_Tax">
             <EntityTypeMapping TypeName="TaxModel.IQ_InvoiceHedar_Tax">
               <MappingFragment StoreEntitySet="IQ_InvoiceHedar_Tax">
+                <ScalarProperty Name="Tokentype" ColumnName="Tokentype" />
+                <ScalarProperty Name="TokenPinCode" ColumnName="TokenPinCode" />
+                <ScalarProperty Name="TypeVersion" ColumnName="TypeVersion" />
+                <ScalarProperty Name="ActivityCode" ColumnName="ActivityCode" />
+                <ScalarProperty Name="DocPDFFolder" ColumnName="DocPDFFolder" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ClientSecret" ColumnName="ClientSecret" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="DescL" ColumnName="DescL" />
                 <ScalarProperty Name="DescA" ColumnName="DescA" />

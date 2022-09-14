@@ -17,31 +17,19 @@ namespace APIETAX.Controllers
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
-        }
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get(int Comp, int Optype, int InvoiceID)
-        {
+        } 
 
-           
-
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
         [HttpGet(Name = "GetWeatherForecast")]
-        public string Get (int Comp, int Optype, int InvoiceID)
+        public string Get(int Comp, int Optype, int InvoiceID)
         {
-            I_ControlTax newI_ControlTax = new I_ControlTax();
-            newI_ControlTax = HomeSendinvoce.GetControlTax(1);
-            HomeSendinvoce.sendinvoce(Comp, Optype, InvoiceID);
 
-            return "";
-           
+            I_ControlTax newI_ControlTax = new I_ControlTax();
+
+            newI_ControlTax = HomeSendinvoce.GetControlTax(Comp);
+            newI_ControlTax.access_token = ETax.CreateTokin(newI_ControlTax.ClientIDProd, newI_ControlTax.SecretIDProd);
+
+            HomeSendinvoce.sendinvoce(Optype, InvoiceID, newI_ControlTax);
+            return "";           
         }
     }
 }

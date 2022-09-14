@@ -10,7 +10,7 @@ using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace Inv.APICore
+namespace APIETAX
 {
     public class SignFromToken
     {

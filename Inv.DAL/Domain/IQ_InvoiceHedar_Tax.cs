@@ -79,5 +79,12 @@ namespace Inv.DAL.Domain
         public string DescA { get; set; }
         public string DescL { get; set; }
         public string Remarks { get; set; }
+        public string ClientSecret { get; set; }
+        public string ClientID { get; set; }
+        public string DocPDFFolder { get; set; }
+        public string ActivityCode { get; set; }
+        public string TypeVersion { get; set; }
+        public string TokenPinCode { get; set; }
+        public string Tokentype { get; set; }
     }
 }

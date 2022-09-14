@@ -23,22 +23,7 @@ namespace APIETAX.CustomModel
         }
 
       
-        public static string CreateCode(List<ItemTax> item, string Contenttokin)
-        {
-
-
-            var client = new RestClient("https://api.invoicing.eta.gov.eg/api/v1.0/codetypes/requests/codes");
-            client.Timeout = -1;
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Authorization", "Bearer " + Contenttokin + "");
-            request.AddHeader("Content-Type", "application/json");
-            var item_ = JsonConvert.SerializeObject(item);
-            var body = item_;
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
-
-            return "";
-        }
+       
 
         internal static string CreateTokin(string ClientIDProd,string SecretIDProd)
         {
@@ -54,6 +39,8 @@ namespace APIETAX.CustomModel
             IRestResponse response = client.Execute(request); 
             return response.Content; ;
         }
+
+
     }
 
 }
