@@ -168,24 +168,26 @@ namespace Inv.API.Controllers
 
         }
         [HttpGet, AllowAnonymous]
-        public IHttpActionResult GetAllSlsInvoice(int CompCode, int BranchCode, int CustomerId , string RFQFilter , string StartDate, string EndDate)
+        public IHttpActionResult GetAllSlsInvoice(int CompCode, int BranchCode, string TypeInv , string Status , int CustomerId , string RFQFilter , string StartDate, string EndDate)
         {
-             
-             
+              
             string s = @"SELECT  * FROM  Sls_Ivoice where   ";
 
             string condition = "";
             string Customer = "";
             string RFQ = "";
+            string Statu = "";
 
             if (CustomerId != 0 && CustomerId != null)
                 Customer = " and CustomerId =" + CustomerId+" ";
             if (RFQFilter != "" && RFQFilter != null)
                 RFQ =  " and RefNO ='" + RFQFilter +"' "; 
+            if (Status != "" && Status != null)
+                Statu = " and Status ='" + Status + "' "; 
 
 
-            condition = " ( CompCode = " + CompCode + " and BranchCode = " + BranchCode + " and  TrDate >='" + StartDate + "' and TrDate <= '" + EndDate + "'  " + Customer +" "+ RFQ + " )";
-            condition = condition + " or ( CompCode = " + CompCode + " and BranchCode = " + BranchCode + " and  DeliveryEndDate >='" + StartDate + "' and DeliveryEndDate <= '" + EndDate + "' and TrType = '1' " + Customer + " " + RFQ + " )";
+            condition = " ( CompCode = " + CompCode + " and BranchCode = " + BranchCode + " and DocType = '" + TypeInv + "' and  TrDate >='" + StartDate + "' and TrDate <= '" + EndDate + "'  " + Customer +" "+ RFQ + " "+ Statu + " )";
+            
 
          string query = s + condition + " ORDER BY TrNo DESC;";  
 
@@ -210,7 +212,7 @@ namespace Inv.API.Controllers
         {
 
             //InvDate = DateTime.Now.ToString();
-            string query = "update [dbo].[Sls_Ivoice] set TrType = 0 , DeliveryEndDate = '' where InvoiceID = " + InvoiceID + "";
+            string query = "update [dbo].[Sls_Ivoice] set Status = 3  where InvoiceID = " + InvoiceID + "";
             var res = db.Database.ExecuteSqlCommand(query);
             //ResponseResult res1 = Shared.TransactionProcess(Convert.ToInt32(1), Convert.ToInt32(1), InvoiceID, "INV", "ADD", db);
 

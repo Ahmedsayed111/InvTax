@@ -70,28 +70,7 @@
     <script src="~/NewStyle/js/vendor/modernizr-2.8.3.min.js"></script>
 
     <style>
-        .display_none {
-            display: none;
-        }
-
-        .text_Mandatory {
-            background-color: #ff00009e
-        }
-
-        #SearchBox {
-            z-index: 1041;
-            position: fixed;
-            padding-top: 19px;
-            background-color: white;
-            border-radius: 15px;
-            -moz-box-shadow: black 5px 4px 18px 0px;
-            -webkit-box-shadow: black 5px 4px 18px 0px;
-            box-shadow: black 5px 4px 18px 0px;
-        }
-
-        .jsgrid-grid-body {
-            overflow-y: hidden !important;
-        }
+        
     </style>
 
 
@@ -138,7 +117,7 @@
 
 
         <!-- Header top area start المنيو اللي فوق-->
-        <div class="content-inner-all">
+        <div class="content-inner-all" style="font-weight: bold;font-size: 17px;">
             <div class="header-top-area">
                 <div class="fixed-header-top">
                     <div class="container-fluid">
@@ -155,34 +134,41 @@
                             </div>
                             <div class="col-lg-8 col-md-1 col-sm-1 col-xs-12">
                                 <div class="header-top-menu tabl-d-n">
-									<ul class="nav navbar-nav mai-top-nav">
-										<li class="nav-item">
-											<a id="btnHome" href="#" class="nav-link">Home</a>
-										</li>
-										<li class="nav-item">
-                                            <a id="btnQuotation" key="Quotation" href="#" class="nav-link">Invoice Tax</a>
-										</li>
-										<li class="nav-item">
-											<a id="btnQuotationView" key="QuotationView" href="#" class="nav-link">Quotations & invoice</a>
-										</li>
-										<li class="nav-item">
-											<a id="btnCompanies" key="Companies" href="#" class="nav-link">Companies</a>
-										</li>
-										<li class="nav-item">
-											<a id="btnUsers" key="Users" href="#" class="nav-link">Users</a>
-										</li>
- 
-										<li class="nav-item display_none" @*style="display: none;"*@>
-											<a id="btnStockDef" key="StockDef" href="#" class="nav-link">Stock Definition</a>
-										</li>
-										<li class="nav-item display_none" @*style="display: none;"*@>
-											<a id="btnDownloadInv" key="DownloadInv" href="#" class="nav-link">تحميل الفواتير</a>
-										</li>
-                                        <li class="nav-item display_none" @*style="display: none;"*@>
-											<a id="btnUploadInv" key="UploadInv" href="#" class="nav-link">رفع الفواتير</a>
-										</li>
+                                    <ul class="nav navbar-nav mai-top-nav">
+                                         
+                                        <li class="nav-item">
+                                            <a id="btnUsers" key="Users" href="#" class="nav-link">أدخال المستخدمين</a>
+                                        </li>
 
-									</ul>
+                                        <li class="nav-item  " @*style="display: none;"*@>
+                                            <a id="btnStockDef" key="StockDef" href="#" class="nav-link">تعريف الاصنـاف</a>
+                                        </li>
+                                         
+                                        <li class="nav-item">
+                                            <a id="btnCompanies" key="Companies" href="#" class="nav-link">العملاء</a>
+                                        </li>
+
+                                        <li class="nav-item  " @*style="display: none;"*@>
+                                            <a id="btnUploadInv" key="UploadInv" href="#" class="nav-link">رفع الفواتير</a>
+                                        </li>
+
+                                        <li class="nav-item  " @*style="display: none;"*@>
+                                            <a id="btnDownloadInv" key="DownloadInv" href="#" class="nav-link">تحميل الفواتير</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a id="btnQuotationView" key="QuotationView" href="#" class="nav-link">عــرض الفواتيــر</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a id="btnQuotation" key="Quotation" href="#" class="nav-link">   أدخال فواتيــر</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a id="btnHome" href="#" class="nav-link">الرئيسية</a>
+                                        </li>
+
+                                    </ul>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-5 col-sm-6 col-xs-12">
