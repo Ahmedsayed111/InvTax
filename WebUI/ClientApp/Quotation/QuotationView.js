@@ -20,6 +20,7 @@ var QuotationView;
     var btnFilter;
     var btnRefrash;
     var btnReturn;
+    var btnPur;
     var btnAdd;
     var btnInvoice;
     var FromDate;
@@ -29,6 +30,7 @@ var QuotationView;
     var txtRFQFilter;
     var ddlStatasFilter;
     var txtTypeInv;
+    var ReportGridPur = new JsGrid();
     var ReportGridRet = new JsGrid();
     var ReportGridInv = new JsGrid();
     var CustomerId = 0;
@@ -47,6 +49,7 @@ var QuotationView;
         InitalizeEvents();
         InitializeGridInvoice();
         InitializeGridReturnAndAdd();
+        InitializeGridPur();
         FromDate.value = DateStartMonth();
         ToDate.value = ConvertToDateDash(GetDate()) <= ConvertToDateDash(SysSession.CurrentEnvironment.EndDate) ? GetDate() : SysSession.CurrentEnvironment.EndDate;
         txtTypeInv.value = "I";
@@ -60,6 +63,7 @@ var QuotationView;
         btnRefrash = document.getElementById("btnRefrash");
         btnInvoice = document.getElementById("btnInvoice");
         btnReturn = document.getElementById("btnReturn");
+        btnPur = document.getElementById("btnPur");
         btnAdd = document.getElementById("btnAdd");
         Txt_Search = document.getElementById("Txt_Search");
         txtCompanynameFilter = document.getElementById("txtCompanynameFilter");
@@ -78,6 +82,7 @@ var QuotationView;
         btnInvoice.onclick = function () { Display('I'); txtTypeInv.value = "I"; };
         btnReturn.onclick = function () { Display('C'); txtTypeInv.value = "C"; };
         btnAdd.onclick = function () { Display('D'); txtTypeInv.value = "D"; };
+        btnPur.onclick = function () { Display('P'); txtTypeInv.value = "P"; };
     }
     function txtCompanynameFilter_ochange() {
         txtCompanynameFilter.value = "";
@@ -121,6 +126,7 @@ var QuotationView;
                         $('#btnAdd').removeClass('active');
                         $('#btnReturn').removeClass('active');
                         $('#btnInvoice').addClass('active');
+                        $('#btnPur').removeClass('active');
                     }
                     if (TypeInv == 'C') {
                         ReportGridRet.DataSource = Invoice;
@@ -129,6 +135,7 @@ var QuotationView;
                         $('#btnAdd').removeClass('active');
                         $('#btnReturn').addClass('active');
                         $('#btnInvoice').removeClass('active');
+                        $('#btnPur').removeClass('active');
                     }
                     if (TypeInv == 'D') {
                         ReportGridRet.DataSource = Invoice;
@@ -137,6 +144,16 @@ var QuotationView;
                         $('#btnAdd').addClass('active');
                         $('#btnReturn').removeClass('active');
                         $('#btnInvoice').removeClass('active');
+                        $('#btnPur').removeClass('active');
+                    }
+                    if (TypeInv == 'P') {
+                        ReportGridPur.DataSource = Invoice;
+                        ReportGridPur.Bind();
+                        $('#Title_Inv').html('عـرض فواتير المشتريات');
+                        $('#btnAdd').removeClass('active');
+                        $('#btnReturn').removeClass('active');
+                        $('#btnInvoice').removeClass('active');
+                        $('#btnPur').addClass('active');
                     }
                     $('.jsgrid-header-scrollbar').removeClass("jsgrid-grid-header");
                     var TotalAmount = 0;
@@ -437,6 +454,73 @@ var QuotationView;
             },
         ];
         ReportGridRet.Bind();
+    }
+    function InitializeGridPur() {
+        //let res: any = GetResourceList("");
+        //$("#id_ReportGrid").attr("style", "");
+        ReportGridPur.OnRowDoubleClicked = DoubleClickGridInvoice;
+        ReportGridPur.ElementName = "ReportGridInv";
+        ReportGridPur.PrimaryKey = "InvoiceID";
+        ReportGridPur.Paging = true;
+        ReportGridPur.PageSize = 6;
+        ReportGridPur.Sorting = true;
+        ReportGridPur.InsertionMode = JsGridInsertionMode.Binding;
+        ReportGridPur.Editing = false;
+        ReportGridPur.Inserting = false;
+        ReportGridPur.SelectedIndex = 1;
+        ReportGridPur.SwitchingLanguageEnabled = false;
+        ReportGridPur.OnItemEditing = function () { };
+        ReportGridPur.Columns = [
+            { title: "الرقم", name: "InvoiceID", type: "text", width: "5%", visible: false },
+            { title: "رقم الفاتوره", name: "TrNo", type: "text", width: "5%" },
+            { title: "رقم المرجع", name: "RefNO", type: "text", width: "5%" },
+            {
+                title: "التاريخ",
+                width: "5%",
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("label");
+                    txt.innerHTML = DateFormat(item.TrDate);
+                    return txt;
+                }
+            },
+            { title: "الصافــي  ", name: "NetAfterVat", type: "text", width: "10%" },
+            {
+                title: "الحاله",
+                width: "5%",
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("label");
+                    if (item.Status == 0) {
+                        txt.innerHTML = 'جديد';
+                    }
+                    if (item.Status == 1) {
+                        txt.innerHTML = 'صحيحه';
+                    }
+                    if (item.Status == 2) {
+                        txt.innerHTML = 'غير صحيحه';
+                    }
+                    if (item.Status == 3) {
+                        txt.innerHTML = 'ملغي';
+                    }
+                    return txt;
+                }
+            },
+            {
+                title: "عـرض",
+                width: "5%",
+                itemTemplate: function (s, item) {
+                    var txt = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("عـرض");
+                    txt.id = "butPrint" + item.InvoiceID;
+                    txt.className = "dis src-btn btn btn-warning input-sm style_but_Grid";
+                    txt.onclick = function (e) {
+                        PrintInvoice(item.InvoiceID);
+                    };
+                    return txt;
+                }
+            },
+        ];
+        ReportGridPur.Bind();
     }
     function DoubleClickGridInvoice() {
         Selecteditem = new Array();

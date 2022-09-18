@@ -25,6 +25,7 @@ namespace QuotationView {
     var btnFilter: HTMLButtonElement;
     var btnRefrash: HTMLButtonElement;
     var btnReturn: HTMLButtonElement;
+    var btnPur: HTMLButtonElement;
     var btnAdd: HTMLButtonElement;
     var btnInvoice: HTMLButtonElement;
     var FromDate: HTMLInputElement;
@@ -34,6 +35,7 @@ namespace QuotationView {
     var txtRFQFilter: HTMLInputElement;
     var ddlStatasFilter: HTMLSelectElement;
     var txtTypeInv: HTMLInputElement;
+    var ReportGridPur: JsGrid = new JsGrid();
     var ReportGridRet: JsGrid = new JsGrid();
     var ReportGridInv: JsGrid = new JsGrid();
     var CustomerId = 0;
@@ -54,6 +56,7 @@ namespace QuotationView {
         InitalizeEvents();
         InitializeGridInvoice();
         InitializeGridReturnAndAdd();
+        InitializeGridPur();
         FromDate.value = DateStartMonth();
         ToDate.value = ConvertToDateDash(GetDate()) <= ConvertToDateDash(SysSession.CurrentEnvironment.EndDate) ? GetDate() : SysSession.CurrentEnvironment.EndDate;
 
@@ -69,6 +72,7 @@ namespace QuotationView {
         btnRefrash = document.getElementById("btnRefrash") as HTMLButtonElement;
         btnInvoice = document.getElementById("btnInvoice") as HTMLButtonElement;
         btnReturn = document.getElementById("btnReturn") as HTMLButtonElement;
+        btnPur = document.getElementById("btnPur") as HTMLButtonElement;
         btnAdd = document.getElementById("btnAdd") as HTMLButtonElement;
         Txt_Search = document.getElementById("Txt_Search") as HTMLInputElement;
         txtCompanynameFilter = document.getElementById("txtCompanynameFilter") as HTMLInputElement;
@@ -88,6 +92,7 @@ namespace QuotationView {
         btnInvoice.onclick = () => { Display('I'); txtTypeInv.value = "I" }
         btnReturn.onclick = () => { Display('C'); txtTypeInv.value = "C" }
         btnAdd.onclick = () => { Display('D'); txtTypeInv.value = "D" }
+        btnPur.onclick = () => { Display('P'); txtTypeInv.value = "P" }
     }
     function txtCompanynameFilter_ochange() {
         txtCompanynameFilter.value = "";
@@ -148,6 +153,8 @@ namespace QuotationView {
                         $('#btnAdd').removeClass('active');
                         $('#btnReturn').removeClass('active');
                         $('#btnInvoice').addClass('active');
+                        $('#btnPur').removeClass('active');
+
 
                     }
                     if (TypeInv == 'C') {
@@ -159,6 +166,9 @@ namespace QuotationView {
                         $('#btnAdd').removeClass('active'); 
                         $('#btnReturn').addClass('active');
                         $('#btnInvoice').removeClass('active');
+                        $('#btnPur').removeClass('active'); 
+
+
                     }
                     if (TypeInv == 'D') {
 
@@ -169,6 +179,20 @@ namespace QuotationView {
                         $('#btnAdd').addClass('active');
                         $('#btnReturn').removeClass('active');
                         $('#btnInvoice').removeClass('active');
+                        $('#btnPur').removeClass('active');
+
+                    }
+
+                    if (TypeInv == 'P') {
+
+                        ReportGridPur.DataSource = Invoice;
+                        ReportGridPur.Bind();
+                        $('#Title_Inv').html('عـرض فواتير المشتريات')
+
+                        $('#btnAdd').removeClass('active');
+                        $('#btnReturn').removeClass('active');
+                        $('#btnInvoice').removeClass('active');
+                        $('#btnPur').addClass('active');
 
                     }
 
@@ -539,6 +563,88 @@ namespace QuotationView {
 
         ];
         ReportGridRet.Bind();
+    }
+    
+    function InitializeGridPur() {
+
+
+
+        //let res: any = GetResourceList("");
+        //$("#id_ReportGrid").attr("style", "");
+        ReportGridPur.OnRowDoubleClicked = DoubleClickGridInvoice;
+        ReportGridPur.ElementName = "ReportGridInv";
+        ReportGridPur.PrimaryKey = "InvoiceID";
+        ReportGridPur.Paging = true;
+        ReportGridPur.PageSize = 6;
+        ReportGridPur.Sorting = true;
+        ReportGridPur.InsertionMode = JsGridInsertionMode.Binding;
+        ReportGridPur.Editing = false;
+        ReportGridPur.Inserting = false;
+        ReportGridPur.SelectedIndex = 1;
+        ReportGridPur.SwitchingLanguageEnabled = false;
+        ReportGridPur.OnItemEditing = () => { };
+        ReportGridPur.Columns = [
+            { title: "الرقم", name: "InvoiceID", type: "text", width: "5%", visible: false },
+            { title: "رقم الفاتوره", name: "TrNo", type: "text", width: "5%" },
+            { title: "رقم المرجع", name: "RefNO", type: "text", width: "5%" },
+            {
+                title: "التاريخ",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+                    txt.innerHTML = DateFormat(item.TrDate);
+
+                    return txt;
+                }
+            },
+            { title: "الصافــي  ", name: "NetAfterVat", type: "text", width: "10%" },
+            {
+                title: "الحاله",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+
+                    if (item.Status == 0) {
+                        txt.innerHTML = 'جديد';
+                    }
+                    if (item.Status == 1) {
+                        txt.innerHTML = 'صحيحه';
+                    }
+                    if (item.Status == 2) {
+                        txt.innerHTML = 'غير صحيحه';
+                    }
+                    if (item.Status == 3) {
+                        txt.innerHTML = 'ملغي';
+                    }
+
+
+                    return txt;
+                }
+            }, 
+            {
+                title: "عـرض",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
+                    let txt: HTMLInputElement = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("عـرض");
+                    txt.id = "butPrint" + item.InvoiceID;
+                    txt.className = "dis src-btn btn btn-warning input-sm style_but_Grid";
+
+
+
+                    txt.onclick = (e) => {
+                        PrintInvoice(item.InvoiceID);
+                    };
+                    return txt;
+                }
+            },
+
+       
+
+
+        ];
+        ReportGridPur.Bind();
     }
 
 
