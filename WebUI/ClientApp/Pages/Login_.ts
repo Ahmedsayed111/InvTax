@@ -182,9 +182,9 @@ var Login_;
         }); 
      }
     function GoToCompanySelect() { 
-        //$("#tblLogin").css("display", "none");
-        //$("#tblCompany").css("display", "block");
-        //(document.getElementById("btnOk") as HTMLInputElement).addEventListener("click", () => { 
+        $("#tblLogin").css("display", "none");
+        $("#tblCompany").css("display", "block");
+        (document.getElementById("btnOk") as HTMLInputElement).addEventListener("click", () => { 
             let compCode = $("#cmbCompany").val();
             let braCode = $("#cmbBranch").val(); 
              let company = compData.filter(x => x.CompanyCode == cmbCompany.value)[0];
@@ -231,31 +231,31 @@ var Login_;
                                                 SystemEnv.NationalityID = CompanyService[0].NationalityID;
 
 
-                                                //Ajax.Callsyncstart({
-                                                //    type: "GET",
-                                                //    url: sys.apiUrl("GBranch", "GetBranch"),
-                                                //    data: { CompCode: Number(compCode), BRA_CODE: Number(braCode) },
-                                                //    async: false,
-                                                //    success: (d) => {
-                                                //        let res = d as BaseResponse;
-                                                //        if (res.IsSuccess) {
-                                                //            G_BRANCHService = res.Response as Array<G_BRANCH>;
-                                                //            if (G_BRANCHService != null) { 
-                                                //                SystemEnv.SlsInvType = G_BRANCHService[0].SlsInvType;
-                                                //                SystemEnv.WholeInvoiceTransCode = G_BRANCHService[0].WholeInvoiceTransCode;
-                                                //                SystemEnv.RetailInvoicePayment = G_BRANCHService[0].RetailInvoicePayment;
-                                                //                SystemEnv.WholeInvoicePayment = G_BRANCHService[0].WholeInvoicePayment;
-                                                //                SystemEnv.ServiceInvoiceTransCode = G_BRANCHService[0].ServiceInvoiceTransCode;
-                                                //                SystemEnv.ReturnTypeCode = G_BRANCHService[0].ReturnTypeCode;
-                                                //                SystemEnv.InvoiceTypeCode = G_BRANCHService[0].InvoiceTypeCode;
-                                                //                SystemEnv.RetailInvoiceTransCode = G_BRANCHService[0].RetailInvoiceTransCode; 
-                                                //            } else {
-                                                //                var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول الفرع" : "You are not allowed to login";
-                                                //                MessageBox.Show(msg, "");
-                                                //            }
-                                                //        }
-                                                //    }
-                                                //});
+                                                Ajax.Callsyncstart({
+                                                    type: "GET",
+                                                    url: sys.apiUrl("GBranch", "GetBranch"),
+                                                    data: { CompCode: Number(compCode), BRA_CODE: Number(braCode) },
+                                                    async: false,
+                                                    success: (d) => {
+                                                        let res = d as BaseResponse;
+                                                        if (res.IsSuccess) {
+                                                            G_BRANCHService = res.Response as Array<G_BRANCH>;
+                                                            if (G_BRANCHService != null) { 
+                                                                SystemEnv.SlsInvType = G_BRANCHService[0].SlsInvType;
+                                                                SystemEnv.WholeInvoiceTransCode = G_BRANCHService[0].WholeInvoiceTransCode;
+                                                                SystemEnv.RetailInvoicePayment = G_BRANCHService[0].RetailInvoicePayment;
+                                                                SystemEnv.WholeInvoicePayment = G_BRANCHService[0].WholeInvoicePayment;
+                                                                SystemEnv.ServiceInvoiceTransCode = G_BRANCHService[0].ServiceInvoiceTransCode;
+                                                                SystemEnv.ReturnTypeCode = G_BRANCHService[0].ReturnTypeCode;
+                                                                SystemEnv.InvoiceTypeCode = G_BRANCHService[0].InvoiceTypeCode;
+                                                                SystemEnv.RetailInvoiceTransCode = G_BRANCHService[0].RetailInvoiceTransCode; 
+                                                            } else {
+                                                                var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول الفرع" : "You are not allowed to login";
+                                                                MessageBox.Show(msg, "");
+                                                            }
+                                                        }
+                                                    }
+                                                });
 
 
 
@@ -304,7 +304,7 @@ var Login_;
                 let mg = SystemEnv.ScreenLanguage == "ar" ? "هذه الشركة غير متاحة" : "This company is not Active";
                 MessageBox.Show(mg, "");
             }
-        //});
+        });
     }
     function OnLogged() {
         APiSession.Session.BranchCode = SystemEnv.BranchCode;

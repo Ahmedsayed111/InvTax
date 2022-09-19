@@ -1117,6 +1117,13 @@ var Root3 = /** @class */ (function () {
     }
     return Root3;
 }());
+var DetailsAndTaxabl = /** @class */ (function () {
+    function DetailsAndTaxabl() {
+        this.IQ_Sls_InvoiceDetail_Tax = new Array();
+        this.taxableItem = new Array();
+    }
+    return DetailsAndTaxabl;
+}());
 var I_D_UOM = /** @class */ (function () {
     function I_D_UOM() {
         this.UomID = 0;
@@ -1431,5 +1438,144 @@ var G_Codes = /** @class */ (function () {
         this.Remarks = "";
     }
     return G_Codes;
+}());
+var IQ_Sls_InvoiceDetail_Tax = /** @class */ (function () {
+    function IQ_Sls_InvoiceDetail_Tax() {
+        this.InvoiceID = 0;
+        this.InvoiceItemID = 0;
+        this.ItemID = 0;
+        this.UomID = 0;
+        this.InvoiceSoldQty = 0;
+        this.SoldQty = 0;
+        this.Unitprice = 0;
+        this.DiscountPrc = 0;
+        this.DiscountAmount = 0;
+        this.NetUnitPrice = 0;
+        this.ItemTotal = 0;
+        this.VatPrc = 0;
+        this.VatAmount = 0;
+        this.NetAfterVat = 0;
+        this.StockSoldQty = 0;
+        this.StockUnitCost = 0;
+        this.VatApplied = 0;
+        this.TotRetQty = 0;
+        this.Serial = 0;
+        this.AllowAmount = 0;
+        this.AllowancePrc = 0;
+        this.AllowanceBase = 0;
+        this.AllowReason = "";
+        this.AllowCode = 0;
+        this.BaseQty = 0;
+        this.BaseQtyUomid = 0;
+        this.BaseQtyPrice = 0;
+        this.BaseQtyDiscount = 0;
+        this.DiscountPrcBase = 0;
+        this.DiscountVatNatID = 0;
+        this.Discountreason = "";
+        this.DiscountCode = 0;
+        this.ItemNetAmount = 0;
+        this.ChargeAmount = 0;
+        this.ChargePrc = 0;
+        this.ChargeBase = 0;
+        this.ChargeVatNatID = 0;
+        this.ChargeVatPrc = 0;
+        this.ChargeAfterVat = 0;
+        this.ChargeReason = "";
+        this.ChargeCode = 0;
+        this.VatNatID = 0;
+        this.UnitpriceWithVat = 0;
+        this.NetUnitPriceWithVat = 0;
+        this.Itemdesc = "";
+        this.itemCode = "";
+        this.description = "";
+        this.UnitCode = "";
+        this.StatusCode = 0;
+        this.activeTo = "";
+        this.activeFrom = "";
+        this.codeNameAr = "";
+        this.codeName = "";
+        this.parentCode = "";
+        this.codeType = "";
+        this.UomCode = "";
+        this.DescA = "";
+    }
+    return IQ_Sls_InvoiceDetail_Tax;
+}());
+var IQ_InvoiceHedar_Tax = /** @class */ (function () {
+    function IQ_InvoiceHedar_Tax() {
+        this.CompCode = 0;
+        this.InvoiceID = 0;
+        this.TrNo = 0;
+        this.RefNO = "";
+        this.RefTrID = 0;
+        this.TrDate = "";
+        this.TrType = 0;
+        this.IsCash = false;
+        this.CustomerId = 0;
+        this.CustomerName = "";
+        this.TotalAmount = 0;
+        this.VatAmount = 0;
+        this.VatType = 0;
+        this.DiscountAmount = 0;
+        this.NetAfterVat = 0;
+        this.Remark = "";
+        this.Status = 0;
+        this.BranchCode = 0;
+        this.TrTime = "";
+        this.TaxCurrencyID = 0;
+        this.InvoiceCurrenyID = 0;
+        this.ItemTotal = 0;
+        this.ItemAllowTotal = 0;
+        this.ItemDiscountTotal = 0;
+        this.ItemVatTotal = 0;
+        this.UUID = "";
+        this.DocType = "";
+        this.RoundingAmount = 0;
+        this.TimeUpload = "";
+        this.VersionInv = "";
+        this.GlobalInvoiceCounter = 0;
+        this.receiverID_rec = 0;
+        this.branchID_rec = 0;
+        this.country_rec = "";
+        this.governate_rec = "";
+        this.regionCity_rec = "";
+        this.street_rec = "";
+        this.buildingNumber_rec = "";
+        this.postalCode_rec = "";
+        this.floor_rec = "";
+        this.room_rec = "";
+        this.landmark_rec = "";
+        this.additionalInformation_rec = "";
+        this.type_rec = "";
+        this.id_rec = "";
+        this.name_rec = "";
+        this.issuerID_iss = 0;
+        this.branchID_iss = 0;
+        this.country_iss = "";
+        this.governate_iss = "";
+        this.regionCity_iss = "";
+        this.street_iss = "";
+        this.buildingNumber_iss = "";
+        this.postalCode_iss = "";
+        this.floor_iss = "";
+        this.room_iss = "";
+        this.landmark_iss = "";
+        this.additionalInformation_iss = "";
+        this.type_iss = "";
+        this.id_iss = "";
+        this.name_iss = "";
+        this.CurrencyCode = "";
+        this.DescA = "";
+        this.DescL = "";
+        this.Remarks = "";
+        this.ClientSecret = "";
+        this.ClientID = "";
+        this.DocPDFFolder = "";
+        this.ActivityCode = "";
+        this.TypeVersion = "";
+        this.TokenPinCode = "";
+        this.Tokentype = "";
+    }
+    return IQ_InvoiceHedar_Tax;
 }());
 //# sourceMappingURL=Entities.js.map

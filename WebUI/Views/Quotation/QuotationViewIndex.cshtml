@@ -8,16 +8,64 @@
     .des {
         width: 20% !important;
     }
+
     .uom {
         width: 11% !important;
-    } 
+    }
+
     .Zero {
         width: 0% !important;
     }
+
     .Price {
         width: 9% !important;
     }
 
+    .Net {
+        width: 45% !important;
+    }
+
+
+
+    .dess {
+        width: 15% !important;
+    }
+
+    .uom {
+        width: 11% !important;
+    }
+
+    .des {
+        width: 9% !important;
+    }
+
+    .Net {
+        width: 45% !important;
+    }
+
+    .QTY {
+        width: 11% !important;
+    }
+
+    .Zero {
+        width: 7% !important;
+    }
+
+    .Tax {
+        width: 7% !important;
+    }
+
+    .Price {
+        width: 9% !important;
+    }
+
+    .SR {
+        width: 4% !important;
+    }
+
+    th {
+        text-align: right !important;
+    }
 </style>
 <body class="materialdesign">
     <div class="content-inner-all">
@@ -34,29 +82,45 @@
                                     <ul class="nav nav-tabs">
 
 
-                                        <li id="btnQuotations">
-                                            <a data-toggle="tab" href="#viewmail"><span class="inbox-icon"><i class="fa fa-envelope" aria-hidden="true"></i></span>Quotations </a>
-                                        </li>
                                         <li id="btnInvoice">
-                                            <a data-toggle="tab" href="#sendmail"><span class="inbox-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></span> Invoice</a>
+                                            <a data-toggle="tab" href="#sendmail" class="font_size"><span class="inbox-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></span> فواتير المبيعات</a>
+                                        </li>
+                                        <li id="btnReturn">
+                                            <a data-toggle="tab" href="#sendmail" class="font_size"><span class="inbox-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>فواتير المرتجعات </a>
+                                        </li>
+                                        <li id="btnAdd">
+                                            <a data-toggle="tab" href="#sendmail" class="font_size"><span class="inbox-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>فواتير أضافه </a>
+                                        </li>
+
+                                        <li id="btnPur">
+                                            <a data-toggle="tab" href="#sendmail" class="font_size"><span class="inbox-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>فواتير المشتريات </a>
                                         </li>
 
                                         <li>
                                             <br />
                                         </li>
                                         <li>
-                                            <input id="txtRFQFilter" type="text" class="form-control" placeholder="RFQ">
+                                            <select id="ddlStatasFilter" style="direction: rtl;" class="form-control ">
+                                                <option value="null"> اختار الحاله   </option>
+                                                <option value="0"> جديد   </option>
+                                                <option value="1"> صحيحه   </option>
+                                                <option value="2"> غير صحيحه   </option>
+                                                <option value="3"> ملغي  </option>
+                                            </select>
+                                        </li>
+                                        <li>
+                                            <input id="txtRFQFilter" type="text" class="form-control" placeholder="رقم المرجـع" style="direction: rtl;">
                                         </li>
                                         <li>
 
-                                            <input id="txtCompanynameFilter" type="text" class=" " disabled placeholder="Company" style="width: 50%;height: 32px;">
-                                            <button id="btnCustSrchFilter" type="button" class="btn btn-custon-four btn-primary" style="width: 33%;">
-                                                <i>Search</i>
+                                            <input id="txtCompanynameFilter" type="text" class=" " disabled placeholder="العميل" style="direction: rtl; width: 50%; height: 32px;">
+                                            <button id="btnCustSrchFilter" type="button" class="btn btn-custon-four btn-primary" style="width: 48%; font-weight: bold; font-size: 13px;">
+                                                <i>بحـث</i>
                                             </button>
 
                                         </li>
-                                        <li>
-                                            <label>Date From To</label>
+                                        <li style="text-align: center;">
+                                            <label class="font_size">تاريخ من الي</label>
                                         </li>
                                         <li>
                                             <input id="FromDate" name="FromDate" type="date" class="form-control" placeholder="FromDate">
@@ -66,40 +130,81 @@
                                         <li>
 
                                             <div class="col-lg-12">
-                                                <input type="button" value="Filter" id="btnFilter" class="btn btn-custon-four btn-success" style="width: 40%;">
-                                                <input type="button" value="Refrash" id="btnRefrash" class="dis src-btn btn btn-warning " style="width: 50%;">
+                                                <input type="button" value="عـرض" id="btnFilter" class="btn btn-custon-four btn-success  " style="width: 48%; font-weight: bold; font-size: 17px;">
+                                                <input type="button" value="أرجاع" id="btnRefrash" class="dis src-btn btn btn-warning  " style="width: 48%; font-weight: bold; font-size: 17px;">
                                             </div>
                                             <br />
-                                            <br /> 
+                                            <br />
 
 
                                         </li>
-                                        <li>
-                                            <label>Created</label>
+                                        <li style="text-align: center;">
+                                            <label>انشاء</label>
                                         </li>
                                         <li>
-                                            <input id="txtCreatedBy" name="CREATED_BY" type="text" disabled class="form-control" placeholder="Created By ">
-                                            <input id="txtCreatedAt" name="CREATED_AT" type="text" disabled class="form-control" placeholder="Created At">
+                                            <input id="txtCreatedBy" name="CREATED_BY" type="text" disabled class="form-control" style="direction: rtl;" placeholder=" البائع">
+                                            <input id="txtCreatedAt" name="CREATED_AT" type="text" disabled class="form-control" style="direction: rtl;" placeholder="وقـت الانشاء">
                                         </li>
 
-                                        <li>
-                                            <label>Updated</label>
+                                        <li style="text-align: center;">
+                                            <label>تعـديل</label>
                                         </li>
                                         <li>
-                                            <input id="txtUpdatedBy" name="UPDATED_BY" type="text" disabled class="form-control" placeholder="Updated By ">
-                                            <input id="txtUpdatedAt" name="UPDATED_AT" type="text" disabled class="form-control" placeholder="Updated At">
+                                            <input id="txtUpdatedBy" name="UPDATED_BY" type="text" disabled class="form-control" style="direction: rtl;" placeholder="البائع ">
+                                            <input id="txtUpdatedAt" name="UPDATED_AT" type="text" disabled class="form-control" style="direction: rtl;" placeholder="وقت التعديل">
                                         </li>
 
 
                                     </ul>
                                 </div>
                             </div>
-                            <div id="Div_Views" class="col-lg-10">
+                            <div id="Div_Views" class="col-lg-10 style_rtl" style=" ">
                                 <div class="tab-content">
 
 
+                                    <div id="sendmail" class="tab-pane animated zoomOut   fade shadow-reset custom-inbox-message shadow-reset active in">
+                                        <div class="admin-dashone-data-table-area mg-b-15">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="sparkline8-list shadow-reset">
+                                                            <div class="sparkline8-hd">
+                                                                <div class="main-sparkline8-hd">
+                                                                    <h1 id="Title_Inv">عـرض فواتير المبيعات</h1>
+                                                                    <input id="txtTypeInv" class="display_none" name="TypeInv" type="text" disabled=""> 
+                                                                    <input id="Txt_Search" type="text" class="form-control" placeholder="بحــث" style="direction: rtl; width: 25%;">
+                                                                </div> 
+                                                            </div>
+                                                            <div class="sparkline8-graph">
+                                                                <table id="ReportGridInv">
+                                                                </table>
 
-                                    <div id="viewmail" class="tab-pane fade in animated zoomInDown shadow-reset custom-inbox-message shadow-reset active">
+                                                            </div>
+
+                                                            <label class="col-lg-12">  </label>
+                                                            <div class=" ">
+                                                                <label class="col-lg-3">  </label>
+                                                                <input id="txtTotalAmount" name="TotalAmount" type="text" disabled="" class="col-lg-3 " placeholder="اجمالي الفواتير " style="width: 14%;font-weight: bold;font-size: 17px; color: #249600;text-align: center;">
+                                                                <label class="col-lg-2" style="width: 13%;font-weight: bold;font-size: 19px;"> اجمالي الفواتير  :</label>
+
+
+                                                                <label class="col-lg-2" style="width: 13%;font-weight: bold;font-size: 19px;">  </label>
+
+
+                                                                <input id="txtTotalQty" name="TotalQty" type="text" disabled="" class="col-lg-3 " placeholder="عدد الفواتير" style="width: 14%;font-weight: bold;font-size: 17px; color: #249600;text-align: center;">
+                                                                <label class="col-lg-2" style="width: 13%;font-weight: bold;font-size: 19px;"> عدد الفواتير :</label>
+
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="viewmail" class="tab-pane fade in animated zoomInDown shadow-reset custom-inbox-message ">
                                         <div class="admin-dashone-data-table-area mg-b-15">
                                             <div class="container-fluid">
                                                 <div class="row">
@@ -121,38 +226,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="sendmail" class="tab-pane animated zoomInDown fade shadow-reset custom-inbox-message">
-                                        <div class="admin-dashone-data-table-area mg-b-15">
-                                            <div class="container-fluid">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="sparkline8-list shadow-reset">
-                                                            <div class="sparkline8-hd">
-                                                                <div class="main-sparkline8-hd">
-                                                                    <h1>Invoice</h1>
-                                                                </div>
-                                                            </div>
-                                                            <div class="sparkline8-graph">
-                                                                <table id="ReportGridInv">
-                                                                </table>
 
-                                                            </div>
-                                                            <label class="col-lg-12">  </label>
-                                                            <label class="col-lg-2" style="width: 13%;font-weight: bold;font-size: 19px;"> Total Qty Inv :</label>
-                                                            <input id="txtTotalQty" name="TotalQty" type="text" disabled="" class="col-lg-3 " placeholder="Total Qty" style="width: 14%;font-weight: bold;font-size: 17px; color: #249600;text-align: center;">
-
-                                                            <label class="col-lg-2" style="width: 13%;font-weight: bold;font-size: 19px;">  </label>
-
-                                                            <label class="col-lg-2" style="width: 13%;font-weight: bold;font-size: 19px;"> Total Amount :</label>
-                                                            <input id="txtTotalAmount" name="TotalAmount" type="text" disabled="" class="col-lg-3 " placeholder="Total Amount" style="width: 14%;font-weight: bold;font-size: 17px; color: #249600;text-align: center;">
-
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div id="composemail" class="tab-pane fade animated zoomInDown shadow-reset custom-inbox-message" style="direction: rtl;">
                                         <div class="view-mail-wrap">
 
@@ -183,7 +257,7 @@
                                                                 <div class="sparkline8-list shadow-reset">
                                                                     <div class="sparkline8-hd">
                                                                         <div class="main-sparkline8-hd">
-                                                                            <h1 style="text-align: center;"> Invoice Tax </h1>
+                                                                            <h1 id="TrNo" style="text-align: center;"> Invoice Tax </h1>
                                                                         </div>
                                                                         <br>
                                                                         <div class="row">
@@ -315,7 +389,7 @@
 
                                                                             <div class="col-lg-3">
                                                                                 <div class="input-mark-inner mg-b-22">
-                                                                                    <select id="ddlStatas" class="form-control">
+                                                                                    <select id="ddlStatas" disabled class="form-control ">
                                                                                         <option value="0"> جديد   </option>
                                                                                         <option value="1"> صحيحه   </option>
                                                                                         <option value="2"> غير صحيحه   </option>
@@ -369,7 +443,7 @@
 
                                                                             <div class="col-lg-3">
                                                                                 <div class="input-mark-inner mg-b-22">
-                                                                                    <select id="ddlTypeInv" class="form-control">
+                                                                                    <select id="ddlTypeInv" disabled class="form-control">
                                                                                         <option value="I"> فاتوره   </option>
                                                                                         <option value="C"> مرتجع   </option>
                                                                                         <option value="D"> أضافه   </option>
@@ -407,7 +481,7 @@
                                                                             <div class="button-ap-list responsive-btn">
                                                                                 <button id="btnprint" type="button" class="btn btn-custon-four btn-primary display_none"><i class="fa fa-print"></i>print</button>
                                                                                 <button id="btnsave" type="button" class="btn btn-custon-four btn-success" style="font-weight: bold;font-size: 18px;"><i class="fa fa-save"></i>&nbsp; حفظ</button>
-                                                                                <button id="btnClean" type="button" class="btn btn-custon-four btn-danger" style="font-weight: bold;font-size: 18px;"><i class="fa fa-empty"></i>تراجع  </button>
+                                                                                <button id="btnClean" type="button" class="btn btn-custon-four btn-danger" style="font-weight: bold;font-size: 18px;"><i class="fa fa-empty"></i>تراجع من مود    </button>
                                                                             </div>
                                                                             <div id="DivMassage" class="col-lg-12  margingred  borderred display_none">
                                                                                 <h4 id="Text_Massage">Message</h4>

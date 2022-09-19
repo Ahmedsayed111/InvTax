@@ -204,6 +204,7 @@
     <Compile Include="Models\CustomModel\items.cs" />
     <Compile Include="Models\CustomModel\ItemTax.cs" />
     <Compile Include="Models\CustomModel\MasterDetailsUserRoles.cs" />
+    <Compile Include="Models\CustomModel\DetailsAndTaxabl.cs" />
     <Compile Include="Models\CustomModel\SlsInvoiceMasterDetails.cs" />
     <Compile Include="Models\ResponseResult.cs" />
     <Compile Include="Models\SessionRecord.cs" />

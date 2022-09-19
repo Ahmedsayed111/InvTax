@@ -9,24 +9,34 @@ namespace QuotationView {
     //var sys: _shared = new _shared();
     var SysSession: SystemSession = GetSystemSession(Modules.QuotationView);
 
-    var InvItemsDetailsModel: Array<Sls_InvoiceDetail> = new Array<Sls_InvoiceDetail>();
+    var InvItemsDetailsModel: Array<IQ_Sls_InvoiceDetail_Tax> = new Array<IQ_Sls_InvoiceDetail_Tax>();
 
     var Selected_Data: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
     var InvoiceDisplay: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
+    var SearchDetails: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
     var Selecteditem: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
     var Invoice: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
     var InvQuotation: Array<Sls_Ivoice> = new Array<Sls_Ivoice>();
-    var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>(); 
+    var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>();
     var CustomerDetailnew: Array<receiver> = new Array<receiver>();
 
+    var DisplayDetailsAndTaxabl: DetailsAndTaxabl = new DetailsAndTaxabl();
     var btnCustSrchFilter: HTMLButtonElement;
     var btnFilter: HTMLButtonElement;
     var btnRefrash: HTMLButtonElement;
+    var btnReturn: HTMLButtonElement;
+    var btnPur: HTMLButtonElement;
+    var btnAdd: HTMLButtonElement;
+    var btnInvoice: HTMLButtonElement;
     var FromDate: HTMLInputElement;
     var ToDate: HTMLInputElement;
+    var Txt_Search: HTMLInputElement;
     var txtCompanynameFilter: HTMLInputElement;
     var txtRFQFilter: HTMLInputElement;
-    var ReportGrid: JsGrid = new JsGrid();
+    var ddlStatasFilter: HTMLSelectElement;
+    var txtTypeInv: HTMLInputElement;
+    var ReportGridPur: JsGrid = new JsGrid();
+    var ReportGridRet: JsGrid = new JsGrid();
     var ReportGridInv: JsGrid = new JsGrid();
     var CustomerId = 0;
     var compcode: number;//SharedSession.CurrentEnvironment.CompCode;
@@ -35,21 +45,23 @@ namespace QuotationView {
     var RFQFilter;
     var FromDat;
     var ToDat;
+    var Return_Falg = false;
     export function InitalizeComponent() {
 
         debugger
-    
+
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
         InitalizeControls();
         InitalizeEvents();
-        InitializeGridQuotation();
         InitializeGridInvoice();
+        InitializeGridReturnAndAdd();
+        InitializeGridPur();
         FromDate.value = DateStartMonth();
         ToDate.value = ConvertToDateDash(GetDate()) <= ConvertToDateDash(SysSession.CurrentEnvironment.EndDate) ? GetDate() : SysSession.CurrentEnvironment.EndDate;
 
-        
-        Display();
+        txtTypeInv.value = "I";
+        Display("I");
 
         FillddlUom();
 
@@ -58,8 +70,15 @@ namespace QuotationView {
         btnCustSrchFilter = document.getElementById("btnCustSrchFilter") as HTMLButtonElement;
         btnFilter = document.getElementById("btnFilter") as HTMLButtonElement;
         btnRefrash = document.getElementById("btnRefrash") as HTMLButtonElement;
+        btnInvoice = document.getElementById("btnInvoice") as HTMLButtonElement;
+        btnReturn = document.getElementById("btnReturn") as HTMLButtonElement;
+        btnPur = document.getElementById("btnPur") as HTMLButtonElement;
+        btnAdd = document.getElementById("btnAdd") as HTMLButtonElement;
+        Txt_Search = document.getElementById("Txt_Search") as HTMLInputElement;
         txtCompanynameFilter = document.getElementById("txtCompanynameFilter") as HTMLInputElement;
+        ddlStatasFilter = document.getElementById("ddlStatasFilter") as HTMLSelectElement;
         txtRFQFilter = document.getElementById("txtRFQFilter") as HTMLInputElement;
+        txtTypeInv = document.getElementById("txtTypeInv") as HTMLInputElement;
         ToDate = document.getElementById("ToDate") as HTMLInputElement;
         FromDate = document.getElementById("FromDate") as HTMLInputElement;
     }
@@ -68,6 +87,12 @@ namespace QuotationView {
         btnFilter.onclick = btnFilter_onclick;
         btnRefrash.onclick = btnRefrash_onclick;
         txtCompanynameFilter.onchange = txtCompanynameFilter_ochange;
+        Txt_Search.onkeyup = _SearchBox_Change;
+
+        btnInvoice.onclick = () => { Display('I'); txtTypeInv.value = "I" }
+        btnReturn.onclick = () => { Display('C'); txtTypeInv.value = "C" }
+        btnAdd.onclick = () => { Display('D'); txtTypeInv.value = "D" }
+        btnPur.onclick = () => { Display('P'); txtTypeInv.value = "P" }
     }
     function txtCompanynameFilter_ochange() {
         txtCompanynameFilter.value = "";
@@ -77,55 +102,103 @@ namespace QuotationView {
         CustomerId = 0;
         txtCompanynameFilter.value = '';
         txtRFQFilter.value = '';
+        ddlStatasFilter.value = 'null'
         FromDate.value = DateStartMonth();
         ToDate.value = ConvertToDateDash(GetDate()) <= ConvertToDateDash(SysSession.CurrentEnvironment.EndDate) ? GetDate() : SysSession.CurrentEnvironment.EndDate;
 
-        Display();
+        Display(txtTypeInv.value);
     }
     function btnFilter_onclick() {
 
 
-        Display();
+        Display(txtTypeInv.value);
 
     }
-     
-    function Display() {
 
+    function Display(TypeInv: string) {
 
-        $('#viewmail').removeClass('active in');
+        Txt_Search.value = '';
+         
         $('#sendmail').addClass('active in');
 
-        $('#btnQuotations').removeClass('active');
-        $('#btnInvoice').addClass('active');
 
 
         RFQFilter = txtRFQFilter.value;
         FromDat = FromDate.value;
         ToDat = ToDate.value;
 
+        let Status = ddlStatasFilter.value == 'null' ? '' : ddlStatasFilter.value ;
+
         $("#ReportGrid").jsGrid("option", "pageIndex", 1);
+        $('#sendmail').attr('class', '');
         Ajax.Callsync({
             type: "GET",
             url: sys.apiUrl("SlsTrSales", "GetAllSlsInvoice"),
-            data: { CompCode: compcode, BranchCode: BranchCode, CustomerId: CustomerId, RFQFilter: RFQFilter, StartDate: FromDat, EndDate: ToDat },
+            data: { CompCode: compcode, BranchCode: BranchCode, TypeInv: TypeInv, Status: Status, CustomerId: CustomerId, RFQFilter: RFQFilter, StartDate: FromDat, EndDate: ToDat },
             success: (d) => {
                 debugger;
                 let result = d as BaseResponse;
                 if (result.IsSuccess) {
-                    InvoiceDisplay = result.Response as Array<Sls_Ivoice>;
-                    //InvQuotation = InvoiceDisplay.filter(x => x.TrType == 0);
-                    Invoice = new Array<Sls_Ivoice>();
-                    InvQuotation = new Array<Sls_Ivoice>();
+                    Invoice = result.Response as Array<Sls_Ivoice>;
+                    InvoiceDisplay = Invoice;
 
-                    Invoice = InvoiceDisplay;
+                    if (TypeInv == 'I') {
+
+                        ReportGridInv.DataSource = Invoice;
+                        ReportGridInv.Bind();
+
+                        $('#Title_Inv').html('عـرض فواتير المبيعات')
 
 
-                    //Invoice = InvoiceDisplay.filter(x => x.TrType == 1 && x.CashBoxID != null).sort(function (a, b) { return b.CashBoxID - a.CashBoxID; });
-                    //ReportGrid.DataSource = InvQuotation;
-                    //ReportGrid.Bind();
+                        $('#btnAdd').removeClass('active');
+                        $('#btnReturn').removeClass('active');
+                        $('#btnInvoice').addClass('active');
+                        $('#btnPur').removeClass('active');
 
-                    ReportGridInv.DataSource = Invoice;
-                    ReportGridInv.Bind();
+
+                    }
+                    if (TypeInv == 'C') {
+
+                        ReportGridRet.DataSource = Invoice;
+                        ReportGridRet.Bind();
+                        $('#Title_Inv').html('عـرض فواتير المرتجعات')
+
+                        $('#btnAdd').removeClass('active'); 
+                        $('#btnReturn').addClass('active');
+                        $('#btnInvoice').removeClass('active');
+                        $('#btnPur').removeClass('active'); 
+
+
+                    }
+                    if (TypeInv == 'D') {
+
+                        ReportGridRet.DataSource = Invoice;
+                        ReportGridRet.Bind();
+                        $('#Title_Inv').html('عـرض فواتير أضافه')
+
+                        $('#btnAdd').addClass('active');
+                        $('#btnReturn').removeClass('active');
+                        $('#btnInvoice').removeClass('active');
+                        $('#btnPur').removeClass('active');
+
+                    }
+
+                    if (TypeInv == 'P') {
+
+                        ReportGridPur.DataSource = Invoice;
+                        ReportGridPur.Bind();
+                        $('#Title_Inv').html('عـرض فواتير المشتريات')
+
+                        $('#btnAdd').removeClass('active');
+                        $('#btnReturn').removeClass('active');
+                        $('#btnInvoice').removeClass('active');
+                        $('#btnPur').addClass('active');
+
+                    }
+
+                    $('.jsgrid-header-scrollbar').removeClass("jsgrid-grid-header");
+
+
 
 
                     let TotalAmount = 0;
@@ -144,7 +217,10 @@ namespace QuotationView {
                     $('#txtUpdatedBy').prop("value", '');
                     $('#txtUpdatedAt').prop("value", '');
 
-                    //$('.Done').addClass("display_none");
+                    $('#sendmail').attr('class', 'tab-pane animated zoomInDown zoomInDown  fade shadow-reset custom-inbox-message shadow-reset active in');
+
+
+
 
                 }
             }
@@ -152,158 +228,7 @@ namespace QuotationView {
 
 
     }
-    function InitializeGridQuotation() {
-        $("#ReportGrid").jsGrid("option", "pageIndex", 1);
 
-        //let res: any = GetResourceList("");
-        //$("#id_ReportGrid").attr("style", "");
-        ReportGrid.OnRowDoubleClicked = DoubleClickGridQuotation;
-        ReportGrid.ElementName = "ReportGrid";
-        ReportGrid.PrimaryKey = "InvoiceID";
-        ReportGrid.Paging = true;
-        ReportGrid.PageSize = 8;
-        ReportGrid.Sorting = true;
-        ReportGrid.InsertionMode = JsGridInsertionMode.Binding;
-        ReportGrid.Editing = false;
-        ReportGrid.Inserting = false;
-        ReportGrid.SelectedIndex = 1;
-        ReportGrid.SwitchingLanguageEnabled = false;
-        ReportGrid.OnItemEditing = () => { };
-        ReportGrid.Columns = [
-            { title: "الرقم", name: "InvoiceID", type: "text", width: "5%", visible: false },
-            { title: "Quot.No", name: "TrNo", type: "text", width: "5%" },
-            { title: "RFQ", name: "RefNO", type: "text", width: "7%" },
-            { title: "Date", name: "TrDateH", type: "text", width: "7%" },
-            { title: "TotalAmount", name: "NetAfterVat", type: "text", width: "5%" },
-            {
-                title: "PurNo",
-                width: "8%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
-                    let txt: HTMLInputElement = document.createElement("input");
-                    txt.type = "text";
-                     
-
-                    txt.placeholder = ("PurNo");
-                    txt.id = "PurNo" + item.InvoiceID;
-                    txt.className = "form-control ";
-
-                    if (item.TaxNotes != '' && item.TaxNotes != null) {
-                        txt.disabled = true;
-                        txt.value = item.TaxNotes;
-                    }
-
-                    txt.onchange = (e) => {
-                        ComfirmPurNo(item.InvoiceID, txt.value);
-                    };
-
-                    return txt;
-                }
-            },
-
-
-            {
-                title: "Review",
-                width: "4%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLButtonElement => {
-                    let txt: HTMLButtonElement = document.createElement("button");
-                    txt.type = "button";
-                    txt.innerText = ("Review");
-                    txt.id = "butPrint" + item.InvoiceID;
-                    txt.className = "btn btn-custon-four btn-danger Done";
-                    //if (item.TaxNotes == '' || item.TaxNotes == null) {
-                    //    txt.classList.add("display_none")
-                    //}
-
-                    txt.onclick = (e) => {
-                        PrintQuotation(item.InvoiceID);
-                    };
-                    return txt;
-                }
-            },
-
-            {
-                title: "DelivNote",
-                width: "5%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLButtonElement => {
-                    let txt: HTMLButtonElement = document.createElement("button");
-                    txt.type = "button";
-                    txt.innerText = ("DelivNote");
-                    txt.id = "butDelivNote" + item.InvoiceID;
-                    txt.className = "btn btn-custon-four btn-primary Done";
-
-                    if (item.TaxNotes == '' || item.TaxNotes == null) {
-                        txt.classList.add("display_none")
-                    }
-
-
-                    txt.onclick = (e) => {
-                        DelivNoteQuotation(item.InvoiceID);
-                    };
-                    return txt;
-                }
-            },
-            {
-                title: "Eidt",
-                width: "3%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLButtonElement => {
-                    let txt: HTMLButtonElement = document.createElement("button");
-                    txt.type = "button";
-                    txt.innerText = ("Eidt");
-                    txt.id = "butEidt" + item.InvoiceID;
-                    txt.className = "dis src-btn btn btn-warning input-sm Inv Done";
-
-                    //if (item.TaxNotes == '' || item.TaxNotes == null) {
-                    //    txt.classList.add("display_none")
-                    //}
-
-                    if (item.TrType == 1) {
-                        txt.classList.add("display_none")
-                    }
-                    txt.onclick = (e) => {
-
-                        $('#title_Edit').html('Eidt Quotation');
-                        EidtQuotation(item.InvoiceID);
-                    };
-                    return txt;
-                }
-            },
-
-            {
-                title: "Comfirm",
-                width: "5%",
-                itemTemplate: (s: string, item: Sls_Ivoice): HTMLButtonElement => {
-                    let txt: HTMLButtonElement = document.createElement("button");
-                    txt.type = "button";
-                    txt.innerText = ("comfirm");
-                    txt.id = "butComfirm" + item.InvoiceID;
-                    txt.className = "btn btn-custon-four btn-success Inv Done";
-
-                    if (item.TaxNotes == '' || item.TaxNotes == null) {
-                        txt.classList.add("display_none")
-                    }
-
-                    if (item.TrType == 1) {
-                        txt.classList.add("display_none")
-                    }
-                    txt.onclick = (e) => {
-                        ComfirmQuotation(item.InvoiceID);
-
-
-                    };
-                    return txt;
-                }
-            },
-
-
-
-
-
-
-        ];
-        ReportGrid.Bind();
-
-         
-    }
     function InitializeGridInvoice() {
 
 
@@ -324,27 +249,73 @@ namespace QuotationView {
         ReportGridInv.OnItemEditing = () => { };
         ReportGridInv.Columns = [
             { title: "الرقم", name: "InvoiceID", type: "text", width: "5%", visible: false },
-            { title: "INV.No", name: "TrNo", type: "text", width: "5%" },
+            { title: "رقم الفاتوره", name: "TrNo", type: "text", width: "5%" },
+            { title: "رقم المرجع", name: "RefNO", type: "text", width: "5%" },
             {
-                title: "Date",
+                title: "التاريخ",
                 width: "5%",
                 itemTemplate: (s: string, item: Sls_Ivoice): HTMLLabelElement => {
                     let txt: HTMLLabelElement = document.createElement("label");
-                    txt.innerHTML = DateFormat( item.TrDate);
-                     
+                    txt.innerHTML = DateFormat(item.TrDate);
+
                     return txt;
                 }
             },
-            { title: "TotalAmount", name: "NetAfterVat", type: "text", width: "10%" },
+            { title: "الصافــي  ", name: "NetAfterVat", type: "text", width: "10%" },
             {
-                title: "Review",
+                title: "الحاله",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+
+                    if (item.Status == 0) {
+                        txt.innerHTML = 'جديد';
+                    }
+                    if (item.Status == 1) {
+                        txt.innerHTML = 'صحيحه';
+                    }
+                    if (item.Status == 2) {
+                        txt.innerHTML = 'غير صحيحه';
+                    }
+                    if (item.Status == 3) {
+                        txt.innerHTML = 'ملغي';
+                    }
+
+
+                    return txt;
+                }
+            },
+            {
+                title: "رفـع الفاتوره",
                 width: "5%",
                 itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
                     let txt: HTMLInputElement = document.createElement("input");
                     txt.type = "button";
-                    txt.value = ("Review");
+                    txt.value = ("رفـع");
                     txt.id = "butPrint" + item.InvoiceID;
-                    txt.className = "dis src-btn btn btn-warning input-sm";
+                    txt.className = "dis src-btn btn btn-primary input-sm style_but_Grid";
+
+                    if (item.Status != 0) {
+                        txt.disabled = true;
+                    }
+
+                    txt.onclick = (e) => {
+                        alert('تحت الانشاء')
+                    };
+                    return txt;
+                }
+            },
+            {
+                title: "عـرض",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
+                    let txt: HTMLInputElement = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("عـرض");
+                    txt.id = "butPrint" + item.InvoiceID;
+                    txt.className = "dis src-btn btn btn-warning input-sm style_but_Grid";
+
+
 
                     txt.onclick = (e) => {
                         PrintInvoice(item.InvoiceID);
@@ -354,19 +325,23 @@ namespace QuotationView {
             },
 
             {
-                title: "Eidt",
-                width: "3%",
+                title: "تعديــل",
+                width: "5%",
                 itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
                     let txt: HTMLInputElement = document.createElement("input");
                     txt.type = "button";
-                    txt.value = ("Eidt");
+                    txt.value = ("تعديــل");
                     txt.id = "butEidt" + item.InvoiceID;
-                    txt.className = "btn btn-custon-four btn-success input-sm Inv Done";
+                    txt.className = "btn btn-custon-four btn-success input-sm Inv Done style_but_Grid";
+
+                    if (item.Status != 0) {
+                        txt.disabled = true;
+                    }
 
                     txt.onclick = (e) => {
                         $('#title_Edit').html('Eidt Invoice');
 
-                        EidtQuotation(item.InvoiceID);
+                        EidtInvoice(item.InvoiceID);
                     };
                     return txt;
                 }
@@ -374,17 +349,63 @@ namespace QuotationView {
 
 
             {
-                title: "Delete",
+                title: "الغـاء",
                 width: "5%",
                 itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
                     let txt: HTMLInputElement = document.createElement("input");
                     txt.type = "button";
-                    txt.value = ("Delete");
+                    txt.value = ("الغـاء");
                     txt.id = "butDelete" + item.InvoiceID;
-                    txt.className = "btn btn-custon-four btn-danger ";
+                    txt.className = "btn btn-custon-four btn-danger style_but_Grid ";
+
+                    if (item.Status != 0) {
+                        txt.disabled = true;
+                    }
 
                     txt.onclick = (e) => {
                         DeleteInvoice(item.InvoiceID);
+                    };
+                    return txt;
+                }
+            },
+
+            {
+                title: "مرتجع",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
+                    let txt: HTMLInputElement = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("مرتجـع");
+                    txt.id = "butDelete" + item.InvoiceID;
+                    txt.className = "btn btn-custon-four btn-danger style_but_Grid ret ";
+
+                    if (item.Status != 0) {
+                        txt.disabled = true;
+                    }
+
+                    txt.onclick = (e) => {
+                        ReturnORAddInvoice(item.InvoiceID,'C');
+                    };
+                    return txt;
+                }
+            },
+
+            {
+                title: "أضافه",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
+                    let txt: HTMLInputElement = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("أضافــه");
+                    txt.id = "butDelete" + item.InvoiceID;
+                    txt.className = "btn btn-custon-four btn-danger style_but_Grid Add ";
+
+                    if (item.Status != 0) {
+                        txt.disabled = true;
+                    }
+
+                    txt.onclick = (e) => {
+                        ReturnORAddInvoice(item.InvoiceID,'D');
                     };
                     return txt;
                 }
@@ -397,16 +418,233 @@ namespace QuotationView {
         ReportGridInv.Bind();
     }
 
-    function DoubleClickGridQuotation() {
 
-        Selecteditem = new Array<Sls_Ivoice>();
-        Selecteditem = InvoiceDisplay.filter(x => x.InvoiceID == Number(ReportGrid.SelectedKey));
+    function InitializeGridReturnAndAdd() {
 
-        $('#txtCreatedBy').prop("value", Selecteditem[0].CreatedBy);
-        $('#txtCreatedAt').prop("value", Selecteditem[0].CreatedAt);
 
-        $('#txtUpdatedBy').prop("value", Selecteditem[0].UpdatedBy);
-        $('#txtUpdatedAt').prop("value", Selecteditem[0].UpdatedAt);
+
+        //let res: any = GetResourceList("");
+        //$("#id_ReportGrid").attr("style", "");
+        ReportGridRet.OnRowDoubleClicked = DoubleClickGridInvoice;
+        ReportGridRet.ElementName = "ReportGridInv";
+        ReportGridRet.PrimaryKey = "InvoiceID";
+        ReportGridRet.Paging = true;
+        ReportGridRet.PageSize = 6;
+        ReportGridRet.Sorting = true;
+        ReportGridRet.InsertionMode = JsGridInsertionMode.Binding;
+        ReportGridRet.Editing = false;
+        ReportGridRet.Inserting = false;
+        ReportGridRet.SelectedIndex = 1;
+        ReportGridRet.SwitchingLanguageEnabled = false;
+        ReportGridRet.OnItemEditing = () => { };
+        ReportGridRet.Columns = [
+            { title: "الرقم", name: "InvoiceID", type: "text", width: "5%", visible: false },
+            { title: "رقم الفاتوره", name: "TrNo", type: "text", width: "5%" },
+            { title: "رقم المرجع", name: "RefNO", type: "text", width: "5%" },
+            {
+                title: "التاريخ",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+                    txt.innerHTML = DateFormat(item.TrDate);
+
+                    return txt;
+                }
+            },
+            { title: "الصافــي  ", name: "NetAfterVat", type: "text", width: "10%" },
+            {
+                title: "الحاله",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+
+                    if (item.Status == 0) {
+                        txt.innerHTML = 'جديد';
+                    }
+                    if (item.Status == 1) {
+                        txt.innerHTML = 'صحيحه';
+                    }
+                    if (item.Status == 2) {
+                        txt.innerHTML = 'غير صحيحه';
+                    }
+                    if (item.Status == 3) {
+                        txt.innerHTML = 'ملغي';
+                    }
+
+
+                    return txt;
+                }
+            },
+            {
+                title: "رفـع الفاتوره",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
+                    let txt: HTMLInputElement = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("رفـع");
+                    txt.id = "butPrint" + item.InvoiceID;
+                    txt.className = "dis src-btn btn btn-primary input-sm style_but_Grid";
+
+                    if (item.Status != 0) {
+                        txt.disabled = true;
+                    }
+
+                    txt.onclick = (e) => {
+                        alert('تحت الانشاء')
+                    };
+                    return txt;
+                }
+            },
+            {
+                title: "عـرض",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
+                    let txt: HTMLInputElement = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("عـرض");
+                    txt.id = "butPrint" + item.InvoiceID;
+                    txt.className = "dis src-btn btn btn-warning input-sm style_but_Grid";
+
+
+
+                    txt.onclick = (e) => {
+                        PrintInvoice(item.InvoiceID);
+                    };
+                    return txt;
+                }
+            },
+
+            {
+                title: "تعديــل",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
+                    let txt: HTMLInputElement = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("تعديــل");
+                    txt.id = "butEidt" + item.InvoiceID;
+                    txt.className = "btn btn-custon-four btn-success input-sm Inv Done style_but_Grid";
+
+                    if (item.Status != 0) {
+                        txt.disabled = true;
+                    }
+
+                    txt.onclick = (e) => {
+                        $('#title_Edit').html('Eidt Invoice');
+
+                        EidtInvoice(item.InvoiceID);
+                    };
+                    return txt;
+                }
+            },
+
+
+            {
+                title: "الغـاء",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
+                    let txt: HTMLInputElement = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("الغـاء");
+                    txt.id = "butDelete" + item.InvoiceID;
+                    txt.className = "btn btn-custon-four btn-danger style_but_Grid ";
+
+                    if (item.Status != 0) {
+                        txt.disabled = true;
+                    }
+
+                    txt.onclick = (e) => {
+                        DeleteInvoice(item.InvoiceID);
+                    };
+                    return txt;
+                }
+            },
+
+
+
+        ];
+        ReportGridRet.Bind();
+    }
+    
+    function InitializeGridPur() {
+
+
+
+        //let res: any = GetResourceList("");
+        //$("#id_ReportGrid").attr("style", "");
+        ReportGridPur.OnRowDoubleClicked = DoubleClickGridInvoice;
+        ReportGridPur.ElementName = "ReportGridInv";
+        ReportGridPur.PrimaryKey = "InvoiceID";
+        ReportGridPur.Paging = true;
+        ReportGridPur.PageSize = 6;
+        ReportGridPur.Sorting = true;
+        ReportGridPur.InsertionMode = JsGridInsertionMode.Binding;
+        ReportGridPur.Editing = false;
+        ReportGridPur.Inserting = false;
+        ReportGridPur.SelectedIndex = 1;
+        ReportGridPur.SwitchingLanguageEnabled = false;
+        ReportGridPur.OnItemEditing = () => { };
+        ReportGridPur.Columns = [
+            { title: "الرقم", name: "InvoiceID", type: "text", width: "5%", visible: false },
+            { title: "رقم الفاتوره", name: "TrNo", type: "text", width: "5%" },
+            { title: "رقم المرجع", name: "RefNO", type: "text", width: "5%" },
+            {
+                title: "التاريخ",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+                    txt.innerHTML = DateFormat(item.TrDate);
+
+                    return txt;
+                }
+            },
+            { title: "الصافــي  ", name: "NetAfterVat", type: "text", width: "10%" },
+            {
+                title: "الحاله",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLLabelElement => {
+                    let txt: HTMLLabelElement = document.createElement("label");
+
+                    if (item.Status == 0) {
+                        txt.innerHTML = 'جديد';
+                    }
+                    if (item.Status == 1) {
+                        txt.innerHTML = 'صحيحه';
+                    }
+                    if (item.Status == 2) {
+                        txt.innerHTML = 'غير صحيحه';
+                    }
+                    if (item.Status == 3) {
+                        txt.innerHTML = 'ملغي';
+                    }
+
+
+                    return txt;
+                }
+            }, 
+            {
+                title: "عـرض",
+                width: "5%",
+                itemTemplate: (s: string, item: Sls_Ivoice): HTMLInputElement => {
+                    let txt: HTMLInputElement = document.createElement("input");
+                    txt.type = "button";
+                    txt.value = ("عـرض");
+                    txt.id = "butPrint" + item.InvoiceID;
+                    txt.className = "dis src-btn btn btn-warning input-sm style_but_Grid";
+
+
+
+                    txt.onclick = (e) => {
+                        PrintInvoice(item.InvoiceID);
+                    };
+                    return txt;
+                }
+            },
+
+       
+
+
+        ];
+        ReportGridPur.Bind();
     }
 
 
@@ -422,200 +660,37 @@ namespace QuotationView {
         $('#txtUpdatedAt').prop("value", Selecteditem[0].UpdatedAt);
     }
 
-    function ComfirmPurNo(btnId: number, PurNo: string) {
-
-
-
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrl("SlsTrSales", "UpdatePurNo"),
-            data: { InvoiceID: btnId, PurNo: PurNo },
-            success: (d) => {
-                let result = d as BaseResponse;
-                if (result.IsSuccess == true) {
-
-                    Display();
-
-
-                } else {
-                    DisplayMassage("Please refresh the page and try again", "Please refresh the page and try again", MessageType.Error);
-
-                }
-            }
-        });
-
-    }
-    function ComfirmQuotation(btnId: number) {
-        var InvDate = GetDate();
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrl("SlsTrSales", "UpdateInvoice"),
-            data: { InvoiceID: btnId, InvDate: InvDate },
-            success: (d) => {
-                let result = d as BaseResponse;
-                if (result.IsSuccess == true) {
-
-                    Display();
-                    $('#viewmail').removeClass('active in');
-                    $('#sendmail').addClass('active in');
-
-                    $('#btnQuotations').removeClass('active');
-                    $('#btnInvoice').addClass('active');
-
-                } else {
-                    DisplayMassage("Please refresh the page and try again", "Please refresh the page and try again", MessageType.Error);
-
-                }
-            }
-        });
-
-    }
-    function DelivNoteQuotation(btnId: number) {
-        if (!SysSession.CurrentPrivileges.PrintOut) return;
-
-        window.open(Url.Action("ReportsPopup", "Home"), "blank");
-        localStorage.setItem("result", '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
-
-
-        let rp: ReportParameters = new ReportParameters();
-
-        rp.CompCode = SysSession.CurrentEnvironment.CompCode;
-        rp.BranchCode = SysSession.CurrentEnvironment.BranchCode;
-        rp.CompNameA = SysSession.CurrentEnvironment.CompanyNameAr;
-        rp.CompNameE = SysSession.CurrentEnvironment.CompanyName;
-        rp.UserCode = SysSession.CurrentEnvironment.UserCode;
-        rp.Tokenid = SysSession.CurrentEnvironment.Token;
-        rp.ScreenLanguage = SysSession.CurrentEnvironment.ScreenLanguage;
-        rp.SystemCode = SysSession.CurrentEnvironment.SystemCode;
-        rp.SubSystemCode = SysSession.CurrentEnvironment.SubSystemCode;
-        rp.BraNameA = SysSession.CurrentEnvironment.BranchName;
-        rp.BraNameE = SysSession.CurrentEnvironment.BranchName;
-        if (rp.BraNameA == null || rp.BraNameE == null) {
-
-            rp.BraNameA = " ";
-            rp.BraNameE = " ";
-        }
-        rp.Type = 4;
-        rp.Repdesign = 2;
-        rp.TRId = btnId;
-        rp.slip = 0;
-        rp.stat = 1
-
-        debugger
-        Ajax.CallAsync({
-            url: Url.Action("PrintQuotation", "GeneralRep"),
-            data: rp,
-            success: (d) => {
-                let result = d as BaseResponse;
-                localStorage.setItem("result", "" + result + "");
-                window.open(Url.Action("ReportsPopup", "Home"), "blank");
-
-                //let result = d.result as string;    
-                //window.open(result, "_blank");
-            }
-        })
-    }
-    function PrintQuotation(btnId: number) {
-        if (!SysSession.CurrentPrivileges.PrintOut) return;
-
-        window.open(Url.Action("ReportsPopup", "Home"), "blank");
-        localStorage.setItem("result", '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
-
-
-        let rp: ReportParameters = new ReportParameters();
-
-        rp.CompCode = SysSession.CurrentEnvironment.CompCode;
-        rp.BranchCode = SysSession.CurrentEnvironment.BranchCode;
-        rp.CompNameA = SysSession.CurrentEnvironment.CompanyNameAr;
-        rp.CompNameE = SysSession.CurrentEnvironment.CompanyName;
-        rp.UserCode = SysSession.CurrentEnvironment.UserCode;
-        rp.Tokenid = SysSession.CurrentEnvironment.Token;
-        rp.ScreenLanguage = SysSession.CurrentEnvironment.ScreenLanguage;
-        rp.SystemCode = SysSession.CurrentEnvironment.SystemCode;
-        rp.SubSystemCode = SysSession.CurrentEnvironment.SubSystemCode;
-        rp.BraNameA = SysSession.CurrentEnvironment.BranchName;
-        rp.BraNameE = SysSession.CurrentEnvironment.BranchName;
-        if (rp.BraNameA == null || rp.BraNameE == null) {
-
-            rp.BraNameA = " ";
-            rp.BraNameE = " ";
-        }
-        rp.Type = 4;
-        rp.Repdesign = 1;
-        rp.TRId = btnId;
-        rp.slip = 0;
-        rp.stat = 1
-
-        debugger
-        Ajax.CallAsync({
-            url: Url.Action("PrintQuotation", "GeneralRep"),
-            data: rp,
-            success: (d) => {
-                let result = d as BaseResponse;
-                localStorage.setItem("result", "" + result + "");
-                window.open(Url.Action("ReportsPopup", "Home"), "blank");
-
-                //let result = d.result as string;    
-                //window.open(result, "_blank");
-            }
-        })
-    }
-    function EidtQuotation(btnId: number) {
-
-        debugger
-        $('#viewmail').removeClass('active in');
-        $('#sendmail').removeClass('active in');
-        $('#composemail').addClass('active in');
-
-        $('#btnQuotations').removeClass('active');
-        $('#btnInvoice').removeClass('active');
-
-        $('#Div_Fillter').addClass('display_none');
-        $('#Div_Views').attr('style', 'width: 100% !important;');
-
-
-        InitalizeComponentInvoice();
-
-
-        Selected_Data = new Array<Sls_Ivoice>();
-
-        Selected_Data = InvoiceDisplay.filter(x => x.InvoiceID == Number(btnId));
-
-        DisplayData(Selected_Data);
-
-    }
     function DisplayData(Selected_Data: Array<Sls_Ivoice>) {
         debugger
 
         DocumentActions.RenderFromModel(Selected_Data[0]);
-         
+
 
         txtDate.value = DateFormat(Selected_Data[0].TrDate);
 
 
         GlobalinvoiceID = Selected_Data[0].InvoiceID;
         CustomerId = Selected_Data[0].CustomerId;
-        //txtQutationNo.value = Selected_Data[0].TrNo.toString();
+        $('#TrNo').html('رقم الفاتوره ( ' + Selected_Data[0].TrNo.toString() + ' )')
         txtRFQ.value = Selected_Data[0].RefNO;
         txtCompanysales.value = Selected_Data[0].CustomerName;
         txtRemark.value = Selected_Data[0].Remark;
         GetCustomer();
         ddlCurreny.value = setVal(Selected_Data[0].InvoiceCurrenyID.toString());
-        ddlTypePay.value = Selected_Data[0].IsCash == false ? '0' :'1';
+        ddlTypePay.value = Selected_Data[0].IsCash == false ? '0' : '1';
         ddlStatas.value = setVal(Selected_Data[0].Status);
         ddlTypeInv.value = setVal(Selected_Data[0].DocType);
         txtTaxPrc.value = setVal(Selected_Data[0].RoundingAmount);
 
-        //ddlValueTax.value = setVal(Selected_Data[0].Status);
-        //ddlTypeTax.value = setVal(Selected_Data[0].Status);
-        //ddlDisTax.value = setVal(Selected_Data[0].Status);
-        //ddlTypeDis.value = setVal(Selected_Data[0].Status);
 
-        //txtNetBefore.value = Selected_Data[0].TotalAmount.toString();
-        ////txtAllDiscount.value = Selected_Data[0].RoundingAmount.toString();
-        //txtNetAfterVat.value = Selected_Data[0].NetAfterVat.toString();
+        txtTotal.value = setVal(Selected_Data[0].TotalAmount);
+        txtNet.value = setVal(Selected_Data[0].NetAfterVat);
+        txtTax.value = setVal(Selected_Data[0].VatAmount);
+        txtTotalDiscount.value = setVal(Selected_Data[0].ItemDiscountTotal);
+
+
         ////-------------------------(T E R M S & C O N D I T I O N S)-----------------------------------------------     
-       
+
         Ajax.Callsync({
             type: "Get",
             url: sys.apiUrl("SlsTrSales", "GetSlsInvoiceItem"),
@@ -623,18 +698,90 @@ namespace QuotationView {
             success: (d) => {//(int CompCode, string StartDate, string EndDate, int Status, int? CustId, string SalesUser, string UserCode, string Token)
                 let result = d as BaseResponse;
                 if (result.IsSuccess) {
-                    InvItemsDetailsModel = result.Response as Array<Sls_InvoiceDetail>;
+                    DisplayDetailsAndTaxabl = result.Response as DetailsAndTaxabl;
+
+                    InvItemsDetailsModel = DisplayDetailsAndTaxabl.IQ_Sls_InvoiceDetail_Tax;
                     CountGrid = 0;
                     $("#Table_Data").html("");
                     for (let i = 0; i < InvItemsDetailsModel.length; i++) {
                         BuildControls(i);
                         Display_GridConrtol(i);
+                        CountGrid++;
                     }
-                    CountGrid = InvItemsDetailsModel.length;
+
+                    debugger
+                    let tax = DisplayDetailsAndTaxabl.taxableItem;
+
+
+
+                    ddlValueTax.value = tax[0].taxType;
+
+                    let ValueTax = ddlValueTax.value;
+                    let TaxT1 = TaxType.filter(x => x.StdCode == ValueTax)
+
+                    $('#ddlTypeTax').html('')
+                    for (var i = 0; i < TaxT1.length; i++) {
+                        $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+                    }
+
+                    ddlTypeTax.value = tax[0].subType;
+
+
+
+                    if (tax.length > 1) {
+                        ddlDisTax.value = tax[1].taxType;
+
+
+                        let DisTax = ddlDisTax.value;
+                        let TaxT2 = TaxType.filter(x => x.StdCode == DisTax)
+
+                        $('#ddlTypeDis').html('')
+                        for (var i = 0; i < TaxT2.length; i++) {
+                            $('#ddlTypeDis').append('<option   value="' + TaxT2[i].SubCode + '">' + TaxT2[i].DescA + '</option>');
+                        }
+
+                        if (ddlDisTax.value == 'null') {
+                            $('#ddlTypeDis').append('<option value="null"> Choose Tax </option>');
+                        }
+
+
+                        ddlTypeDis.value = tax[1].subType;
+                    }
+
+
+
+
+                    ComputeTotals();
+
                 }
             }
         });
 
+    }
+    function Display_GridConrtol(cnt) {
+
+        if (Return_Falg == true) {
+
+            $("#txt_StatusFlag" + cnt).val("i");
+        }
+        else {
+
+            $("#txt_StatusFlag" + cnt).val("");
+        }
+        $("#InvoiceItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].InvoiceItemID);
+        $("#txt_ItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].ItemID);
+        $("#txtSerial" + cnt).prop("value", InvItemsDetailsModel[cnt].Serial);
+        $("#btnItem" + cnt).html(InvItemsDetailsModel[cnt].description);
+        $("#ddlTypeUom" + cnt).prop("value", InvItemsDetailsModel[cnt].UomID);
+        $("#txtQuantity" + cnt).prop("value", InvItemsDetailsModel[cnt].SoldQty);
+        $("#txtPrice" + cnt).prop("value", InvItemsDetailsModel[cnt].Unitprice);
+        $("#txtNetUnitPrice" + cnt).prop("value", InvItemsDetailsModel[cnt].NetUnitPrice);
+        $("#txtDiscountPrc" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountPrc);
+        $("#txtDiscountAmount" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountAmount);
+        $("#txtTax_Rate" + cnt).prop("value", InvItemsDetailsModel[cnt].VatPrc);
+        $("#txtTax_Rate" + cnt).prop("value", InvItemsDetailsModel[cnt].VatPrc);
+        $("#txtTax" + cnt).prop("value", InvItemsDetailsModel[cnt].VatAmount);
+        totalRow(cnt, true);
     }
     function GetCustomer() {
         Ajax.Callsync({
@@ -652,21 +799,59 @@ namespace QuotationView {
             }
         });
     }
-    function Display_GridConrtol(cnt) {
+
+    function ReturnORAddInvoice(btnId: number, Typ: string) {
+
+        debugger
+        $('#viewmail').removeClass('active in');
+        $('#sendmail').removeClass('active in');
+        $('#composemail').addClass('active in');
+
+        $('#btnReturn').removeClass('active');
+        $('#btnInvoice').removeClass('active');
+
+        $('#Div_Fillter').addClass('display_none');
+        $('#Div_Views').attr('style', 'width: 100% !important;');
 
 
-        $("#txt_StatusFlag" + cnt).val(""); 
-        $("#InvoiceItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].InvoiceItemID);
-        $("#txt_ItemID" + cnt).prop("value", InvItemsDetailsModel[cnt].ItemID);
-        $("#serial" + cnt).prop("value", InvItemsDetailsModel[cnt].Serial);
-        $("#QTY" + cnt).prop("value", InvItemsDetailsModel[cnt].SoldQty);
-        $("#Description" + cnt).prop("value", InvItemsDetailsModel[cnt].Itemdesc);
-        $("#ddlTypeUom" + cnt).prop("value", InvItemsDetailsModel[cnt].UomID);
-        $("#UnitPrice" + cnt).prop("value", InvItemsDetailsModel[cnt].NetUnitPrice);
-        $("#Totalprice" + cnt).prop("value", InvItemsDetailsModel[cnt].ItemTotal);
-        $("#DiscountPrc" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountPrc);
-        $("#DiscountAmount" + cnt).prop("value", InvItemsDetailsModel[cnt].DiscountAmount);
-        $("#Net" + cnt).prop("value", InvItemsDetailsModel[cnt].NetAfterVat);
+        InitalizeComponentInvoice();
+
+        Return_Falg = true;
+
+        Selected_Data = new Array<Sls_Ivoice>();
+
+        Selected_Data = InvoiceDisplay.filter(x => x.InvoiceID == Number(btnId));
+
+        DisplayData(Selected_Data);
+
+
+        ddlTypeInv.value = Typ;
+
+        ddlStatas.value = "0";
+        
+    }
+    function EidtInvoice(btnId: number) {
+
+        debugger
+        $('#viewmail').removeClass('active in');
+        $('#sendmail').removeClass('active in');
+        $('#composemail').addClass('active in');
+
+        $('#btnReturn').removeClass('active');
+        $('#btnInvoice').removeClass('active');
+
+        $('#Div_Fillter').addClass('display_none');
+        $('#Div_Views').attr('style', 'width: 100% !important;');
+
+
+        InitalizeComponentInvoice();
+
+
+        Selected_Data = new Array<Sls_Ivoice>();
+
+        Selected_Data = InvoiceDisplay.filter(x => x.InvoiceID == Number(btnId));
+
+        DisplayData(Selected_Data);
 
     }
     function PrintInvoice(btnId: number) {
@@ -724,12 +909,12 @@ namespace QuotationView {
                 let result = d as BaseResponse;
                 if (result.IsSuccess == true) {
 
-                    Display();
-                    $('#viewmail').removeClass('active in');
-                    $('#sendmail').addClass('active in');
+                    Display(txtTypeInv.value);
+                    //$('#viewmail').removeClass('active in');
+                    //$('#sendmail').addClass('active in');
 
-                    $('#btnQuotations').removeClass('active');
-                    $('#btnInvoice').addClass('active');
+                    //$('#btnReturn').removeClass('active');
+                    //$('#btnInvoice').addClass('active');
 
                 } else {
                     DisplayMassage("Please refresh the page and try again", "Please refresh the page and try again", MessageType.Error);
@@ -738,6 +923,61 @@ namespace QuotationView {
             }
         });
     }
+
+    function _SearchBox_Change() {
+        //  k//////
+
+        if (Txt_Search.value != "") {
+
+            let search: string = Txt_Search.value.toLowerCase();
+            SearchDetails = InvoiceDisplay.filter(x => x.TrNo.toString().search(search) >= 0 || x.RefNO.toString().search(search) >= 0
+                  /*|| x.PortName.toLowerCase().search(search) >= 0*/
+              /*  || x.CustomerCODE.toString().search(search) >= 0  || x.CreditLimit.toString().search(search) >= 0 || x.Emp_NameA.toString().search(search) >= 0
+                || x.ContactMobile.toString().search(search) >= 0 /*|| x.DueAmount.toString().search(search) >= 0 *//*|| x.DaysDiff.toString().search(search) >= 0*/);
+
+             
+        } else {
+            SearchDetails = InvoiceDisplay; 
+        }
+
+
+        if (txtTypeInv.value == 'I') {
+
+            ReportGridInv.DataSource = SearchDetails;
+            ReportGridInv.Bind();
+
+            $('#Title_Inv').html('عـرض فواتير المبيعات')
+
+
+            $('#btnAdd').removeClass('active');
+            $('#btnReturn').removeClass('active');
+            $('#btnInvoice').addClass('active');
+
+        }
+        if (txtTypeInv.value == 'C') {
+
+            ReportGridRet.DataSource = SearchDetails;
+            ReportGridRet.Bind();
+            $('#Title_Inv').html('عـرض فواتير المرتجعات')
+
+            $('#btnAdd').removeClass('active');
+            $('#btnReturn').addClass('active');
+            $('#btnInvoice').removeClass('active');
+        }
+        if (txtTypeInv.value == 'D') {
+
+            ReportGridRet.DataSource = SearchDetails;
+            ReportGridRet.Bind();
+            $('#Title_Inv').html('عـرض فواتير أضافه')
+
+            $('#btnAdd').addClass('active');
+            $('#btnReturn').removeClass('active');
+            $('#btnInvoice').removeClass('active');
+
+        }
+
+    }
+
     function btnCust_onClick() {
         sys.FindKey(Modules.Quotation, "btnCustSrch", "", () => {
             CustomerDetail = SearchGrid.SearchDataGrid.SelectedKey;
@@ -749,7 +989,7 @@ namespace QuotationView {
     }
 
     /*@* ---------------------------------------Eidt Invoice------------------------------------------*@*/
-     
+
     var InvoiceItemsDetailsModel: Array<Sls_InvoiceDetail> = new Array<Sls_InvoiceDetail>();
     var invoiceItemSingleModel: Sls_InvoiceDetail = new Sls_InvoiceDetail();
     var InvoiceModel: Sls_Ivoice = new Sls_Ivoice();
@@ -770,7 +1010,6 @@ namespace QuotationView {
     var btnClean: HTMLButtonElement;
     var CustomerId: number = 0;
     var btnCustSrch: HTMLButtonElement;
-    var btnprint: HTMLButtonElement;
     var invoiceID: number = 0;
     var txtDate: HTMLInputElement;
     var txtRFQ: HTMLInputElement;
@@ -780,8 +1019,6 @@ namespace QuotationView {
     var txtCompanyname: HTMLInputElement;
 
     var txtRemark: HTMLInputElement;
-    var txtNetBefore: HTMLInputElement;
-    var txtNetAfterVat: HTMLInputElement;
 
     var txtTaxPrc: HTMLInputElement;
     var txtItemCount: HTMLInputElement;
@@ -828,7 +1065,6 @@ namespace QuotationView {
         btnCustSrch = document.getElementById("btnCustSrch") as HTMLButtonElement;
         btnsave = document.getElementById("btnsave") as HTMLButtonElement;
         btnClean = document.getElementById("btnClean") as HTMLButtonElement;
-        btnprint = document.getElementById("btnprint") as HTMLButtonElement;
         // inputs
         ddlStatas = document.getElementById("ddlStatas") as HTMLSelectElement;
         ddlCurreny = document.getElementById("ddlCurreny") as HTMLSelectElement;
@@ -845,8 +1081,6 @@ namespace QuotationView {
         txtCompanyname = document.getElementById("txtCompanyname") as HTMLInputElement;
 
         txtRemark = document.getElementById("txtRemark") as HTMLInputElement;
-        txtNetBefore = document.getElementById("txtNetBefore") as HTMLInputElement;
-        txtNetAfterVat = document.getElementById("txtNetAfterVat") as HTMLInputElement;
 
         txtTaxPrc = document.getElementById("txtTaxPrc") as HTMLInputElement;
         txtItemCount = document.getElementById("txtItemCount") as HTMLInputElement;
@@ -866,7 +1100,6 @@ namespace QuotationView {
         btnCustSrch.onclick = btnCustSrch_onClick;
         btnsave.onclick = btnsave_onclick;
         btnClean.onclick = btnClean_onclick;
-        //btnprint.onclick = btnprint_onclick;
         ddlValueTax.onchange = ddlValueTax_onchange;
         ddlDisTax.onchange = ddlDisTax_onchange;
         txtTaxPrc.onkeyup = txtTaxPrc_onchange;
@@ -892,7 +1125,7 @@ namespace QuotationView {
         }
 
         if (ddlDisTax.value == 'null') {
-            $('#ddlTypeDis').append('<option value="null"> Choose Tax </option>');
+            $('#ddlTypeDis').append('<option value="null"> اختار </option>');
         }
     }
     function ddlValueTax_onchange() {
@@ -983,7 +1216,7 @@ namespace QuotationView {
             CustomerDetail = SearchGrid.SearchDataGrid.SelectedKey;
             console.log(CustomerDetail);
             CustomerId = Number(CustomerDetail[0]);
-            txtCompanyname.value = String(CustomerDetail[2]);
+            txtCompanyname.value = String(CustomerDetail[1]);
 
         });
     }
@@ -1303,16 +1536,21 @@ namespace QuotationView {
         InvoiceModel.DocType = ddlTypeInv.value;
         ///////////////
         debugger
-        InvoiceModel.InvoiceID = 0;
+
+        Return_Falg == false ? InvoiceModel.TrNo = Number(Selected_Data[0].TrNo) : InvoiceModel.TrNo = 0;
+
+        InvoiceModel.InvoiceID = Selected_Data[0].InvoiceID;
         InvoiceModel.StoreId = 1;
         InvoiceModel.TrDate = txtDate.value;
         InvoiceModel.CommitionAmount = 0;
         InvoiceModel.Remark = txtRemark.value;
+        InvoiceModel.RefNO = txtRFQ.value;
         InvoiceModel.CardAmount = 0;
         InvoiceModel.CashAmount = Number(txtNet.value);
         InvoiceModel.CustomerName = txtCompanysales.value;
         InvoiceModel.TaxCurrencyID = Number(ddlCurreny.value);
         InvoiceModel.InvoiceCurrenyID = Number(ddlCurreny.value);
+        InvoiceModel.RoundingAmount = Number($('#txtTaxPrc').val());
         //InvoiceModel.CardAmount = $('#txtCardMoney').val().trim() == '' ? 0 : $('#txtCardMoney').val();
         //InvoiceModel.CashAmount = $('#txtCashMoney').val().trim() == '' ? 0 : $('#txtCashMoney').val();
         //InvoiceModel.TaxCurrencyID = Number(SysSession.CurrentEnvironment.I_Control[0].Currencyid);
@@ -1414,6 +1652,7 @@ namespace QuotationView {
         }
 
 
+        TaxableSinglModel = new TaxableItem();
         TaxableSinglModel.InvoiceID = 0
         TaxableSinglModel.subType = ddlTypeTax.value
         TaxableSinglModel.taxType = ddlValueTax.value
@@ -1421,7 +1660,7 @@ namespace QuotationView {
 
 
         if (ddlDisTax.value != 'null' && ddlTypeDis.value != 'null') {
-
+            TaxableSinglModel = new TaxableItem();
             TaxableSinglModel.InvoiceID = 0
             TaxableSinglModel.subType = ddlTypeDis.value
             TaxableSinglModel.taxType = ddlDisTax.value
@@ -1435,7 +1674,35 @@ namespace QuotationView {
 
     }
 
-    function insert() {
+    function Update() {
+        if (!validation()) return;
+
+        Assign();
+        Ajax.Callsync({
+            type: "POST",
+            url: sys.apiUrl("SlsTrSales", "updateInvoiceMasterDetail"),
+            data: JSON.stringify(MasterDetailsModel),
+            success: (d) => {
+                let result = d as BaseResponse;
+                if (result.IsSuccess == true) {
+
+                    let res = result.Response as Sls_Ivoice;
+                    invoiceID = res.InvoiceID;
+                    DisplayMassage("تم تعديل فاتوره رقم  ( " + res.TrNo + " )", "تم تعديل فاتوره رقم  ( " + res.TrNo + " )", MessageType.Succeed);
+
+                    success_insert();
+
+
+                } else {
+                    DisplayMassage("Please refresh the page and try again", "Please refresh the page and try again", MessageType.Error);
+
+                }
+            }
+        });
+
+    }
+
+    function Insert() {
         if (!validation()) return;
 
         Assign();
@@ -1449,7 +1716,7 @@ namespace QuotationView {
 
                     let res = result.Response as Sls_Ivoice;
                     invoiceID = res.InvoiceID;
-                    DisplayMassage("An invoice number has been issued " + res.TrNo + "", "An invoice number has been issued " + res.TrNo + "", MessageType.Succeed);
+                    DisplayMassage("تم اصدار فاتوره رقم  ( " + res.TrNo + " )", "تم اصدار فاتوره رقم  ( " + res.TrNo + " )", MessageType.Succeed);
 
                     success_insert();
 
@@ -1462,6 +1729,7 @@ namespace QuotationView {
         });
 
     }
+
     function success_insert() {
         btnClean_onclick();
         txtDate.value = GetDate();
@@ -1472,8 +1740,6 @@ namespace QuotationView {
         txtCompanysales.value = "";
         txtCompanyname.value = "";
         txtRemark.value = "";
-        txtNetBefore.value = "";
-        txtNetAfterVat.value = "";
 
         txtItemCount.value = "";
         txtPackageCount.value = "";
@@ -1483,9 +1749,46 @@ namespace QuotationView {
         txtTax.value = "";
         txtNet.value = "";
 
+        Tax = G_CodesDetails.filter(x => x.CodeType == 'Taxtypes')
+        TaxType = G_CodesDetails.filter(x => x.CodeType == 'TaxSubtypes')
+        let TaxT1 = TaxType.filter(x => x.StdCode == 'T1')
+
+        $('#ddlValueTax').html('')
+        $('#ddlTypeTax').html('')
+
+        for (var i = 0; i < Tax.length; i++) {
+            $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+            $('#ddlDisTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+        }
+
+        for (var i = 0; i < TaxType.length; i++) {
+
+            $('#ddlTypeDis').append('<option   value="' + TaxType[i].SubCode + '">' + TaxType[i].DescA + '</option>');
+
+        }
+
+        for (var i = 0; i < TaxT1.length; i++) {
+            $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+        }
+
+
+
+        $('#ddlValueTax').val('T1')
+        $('#ddlTypeTax').val('V009')
+
+
+
+        ddlDisTax.value = 'null';
+        $('#ddlTypeDis').html('')
+        $('#ddlTypeDis').append('<option value="null"> اختار </option>');
+
 
         $("#Table_Data").html("");
         AddNewRow();
+
+        Display(txtTypeInv.value);
+
+        Return_Falg = false;
     }
     function validation() {
 
@@ -1500,6 +1803,11 @@ namespace QuotationView {
         if (txtDate.value.trim() == "") {
             Errorinput(txtDate);
             DisplayMassage('برجاء ادخال التاريخ', 'Date must be entered', MessageType.Error);
+            return false;
+        }
+        if (txtRFQ.value.trim() == "") {
+            Errorinput(txtRFQ);
+            DisplayMassage('برجاء ادخال رقم الرجع', 'Company must be choosed', MessageType.Error);
             return false;
         }
         if (txtCompanyname.value.trim() == "") {
@@ -1554,22 +1862,65 @@ namespace QuotationView {
             }
         }
         if (CanAdd) {
-            insert();
+            if (Return_Falg == false) {
+                Update();
+
+            }
+            else {
+                Insert();
+            }
         }
 
     }
     function btnClean_onclick() {
-         
+
         $('#viewmail').removeClass('active in');
         $('#sendmail').addClass('active in');
         $('#composemail').removeClass('active in');
 
-        $('#btnQuotations').addClass('active');
-        $('#btnInvoice').removeClass('active');
+        //$('#btnReturn').addClass('active');
+        //$('#btnInvoice').removeClass('active');
+
+
+        if (txtTypeInv.value == 'I') {
+
+            ReportGridInv.DataSource = Invoice;
+            ReportGridInv.Bind();
+
+            $('#Title_Inv').html('عـرض فواتير المبيعات')
+
+
+            $('#btnAdd').removeClass('active');
+            $('#btnReturn').removeClass('active');
+            $('#btnInvoice').addClass('active');
+
+        }
+        if (txtTypeInv.value == 'C') {
+
+            ReportGridRet.DataSource = Invoice;
+            ReportGridRet.Bind();
+            $('#Title_Inv').html('عـرض فواتير المرتجعات')
+
+            $('#btnAdd').removeClass('active');
+            $('#btnReturn').addClass('active');
+            $('#btnInvoice').removeClass('active');
+        }
+        if (txtTypeInv.value == 'D') {
+
+            ReportGridRet.DataSource = Invoice;
+            ReportGridRet.Bind();
+            $('#Title_Inv').html('عـرض فواتير أضافه')
+
+            $('#btnAdd').addClass('active');
+            $('#btnReturn').removeClass('active');
+            $('#btnInvoice').removeClass('active');
+
+        }
+
 
         $('#Div_Fillter').removeClass('display_none');
         $('#Div_Views').attr('style', '');
-
+        Return_Falg = false;
         CountGrid = 0;
         $("#Table_Data").html("");
         AddNewRow();

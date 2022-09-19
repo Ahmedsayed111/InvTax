@@ -80,6 +80,49 @@ th {
     text-align: right !important;
 }
 
+.font_size {
+    font-size: 16px !important;
+    font-weight: bold !important;
+}
+
+.display_none {
+    display: none !important;
+}
+
+.ret {
+    background-color: black !important;
+}
+.Add {
+    background-color: #8b8b18 !important;
+}
+
+.text_Mandatory {
+    background-color: #ff00009e !important; 
+}
+
+#SearchBox {
+    z-index: 1041;
+    position: fixed;
+    padding-top: 19px;
+    background-color: white;
+    border-radius: 15px;
+    -moz-box-shadow: black 5px 4px 18px 0px;
+    -webkit-box-shadow: black 5px 4px 18px 0px;
+    box-shadow: black 5px 4px 18px 0px;
+}
+
+.jsgrid-grid-body {
+    overflow-y: hidden !important;
+}
+
+.style_rtl {
+    direction: rtl !important;
+}
+.style_but_Grid {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    width: 59% !important;
+}
 
 html, body {
     font-family: 'Open Sans', sans-serif;

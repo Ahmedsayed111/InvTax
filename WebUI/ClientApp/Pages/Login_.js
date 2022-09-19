@@ -174,121 +174,122 @@ var Login_;
         });
     }
     function GoToCompanySelect() {
-        //$("#tblLogin").css("display", "none");
-        //$("#tblCompany").css("display", "block");
-        //(document.getElementById("btnOk") as HTMLInputElement).addEventListener("click", () => { 
-        var compCode = $("#cmbCompany").val();
-        var braCode = $("#cmbBranch").val();
-        var company = compData.filter(function (x) { return x.CompanyCode == cmbCompany.value; })[0];
-        var isActive = company.IsActive;
-        SystemEnv = GetSystemEnvironment();
-        if (isActive) {
-            Ajax.Callsyncstart({
-                type: "GET",
-                url: sys.apiUrl("I_VW_GetCompStatus", "GetStat"),
-                data: { Compcode: compCode, yr: Number(txtYear.value) },
-                async: false,
-                success: function (d) {
-                    var res = d;
-                    if (res.IsSuccess) {
-                        var CompanyStatus = res.Response;
-                        var status = CompanyStatus.CompStatus;
-                        var masg = CompanyStatus.LoginMsg;
-                        if (status == 0 || status == 1 || status == 2) {
-                            //MessageBox.Showwithoutclick(CompanyStatus.LoginMsg, "");                                
-                            Ajax.Callsyncstart({
-                                type: "GET",
-                                url: sys.apiUrl("I_Control", "GetAll"),
-                                data: { Compcode: compCode },
-                                async: false,
-                                success: function (d) {
-                                    var res = d;
-                                    if (res.IsSuccess) {
-                                        var CompanyService = res.Response;
-                                        if (CompanyService != null) {
-                                            SystemEnv.I_Control = CompanyService;
-                                            SystemEnv.CompCode = compCode;
-                                            SystemEnv.BranchCode = braCode;
-                                            SystemEnv.CompanyName = company.CompanyNameE;
-                                            SystemEnv.CompanyNameAr = company.CompanyNameA;
-                                            SystemEnv.CurrentYear = txtYear.value;
-                                            SystemEnv.IsBiLingual = true;
-                                            SystemEnv.Language = cmbLanguage.value;
-                                            SystemEnv.ScreenLanguage = cmbLanguage.value;
-                                            SystemEnv.SystemCode = 'I';
-                                            SystemEnv.SubSystemCode = 'I';
-                                            SystemEnv.UserCode = txtUserName.value;
-                                            SystemEnv.StartDate = CompanyStatus.FirstDate.substr(0, 10);
-                                            SystemEnv.EndDate = CompanyStatus.LastDate.substr(0, 10);
-                                            SystemEnv.NationalityID = CompanyService[0].NationalityID;
-                                            //Ajax.Callsyncstart({
-                                            //    type: "GET",
-                                            //    url: sys.apiUrl("GBranch", "GetBranch"),
-                                            //    data: { CompCode: Number(compCode), BRA_CODE: Number(braCode) },
-                                            //    async: false,
-                                            //    success: (d) => {
-                                            //        let res = d as BaseResponse;
-                                            //        if (res.IsSuccess) {
-                                            //            G_BRANCHService = res.Response as Array<G_BRANCH>;
-                                            //            if (G_BRANCHService != null) { 
-                                            //                SystemEnv.SlsInvType = G_BRANCHService[0].SlsInvType;
-                                            //                SystemEnv.WholeInvoiceTransCode = G_BRANCHService[0].WholeInvoiceTransCode;
-                                            //                SystemEnv.RetailInvoicePayment = G_BRANCHService[0].RetailInvoicePayment;
-                                            //                SystemEnv.WholeInvoicePayment = G_BRANCHService[0].WholeInvoicePayment;
-                                            //                SystemEnv.ServiceInvoiceTransCode = G_BRANCHService[0].ServiceInvoiceTransCode;
-                                            //                SystemEnv.ReturnTypeCode = G_BRANCHService[0].ReturnTypeCode;
-                                            //                SystemEnv.InvoiceTypeCode = G_BRANCHService[0].InvoiceTypeCode;
-                                            //                SystemEnv.RetailInvoiceTransCode = G_BRANCHService[0].RetailInvoiceTransCode; 
-                                            //            } else {
-                                            //                var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول الفرع" : "You are not allowed to login";
-                                            //                MessageBox.Show(msg, "");
-                                            //            }
-                                            //        }
-                                            //    }
-                                            //});
-                                            Ajax.Callsyncstart({
-                                                type: "GET",
-                                                url: sys.apiUrl("I_Control", "GetIssuer"),
-                                                data: { Compcode: compCode },
-                                                async: false,
-                                                success: function (d) {
-                                                    var res = d;
-                                                    if (res.IsSuccess) {
-                                                        issuerService = res.Response;
-                                                        if (issuerService.length > 0) {
-                                                            SystemEnv.issuer = issuerService[0];
-                                                        }
-                                                        else {
-                                                            SystemEnv.issuer = new issuer;
+        $("#tblLogin").css("display", "none");
+        $("#tblCompany").css("display", "block");
+        document.getElementById("btnOk").addEventListener("click", function () {
+            var compCode = $("#cmbCompany").val();
+            var braCode = $("#cmbBranch").val();
+            var company = compData.filter(function (x) { return x.CompanyCode == cmbCompany.value; })[0];
+            var isActive = company.IsActive;
+            SystemEnv = GetSystemEnvironment();
+            if (isActive) {
+                Ajax.Callsyncstart({
+                    type: "GET",
+                    url: sys.apiUrl("I_VW_GetCompStatus", "GetStat"),
+                    data: { Compcode: compCode, yr: Number(txtYear.value) },
+                    async: false,
+                    success: function (d) {
+                        var res = d;
+                        if (res.IsSuccess) {
+                            var CompanyStatus = res.Response;
+                            var status = CompanyStatus.CompStatus;
+                            var masg = CompanyStatus.LoginMsg;
+                            if (status == 0 || status == 1 || status == 2) {
+                                //MessageBox.Showwithoutclick(CompanyStatus.LoginMsg, "");                                
+                                Ajax.Callsyncstart({
+                                    type: "GET",
+                                    url: sys.apiUrl("I_Control", "GetAll"),
+                                    data: { Compcode: compCode },
+                                    async: false,
+                                    success: function (d) {
+                                        var res = d;
+                                        if (res.IsSuccess) {
+                                            var CompanyService = res.Response;
+                                            if (CompanyService != null) {
+                                                SystemEnv.I_Control = CompanyService;
+                                                SystemEnv.CompCode = compCode;
+                                                SystemEnv.BranchCode = braCode;
+                                                SystemEnv.CompanyName = company.CompanyNameE;
+                                                SystemEnv.CompanyNameAr = company.CompanyNameA;
+                                                SystemEnv.CurrentYear = txtYear.value;
+                                                SystemEnv.IsBiLingual = true;
+                                                SystemEnv.Language = cmbLanguage.value;
+                                                SystemEnv.ScreenLanguage = cmbLanguage.value;
+                                                SystemEnv.SystemCode = 'I';
+                                                SystemEnv.SubSystemCode = 'I';
+                                                SystemEnv.UserCode = txtUserName.value;
+                                                SystemEnv.StartDate = CompanyStatus.FirstDate.substr(0, 10);
+                                                SystemEnv.EndDate = CompanyStatus.LastDate.substr(0, 10);
+                                                SystemEnv.NationalityID = CompanyService[0].NationalityID;
+                                                Ajax.Callsyncstart({
+                                                    type: "GET",
+                                                    url: sys.apiUrl("GBranch", "GetBranch"),
+                                                    data: { CompCode: Number(compCode), BRA_CODE: Number(braCode) },
+                                                    async: false,
+                                                    success: function (d) {
+                                                        var res = d;
+                                                        if (res.IsSuccess) {
+                                                            G_BRANCHService = res.Response;
+                                                            if (G_BRANCHService != null) {
+                                                                SystemEnv.SlsInvType = G_BRANCHService[0].SlsInvType;
+                                                                SystemEnv.WholeInvoiceTransCode = G_BRANCHService[0].WholeInvoiceTransCode;
+                                                                SystemEnv.RetailInvoicePayment = G_BRANCHService[0].RetailInvoicePayment;
+                                                                SystemEnv.WholeInvoicePayment = G_BRANCHService[0].WholeInvoicePayment;
+                                                                SystemEnv.ServiceInvoiceTransCode = G_BRANCHService[0].ServiceInvoiceTransCode;
+                                                                SystemEnv.ReturnTypeCode = G_BRANCHService[0].ReturnTypeCode;
+                                                                SystemEnv.InvoiceTypeCode = G_BRANCHService[0].InvoiceTypeCode;
+                                                                SystemEnv.RetailInvoiceTransCode = G_BRANCHService[0].RetailInvoiceTransCode;
+                                                            }
+                                                            else {
+                                                                var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول الفرع" : "You are not allowed to login";
+                                                                MessageBox.Show(msg, "");
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            });
-                                            document.cookie = "Inv1_systemProperties=" + JSON.stringify(SystemEnv).toString() + ";expires=Fri, 31 Dec 2030 23:59:59 GMT;path=/";
-                                            OnLogged();
-                                        }
-                                        else {
-                                            var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول للنظام" : "You are not allowed to login";
-                                            MessageBox.Show(msg, "");
+                                                });
+                                                Ajax.Callsyncstart({
+                                                    type: "GET",
+                                                    url: sys.apiUrl("I_Control", "GetIssuer"),
+                                                    data: { Compcode: compCode },
+                                                    async: false,
+                                                    success: function (d) {
+                                                        var res = d;
+                                                        if (res.IsSuccess) {
+                                                            issuerService = res.Response;
+                                                            if (issuerService.length > 0) {
+                                                                SystemEnv.issuer = issuerService[0];
+                                                            }
+                                                            else {
+                                                                SystemEnv.issuer = new issuer;
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                                document.cookie = "Inv1_systemProperties=" + JSON.stringify(SystemEnv).toString() + ";expires=Fri, 31 Dec 2030 23:59:59 GMT;path=/";
+                                                OnLogged();
+                                            }
+                                            else {
+                                                var msg = SystemEnv.ScreenLanguage == "ar" ? "غير مصرح لك الدخول للنظام" : "You are not allowed to login";
+                                                MessageBox.Show(msg, "");
+                                            }
                                         }
                                     }
-                                }
-                            });
-                        }
-                        else {
-                            MessageBox.Show(CompanyStatus.LoginMsg, "", function () {
-                                window.location.href = "/Login/LoginIndex";
-                            });
+                                });
+                            }
+                            else {
+                                MessageBox.Show(CompanyStatus.LoginMsg, "", function () {
+                                    window.location.href = "/Login/LoginIndex";
+                                });
+                            }
                         }
                     }
-                }
-            });
-        }
-        else {
-            var mg = SystemEnv.ScreenLanguage == "ar" ? "هذه الشركة غير متاحة" : "This company is not Active";
-            MessageBox.Show(mg, "");
-        }
-        //});
+                });
+            }
+            else {
+                var mg = SystemEnv.ScreenLanguage == "ar" ? "هذه الشركة غير متاحة" : "This company is not Active";
+                MessageBox.Show(mg, "");
+            }
+        });
     }
     function OnLogged() {
         APiSession.Session.BranchCode = SystemEnv.BranchCode;

@@ -1,80 +1,451 @@
-﻿@{
-    ViewData["Title"] = "Index";
+﻿@using Inv.WebUI.Resources
+@{
+
     Layout = "~/Views/Shared/Layout.cshtml";
 }
+
+
+<style>
+    .btnDownload {
+        background-color: #009966;
+        border: none;
+        color: white;
+        padding: 2px 2px;
+        cursor: pointer;
+        font-size: 10px;
+    }
+
+    .background_upload {
+        background-color: #2083ff !important;
+    }
+
+    .Invalid {
+        color: red;
+        font-weight: bold;
+    }
+
+    .Valid {
+        color: #02ea14;
+        font-weight: bold;
+    }
+</style>
+
+
+<body class="materialdesign">
+    <div class="content-inner-all">
+
+
+        <div class="inbox-mailbox-area mg-b-15">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <div class="inbox-email-menu-list compose-b-mg-30 shadow-reset">
+
+                                    <ul class="nav nav-tabs">
+
+
+                                        <li>
+                                            <a id="add" data-toggle="tab" href="#inbox" class="font_size"><span class="inbox-icon "><i class="fa fa fa-plus "></i></span>تحميــل الفواتير </a>
+                                        </li>
+                                        <li>
+                                            <a id="view" data-toggle="tab" href="#viewmail" class="font_size"><span class="inbox-icon"><i class="fa fa fa-inbox "></i></span>EX رفع الفواتير من </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-10">
+                                <div class="tab-content">
+                                    <div id="inbox" class="tab-pane fade in animated zoomInDown custom-inbox-message shadow-reset active">
+
+                                        <div class="wrapper-pro">
+
+
+                                            <!-- Breadcome start-->
+                                        
+
+                                            <div class="admin-dashone-data-table-area mg-b-15">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="sparkline8-list shadow-reset">
+
+                                                                @*-----------------------------------------------شاشة تحميل الفواتير-------------------------------------------------*@
+
+
+
+                                                                <div class="sparkline8-hd">
+                                                                    <div class="main-sparkline8-hd">
+                                                                        <h1>شاشة تحميل الفواتير</h1>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="sparkline8-graph">
+
+
+
+
+
+                                                                    <div class="row" style="border: solid 1px;border-radius: 24px;">
+                                                                        <br />
+                                                                        <div class="row">
+
+                                                                            <div class="col-lg-1">
+                                                                            </div>
+                                                                            <div class="col-lg-3">
+                                                                                <div class="input-mark-inner mg-b-22">
+                                                                                    <input type="text" class="form-control input-sm inputClass  editable addable" id="invto">
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-lg-1">
+                                                                                <div class="input-mask-title">
+                                                                                    <label class="font_size"> الي  رقم</label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                            </div>
+                                                                            <div class="col-lg-3">
+                                                                                <div class="input-mark-inner mg-b-22">
+                                                                                    <input type="text" class="form-control input-sm inputClass  editable addable" id="invfrom">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                                <div class="input-mask-title">
+                                                                                    <label class="font_size"> من  رقم </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+
+
+                                                                            <div class="col-lg-3">
+                                                                            </div>
+                                                                            <div class="col-lg-3">
+                                                                                <div class="input-mark-inner mg-b-22">
+                                                                                    <input type="radio" name="radio" id="sales" checked class="form-control col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 " />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                                <div class="input-mask-title">
+                                                                                    <label class="font_size"> مبيعات </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                    </div>
+
+
+                                                                    <div class="row">
+                                                                        <br />
+                                                                        <br />
+                                                                    </div>
+
+                                                                    <div class="row" style="border: solid 1px;border-radius: 24px;">
+                                                                        <br />
+                                                                        <div class="row">
+
+                                                                            <div class="col-lg-1">
+                                                                            </div>
+                                                                            <div class="col-lg-3">
+                                                                                <div class="input-mark-inner mg-b-22">
+                                                                                    <input type="date" class="form-control" id="puchvto" />
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-lg-1">
+                                                                                <div class="input-mask-title">
+                                                                                    <label class="font_size">  الي  تاريخ</label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                            </div>
+                                                                            <div class="col-lg-3">
+                                                                                <div class="input-mark-inner mg-b-22">
+                                                                                    <input type="date" class="form-control" id="puchfrom" />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                                <div class="input-mask-title">
+                                                                                    <label class="font_size"> من تاريخ  </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+
+
+                                                                            <div class="col-lg-3">
+                                                                            </div>
+                                                                            <div class="col-lg-3">
+                                                                                <div class="input-mark-inner mg-b-22">
+                                                                                    <input type="radio" name="radio" id="Putcher" class="form-control col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1  " />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                                <div class="input-mask-title">
+                                                                                    <label class="font_size"> مشتريات </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                    </div>
+
+
+
+
+                                                                    <div class="row">
+                                                                        <br />
+                                                                        <br />
+                                                                    </div>
+
+                                                                    <div class="row" style="border: solid 1px;border-radius: 24px;">
+                                                                        <br />
+                                                                        <div class="row">
+
+                                                                            <div class="col-lg-1">
+                                                                            </div>
+                                                                            <div class="col-lg-3">
+                                                                                <div class="input-mark-inner mg-b-22">
+
+                                                                                    <input type="text" class="form-control input-sm inputClass  editable addable" id="pageSize">
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-lg-1">
+                                                                                <div class="input-mask-title">
+                                                                                    <label class="font_size"> عدد الفاتورة</label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                            </div>
+                                                                            <div class="col-lg-3">
+                                                                                <div class="input-mark-inner mg-b-22">
+                                                                                    <input type="text" class="form-control input-sm inputClass  editable addable" id="pageNo">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                                <div class="input-mask-title">
+                                                                                    <label class="font_size">رقم الصفحة   </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+
+
+                                                                            <div class="col-lg-3">
+                                                                            </div>
+                                                                            <div class="col-lg-3">
+                                                                                <div class="input-mark-inner mg-b-22">
+                                                                                    <input type="radio" name="radio" id="All" class="form-control col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1  " />
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                                <div class="input-mask-title">
+                                                                                    <label class="font_size"> الجميع </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <br /> 
+                                                                        <div class="col-lg-6">
+                                                                        </div> 
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title">
+                                                                                <button class=" btn btn-success " id="btnDownload" style="margin-left: -76%;margin-top: 5%;width: 140%;font-weight: bold;font-size: 22px;"> تنزيل</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
  
 
 
-
-<div style="position:center" class="col-lg-12">
-    <h1 style="margin-left: 43%;">شاشة تحميل الفواتير</h1>
+                                                                    <script src="~/ClientApp/DownloadInv/Downloadinv.js"></script>
 
 
-    <div class="col-lg-12" style="border: solid 1px; border-radius: 24px;margin-bottom: 3%;" id="inv">
 
-        <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">
-            <input type="text" class="form-control input-sm inputClass  editable addable" id="invto">
+
+
+                                                                </div>
+
+
+
+
+
+
+                                                                @*------------------------------------------------------------------------------------------------*@
+
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="viewmail" class="tab-pane fade in animated zoomInDown shadow-reset custom-inbox-message">
+                                        <div class="admin-dashone-data-table-area mg-b-15">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="sparkline8-list shadow-reset">
+
+                                                            @*----------------------------------------------- شاشة رفع الفواتير من EX -------------------------------------------------*@
+
+
+                                                            <div class="sparkline8-hd">
+                                                                <div class="main-sparkline8-hd">
+                                                                    <h1>EX رفع الفواتير من </h1>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="sparkline8-graph">
+
+
+                                                                <div class="row">
+                                                                    <br />
+                                                                    <div class="col-lg-1">
+                                                                    </div>
+                                                                    <div class="col-lg-3">
+                                                                        <div class="input-mark-inner mg-b-22">
+                                                                            <input id="uploadDetail" class="btn btn-success   btnAjax float_left" type=file name="files[]">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-1">
+                                                                        <div class="input-mask-title">
+                                                                            <label class="font_size"> Detail </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-1">
+                                                                    </div>
+
+                                                                    <div class="col-lg-3">
+                                                                        <div class="input-mark-inner mg-b-22">
+                                                                            <input id="uploadMaster" class="btn btn-success   btnAjax float_left" type=file name="files[]">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-1">
+                                                                        <div class="input-mask-title">
+                                                                            <label class="font_size"> Master </label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <br />
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <br />
+                                                                    <div class="col-lg-2">
+                                                                    </div>
+                                                                    <div class="col-lg-2">
+                                                                        <div class="input-mark-inner mg-b-22">
+                                                                            <button id="btnMargin" type="button" class="btn btn-success   btnAjax float_left" style="background-color: #2b6292;">
+                                                                                Margin <span class="ti-layers-alt"></span>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-1">
+                                                                    </div>
+                                                                    <div class="col-lg-2">
+                                                                        <div class="input-mark-inner mg-b-22">
+                                                                            <button id="btnRefrash" type="button" class="btn btn-success   btnAjax float_left" style="background-color: #blue;">
+                                                                                Refrash <span class="tidt-autofill-select"></span>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-1">
+                                                                    </div>
+                                                                    <div class="col-lg-1">
+                                                                        <div class="input-mark-inner mg-b-22">
+                                                                            <button id="btnPush" type="button" class="btn btn-success   btnAjax float_left" style="background-color: #922b2b;">
+                                                                                Push <span class="ti-save"></span>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12 p-0">
+
+                                                                        <textarea class="form-control" style="display: none;" rows=100 cols=120 id="xlx_jsonMaster"></textarea>
+                                                                        <textarea class="form-control" style="display: none;" rows=100 cols=120 id="xlx_jsonDetail"></textarea>
+
+                                                                    </div>
+
+                                                                </div>
+
+
+
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="sparkline8-graph">
+                                                                    <table id="LodGrid">
+                                                                    </table>
+
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="row">
+                                                                <div class="sparkline8-graph">
+                                                                    <label>  اجمالي الاصناف </label>
+                                                                    <input id="totalouttax" class="x float_left col-lg-2" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+                                                                    <label>اجمالي الضريبة</label>
+                                                                    <input id="totatax" class="float_left" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+
+                                                                    <label>الاجمالي بعد الضريبة </label>
+                                                                    <input id="totalaftartax" class="float_left col-lg-1" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+
+                                                                    <label> الخصم </label>
+                                                                    <input id="textDisount" class="float_left col-lg-2" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+
+                                                                </div>
+                                                            </div>
+
+
+
+                                                            <div class="row">
+                                                                <div class="sparkline8-graph">
+                                                                    <label>الاجمالي بعد الخصم </label>
+                                                                    <input id="totaِAftarDisount" class="float_left" disabled type="text" style="border-radius: 11px;height: 34px;font-weight: bold;font-size: 17px;">
+
+                                                                </div>
+                                                            </div>
+
+                                                             
+
+                                                            <script src="~/ClientApp/UploadInv/UploadInv.js"></script>
+
+                                                            <script src="~/ClientApp/Excel/jszip.js"></script>
+                                                            <script src="~/ClientApp/Excel/xlsx.js"></script>
+                                                            <script src="~/ClientApp/Excel/LoadExcel.js"></script>
+
+
+
+                                                            @*------------------------------------------------------------------------------------------------*@
+
+
+
+                                                        </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <label id="" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">   الي  رقم </label>
-        <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">
-            <input type="text" class="form-control input-sm inputClass  editable addable" id="invfrom">
-        </div>
-        <label id="" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start"> من الفاتورة رقم      </label>
-
-
-        <input type="radio" name="radio" id="sales" checked class="form-control col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 " />
-        <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">  مبيعات   </label>
     </div>
-</div>
-
-<div class="col-lg-12" style="border: solid 1px; border-radius: 24px;margin-bottom: 3%;" id="">
-
-
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2">
-    </div>
-
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2">
-        <input type="date" class="form-control" id="puchfrom" />
-    </div>
-
-    <label for="date" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 form-label">من تاريخ رقم</label>
-
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xl-2 col-xs-2">
-        <input type="date" class="form-control" id="puchvto" />
-    </div>
-
-    <label for="date" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 form-label"> الي  تاريخ     </label>
-
-
-    <input type="radio" name="radio" id="Putcher" class="form-control col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1  " />
-
-    <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">  مشتريات   </label>
-</div>
-
-<br />
-
-<br />
-<br />
-
-<div class="col-lg-12" style="border: solid 1px; border-radius: 24px;margin-bottom: 3%;" id=" ">
-
-    <label id="" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">عدد الفاتورة </label>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1">
-        <input type="text" class="form-control input-sm inputClass  editable addable" id="pageNo">
-        <input type="text" class="form-control input-sm inputClass  editable addable" id="pageSize">
-    </div>
-    <label id="" class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">رقم الصفحة </label>
-
-
-
-    <input type="radio" name="radio" id="All" class="form-control col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1  " />
-
-    <label class="col-lg-1 col-md-1 col-sm-1 col-xl-1 col-xs-1 marginstenig pading_lep  pading_2  " style="text-align:start">  الجميع   </label>
-</div>
-<div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-xs-12">
-    <button class=" btn btn-success " id="btnDownload" style="margin-left: 46%;margin-top: 5%;"> Download</button>
-</div>
-
-
-<script src="~/ClientApp/DownloadInv/Downloadinv.js"></script>
-
+</body>
+<script src="~/ClientApp/USERS/Users.js"></script>

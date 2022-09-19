@@ -29,8 +29,7 @@ namespace InvoiceTax {
     var btnClean: HTMLButtonElement;
     var btnsaveapi: HTMLButtonElement;
     var CustomerId: number = 0;
-    var btnCustSrch: HTMLButtonElement;
-    var btnprint: HTMLButtonElement;
+    var btnCustSrch: HTMLButtonElement; 
     var invoiceID: number = 0;
     var txtDate: HTMLInputElement;
     var txtRFQ: HTMLInputElement;
@@ -39,9 +38,7 @@ namespace InvoiceTax {
     var txtCompanysales: HTMLInputElement;
     var txtCompanyname: HTMLInputElement;
     
-    var txtRemark: HTMLInputElement;
-    var txtNetBefore: HTMLInputElement;
-    var txtNetAfterVat: HTMLInputElement;
+    var txtRemark: HTMLInputElement; 
 
     var txtTaxPrc: HTMLInputElement;
     var txtItemCount: HTMLInputElement;
@@ -86,8 +83,7 @@ namespace InvoiceTax {
         btnAddDetails = document.getElementById("btnAddDetails") as HTMLButtonElement;
         btnCustSrch = document.getElementById("btnCustSrch") as HTMLButtonElement;
         btnsave = document.getElementById("btnsave") as HTMLButtonElement;
-        btnClean = document.getElementById("btnClean") as HTMLButtonElement;
-        btnprint = document.getElementById("btnprint") as HTMLButtonElement;
+        btnClean = document.getElementById("btnClean") as HTMLButtonElement; 
         // inputs
         ddlCurreny = document.getElementById("ddlCurreny") as HTMLSelectElement;
         ddlValueTax = document.getElementById("ddlValueTax") as HTMLSelectElement;
@@ -102,9 +98,7 @@ namespace InvoiceTax {
         txtCompanysales = document.getElementById("txtCompanysales") as HTMLInputElement;
         txtCompanyname = document.getElementById("txtCompanyname") as HTMLInputElement; 
        
-        txtRemark = document.getElementById("txtRemark") as HTMLInputElement;
-        txtNetBefore = document.getElementById("txtNetBefore") as HTMLInputElement;
-        txtNetAfterVat = document.getElementById("txtNetAfterVat") as HTMLInputElement;
+        txtRemark = document.getElementById("txtRemark") as HTMLInputElement; 
 
         txtTaxPrc = document.getElementById("txtTaxPrc") as HTMLInputElement;
         txtItemCount = document.getElementById("txtItemCount") as HTMLInputElement;
@@ -124,8 +118,7 @@ namespace InvoiceTax {
         btnAddDetails.onclick = AddNewRow;//
         btnCustSrch.onclick = btnCustSrch_onClick;
         btnsave.onclick = btnsave_onclick;
-        btnClean.onclick = btnClean_onclick;
-        //btnprint.onclick = btnprint_onclick;
+        btnClean.onclick = btnClean_onclick; 
         ddlValueTax.onchange = ddlValueTax_onchange;
         ddlDisTax.onchange = ddlDisTax_onchange;
         txtTaxPrc.onkeyup = txtTaxPrc_onchange;
@@ -152,7 +145,7 @@ namespace InvoiceTax {
         }
 
         if (ddlDisTax.value == 'null') {
-            $('#ddlTypeDis').append('<option value="null"> Choose Tax </option>');
+            $('#ddlTypeDis').append('<option value="null"> اختار </option>');
         }
     }
     function ddlValueTax_onchange() {
@@ -239,11 +232,11 @@ namespace InvoiceTax {
 
     function btnCustSrch_onClick() {
         sys.FindKey(Modules.Quotation, "btnCustSrch", "", () => {
-
+            debugger
             CustomerDetail = SearchGrid.SearchDataGrid.SelectedKey;
             console.log(CustomerDetail);
             CustomerId = Number(CustomerDetail[0]);
-            txtCompanyname.value = String(CustomerDetail[2]);
+            txtCompanyname.value = String(CustomerDetail[1]);
 
         });
     }
@@ -408,8 +401,7 @@ namespace InvoiceTax {
         ComputeTotals();
 
 
-    }
-
+    } 
     function ComputeTotals() {
         debugger
         let PackageCount = 0;
@@ -568,6 +560,7 @@ namespace InvoiceTax {
         InvoiceModel.TrDate = txtDate.value; 
         InvoiceModel.CommitionAmount = 0;
         InvoiceModel.Remark = txtRemark.value;
+        InvoiceModel.RefNO = txtRFQ.value;
         InvoiceModel.CardAmount = 0;
         InvoiceModel.CashAmount = Number(txtNet.value);
         InvoiceModel.CustomerName = txtCompanysales.value;
@@ -676,7 +669,8 @@ namespace InvoiceTax {
             }
         }
 
-
+        debugger
+          TaxableSinglModel = new TaxableItem();
         TaxableSinglModel.InvoiceID = 0
         TaxableSinglModel.subType = ddlTypeTax.value
         TaxableSinglModel.taxType = ddlValueTax.value
@@ -684,7 +678,7 @@ namespace InvoiceTax {
 
 
         if (ddlDisTax.value != 'null' && ddlTypeDis.value != 'null') {
-
+            TaxableSinglModel = new TaxableItem();
             TaxableSinglModel.InvoiceID = 0
             TaxableSinglModel.subType = ddlTypeDis.value
             TaxableSinglModel.taxType = ddlDisTax.value
@@ -712,7 +706,7 @@ namespace InvoiceTax {
 
                     let res = result.Response as Sls_Ivoice;
                     invoiceID = res.InvoiceID;
-                    DisplayMassage("An invoice number has been issued " + res.TrNo + "", "An invoice number has been issued " + res.TrNo + "", MessageType.Succeed);
+                    DisplayMassage("تم اصدار فاتوره رقم  ( " + res.TrNo + " )", "تم اصدار فاتوره رقم  ( " + res.TrNo + " )", MessageType.Succeed);
 
                     success_insert();
 
@@ -734,9 +728,7 @@ namespace InvoiceTax {
         txtRFQ.value = "";
         txtCompanysales.value = "";
         txtCompanyname.value = ""; 
-        txtRemark.value = "";
-        txtNetBefore.value = "";
-        txtNetAfterVat.value = "";
+        txtRemark.value = "";  
 
         txtItemCount.value = "";
         txtPackageCount.value = "";
@@ -745,6 +737,39 @@ namespace InvoiceTax {
         txtTotal.value = "";
         txtTax.value = "";
         txtNet.value = "";
+
+        Tax = G_CodesDetails.filter(x => x.CodeType == 'Taxtypes')
+        TaxType = G_CodesDetails.filter(x => x.CodeType == 'TaxSubtypes')
+        let TaxT1 = TaxType.filter(x => x.StdCode == 'T1')
+
+        $('#ddlValueTax').html('')
+        $('#ddlTypeTax').html('')
+
+        for (var i = 0; i < Tax.length; i++) {
+            $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+            $('#ddlDisTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+        }
+
+        for (var i = 0; i < TaxType.length; i++) {
+
+            $('#ddlTypeDis').append('<option   value="' + TaxType[i].SubCode + '">' + TaxType[i].DescA + '</option>');
+
+        }
+
+        for (var i = 0; i < TaxT1.length; i++) {
+            $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+        }
+
+
+
+        $('#ddlValueTax').val('T1')
+        $('#ddlTypeTax').val('V009')
+
+
+
+         ddlDisTax.value = 'null';  
+        $('#ddlTypeDis').html('') 
+        $('#ddlTypeDis').append('<option value="null"> اختار </option>');
 
 
         $("#Table_Data").html("");
@@ -763,6 +788,11 @@ namespace InvoiceTax {
         if (txtDate.value.trim() == "") {
             Errorinput(txtDate);
             DisplayMassage('برجاء ادخال التاريخ', 'Date must be entered', MessageType.Error);
+            return false;
+        }
+        if (txtRFQ.value.trim() == "") {
+            Errorinput(txtRFQ);
+            DisplayMassage('برجاء ادخال رقم الرجع', 'Company must be choosed', MessageType.Error);
             return false;
         }
         if (txtCompanyname.value.trim() == "") {
