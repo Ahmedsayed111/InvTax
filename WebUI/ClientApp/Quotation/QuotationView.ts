@@ -292,7 +292,7 @@ namespace QuotationView {
                     let txt: HTMLInputElement = document.createElement("input");
                     txt.type = "button";
                     txt.value = ("رفـع");
-                    txt.id = "butPrint" + item.InvoiceID;
+                    txt.id = "butPush" + item.InvoiceID;
                     txt.className = "dis src-btn btn btn-primary input-sm style_but_Grid";
 
                     if (item.Status != 0) {
@@ -300,6 +300,7 @@ namespace QuotationView {
                     }
 
                     txt.onclick = (e) => {
+                        Push(item.InvoiceID);
                         alert('تحت الانشاء')
                     };
                     return txt;
@@ -988,6 +989,7 @@ namespace QuotationView {
         });
     }
 
+   
     /*@* ---------------------------------------Eidt Invoice------------------------------------------*@*/
 
     var InvoiceItemsDetailsModel: Array<Sls_InvoiceDetail> = new Array<Sls_InvoiceDetail>();
@@ -1929,7 +1931,28 @@ namespace QuotationView {
     //----------------------------------------------------------------------------------------------------
 
 
+    function Push(btnId: number) {
 
+
+
+        debugger
+        var _URL = $("#GetAPIUrlCore").val() +"Push/";
+        var Comp: number = Number(SysSession.CurrentEnvironment.CompCode);
+        alert(_URL);
+        $.ajax({
+            type: "GET",
+            url: _URL,
+            data: { Comp: Comp,InvoiceID: btnId },
+            success: (d) => {
+                debugger;
+                let result = d as string;
+                debugger
+                //alert(result);
+            }
+
+        });
+
+    }
 
 
 }
