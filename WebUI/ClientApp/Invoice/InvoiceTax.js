@@ -23,6 +23,7 @@ var InvoiceTax;
     var btnAddDetails;
     var btnsave;
     var btnClean;
+    var btnsaveapi;
     var CustomerId = 0;
     var btnCustSrch;
     var btnprint;
@@ -97,6 +98,7 @@ var InvoiceTax;
         txtTotal = document.getElementById("txtTotal");
         txtTax = document.getElementById("txtTax");
         txtNet = document.getElementById("txtNet");
+        btnsaveapi = document.getElementById("btnsaveapi");
     }
     function InitalizeEvents() {
         btnAddDetails.onclick = AddNewRow; //
@@ -107,6 +109,7 @@ var InvoiceTax;
         ddlValueTax.onchange = ddlValueTax_onchange;
         ddlDisTax.onchange = ddlDisTax_onchange;
         txtTaxPrc.onkeyup = txtTaxPrc_onchange;
+        btnsaveapi.onclick = btnsaveapi_onclick;
     }
     function txtTaxPrc_onchange() {
         for (var i = 0; i < CountGrid; i++) {
@@ -651,6 +654,23 @@ var InvoiceTax;
         CountGrid = 0;
         $("#Table_Data").html("");
         AddNewRow();
+    }
+    function btnsaveapi_onclick() {
+        debugger;
+        var _URL = $("#GetAPIUrlCore").val();
+        var Comp = Number(SysSession.CurrentEnvironment.CompCode);
+        alert(_URL);
+        $.ajax({
+            type: "GET",
+            url: _URL,
+            data: { Comp: Comp, Optype: 1, InvoiceID: 1 },
+            success: function (d) {
+                debugger;
+                var result = d;
+                debugger;
+                //alert(result);
+            }
+        });
     }
 })(InvoiceTax || (InvoiceTax = {}));
 //# sourceMappingURL=InvoiceTax.js.map

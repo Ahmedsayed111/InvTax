@@ -17,20 +17,19 @@ namespace APIETAX
 
 
     public class HomeSendinvoce
-    {
-
+    {	  
         //public static string connectionString = @"Data Source=192.168.1.50\SQL2014;Initial Catalog=TESTRAGAB;User Id=SYSUSER;Password=SYSUSER";
-        public static string connectionString = "";
+        public static string connectionString = @"Data Source=.;Initial Catalog=InvoiceTax;User Id=sa;Password=619619";
         private IConfiguration Configuration;
 
         public HomeSendinvoce(IConfiguration _configuration)
         {
             Configuration = _configuration;
-            connectionString = this.Configuration.GetConnectionString("DefaultConnection");
+            connectionString = Configuration.GetSection("MySettings").GetSection("DbConnection").Value;
 
         }
 
-         
+
         internal static string sendinvoce(int Optype, int InvoiceID, I_ControlTax I_ControlTax)
         {
 
@@ -306,7 +305,7 @@ namespace APIETAX
                 Root RootObj = new Root();
                 RootObj = Root;
                 RestClient client = new RestClient();
-                client = new RestClient(I_ControlTax.UploadDllUrl);
+                client = new RestClient("");
                 var requestApi = new RestRequest();
                 string json = JsonConvert.SerializeObject(RootObj);
                 Newtonsoft.Json.Linq.JObject request2 = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(json);
@@ -357,7 +356,7 @@ namespace APIETAX
             RestClient client = new RestClient();
 
 
-            client = new RestClient(I_ControlTax.CancelDllUrl + Header.UUID + "/pdf?=");
+            client = new RestClient("" + Header.UUID + "/pdf?=");
 
             client.Timeout = -1;
             var request = new RestRequest(Method.PUT);
@@ -438,10 +437,10 @@ namespace APIETAX
             IRestResponse response = client.Execute(request);
             var content_ = response.Content;
             byte[] renderdByte = response.RawBytes;
-            string path = I_ControlTax.PDFFolder;
+            string path = I_ControlTax.DocPDFFolder;
             try
             {
-                System.IO.File.WriteAllBytes(I_ControlTax.PDFFolder + @"\" + UUID + "" + ".pdf", renderdByte);
+                System.IO.File.WriteAllBytes(I_ControlTax.DocPDFFolder + @"\" + UUID + "" + ".pdf", renderdByte);
             }
 
             catch (Exception ex)
@@ -588,7 +587,7 @@ namespace APIETAX
             using (System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(connectionString))
             {
 
-                using (System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand("SELECT * FROM I_ControlTax where CompCode ='" + Comp + "' ", con))
+                using (System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand("SELECT * FROM I_Control where CompCode ='" + Comp + "' ", con))
                 {
 
                     cmd.CommandType = System.Data.CommandType.Text;
@@ -598,30 +597,31 @@ namespace APIETAX
                         using (System.Data.DataTable dt = new System.Data.DataTable())
                         {
 
-                            sda.Fill(dt);
+                            try
+                            {
+                                sda.Fill(dt);
+
+                            }
+                            catch (Exception ex)
+                            {
+
+                                throw;
+                            }
 
                             for (int i = 0; i < dt.Rows.Count; i++)
                             {
                                 I_ControlTax ControlTax = new I_ControlTax();
                                 ControlTax.CompCode = Convert.ToInt32(dt.Rows[i]["CompCode"]);
-                                ControlTax.ClientIDProd = dt.Rows[i]["ClientIDProd"].ToString();
+                                ControlTax.ClientID = dt.Rows[i]["ClientID"].ToString();
                                 ControlTax.issuerId = dt.Rows[i]["issuerId"].ToString();
-                                ControlTax.SecretIDProd = dt.Rows[i]["SecretIDProd"].ToString();
-                                ControlTax.IsTaxForTest = Convert.ToBoolean(dt.Rows[i]["IsTaxForTest"]);
+                                ControlTax.ClientSecret = dt.Rows[i]["ClientSecret"].ToString();
                                 ControlTax.TokenPinCode = dt.Rows[i]["TokenPinCode"].ToString();
-                                ControlTax.TokenPinType = dt.Rows[i]["TokenPinType"].ToString();
-                                ControlTax.CreateTokinlDllUrl = dt.Rows[i]["CreateTokinlDllUrl"].ToString();
-                                ControlTax.UploadDllUrl = dt.Rows[i]["UploadDllUrl"].ToString();
-                                ControlTax.CancelDllUrl = dt.Rows[i]["CancelDllUrl"].ToString();
-                                ControlTax.GetDllUrl = dt.Rows[i]["GetDllUrl"].ToString();
-                                ControlTax.DownloadInterDllUrl = dt.Rows[i]["DownloadInterDllUrl"].ToString();
-                                ControlTax.DownloadCustDllUrl = dt.Rows[i]["DownloadCustDllUrl"].ToString();
-                                ControlTax.CancelinvoicePeriod = Convert.ToInt32(dt.Rows[i]["CancelinvoicePeriod"]);
-                                ControlTax.RejectInvoicePeriod = Convert.ToInt32(dt.Rows[i]["RejectInvoicePeriod"]);
-                                ControlTax.LastTaxSycnDate = Convert.ToDateTime(dt.Rows[i]["LastTaxSycnDate"]);
-                                ControlTax.PageCount = Convert.ToInt32(dt.Rows[i]["PageCount"]);
-                                ControlTax.BranchCode = Convert.ToInt32(dt.Rows[i]["BranchCode"]);
-                                ControlTax.PDFFolder = dt.Rows[i]["PDFFolder"].ToString();
+                                ControlTax.Tokentype = dt.Rows[i]["Tokentype"].ToString();  
+                               ControlTax.CancelinvoicePeriod = Convert.ToInt32(dt.Rows[i]["CancelinvoicePeriod"]);
+                               ControlTax.RejectInvoicePeriod = Convert.ToInt32(dt.Rows[i]["RejectInvoicePeriod"]);
+                               //ControlTax.LastTaxSycnDate = Convert.ToDateTime(dt.Rows[i]["LastTaxSycnDate"]);
+                               ControlTax.BranchCode = Convert.ToInt32(dt.Rows[i]["BranchCode"]);
+                                ControlTax.DocPDFFolder = dt.Rows[i]["DocPDFFolder"].ToString();
                                 ControlTaxList.Add(ControlTax);
                             }
                         }
@@ -680,7 +680,7 @@ namespace APIETAX
             int oldstates_ = Convert.ToInt32(I_Sls_TR_Invoice.Status);
             int stat = 0;
             string pageNo = "1";
-            var client = new RestClient(I_ControlTax.DownloadInterDllUrl + I_Sls_TR_Invoice.DocUUID + "/details");
+            var client = new RestClient("" + I_Sls_TR_Invoice.DocUUID + "/details");
             client.Timeout = -1;
             var request = new RestRequest(Method.GET);
             request.AddHeader("PageSize", "");

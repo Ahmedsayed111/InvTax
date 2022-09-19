@@ -26,7 +26,7 @@ namespace APIETAX.Controllers
             I_ControlTax newI_ControlTax = new I_ControlTax();
 
             newI_ControlTax = HomeSendinvoce.GetControlTax(Comp);
-            newI_ControlTax.access_token = ETax.CreateTokin(newI_ControlTax.ClientIDProd, newI_ControlTax.SecretIDProd);
+            newI_ControlTax.access_token = ETax.CreateTokin(newI_ControlTax.ClientID, newI_ControlTax.ClientSecret);
 
             HomeSendinvoce.sendinvoce(Optype, InvoiceID, newI_ControlTax);
             return "";           
