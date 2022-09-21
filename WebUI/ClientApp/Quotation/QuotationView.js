@@ -231,12 +231,13 @@ var QuotationView;
                     var txt = document.createElement("input");
                     txt.type = "button";
                     txt.value = ("رفـع");
-                    txt.id = "butPrint" + item.InvoiceID;
+                    txt.id = "butPush" + item.InvoiceID;
                     txt.className = "dis src-btn btn btn-primary input-sm style_but_Grid";
                     if (item.Status != 0) {
                         txt.disabled = true;
                     }
                     txt.onclick = function (e) {
+                        Push(item.InvoiceID);
                         alert('تحت الانشاء');
                     };
                     return txt;
@@ -1500,5 +1501,22 @@ var QuotationView;
         AddNewRow();
     }
     //----------------------------------------------------------------------------------------------------
+    function Push(btnId) {
+        debugger;
+        var _URL = $("#GetAPIUrlCore").val() + "Push/";
+        var Comp = Number(SysSession.CurrentEnvironment.CompCode);
+        alert(_URL);
+        $.ajax({
+            type: "GET",
+            url: _URL,
+            data: { Comp: Comp, InvoiceID: btnId },
+            success: function (d) {
+                debugger;
+                var result = d;
+                debugger;
+                //alert(result);
+            }
+        });
+    }
 })(QuotationView || (QuotationView = {}));
 //# sourceMappingURL=QuotationView.js.map

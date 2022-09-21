@@ -27,6 +27,7 @@ namespace InvoiceTax {
     var btnAddDetails: HTMLButtonElement;
     var btnsave: HTMLButtonElement;
     var btnClean: HTMLButtonElement;
+    var btnsaveapi: HTMLButtonElement;
     var CustomerId: number = 0;
     var btnCustSrch: HTMLButtonElement; 
     var invoiceID: number = 0;
@@ -107,8 +108,9 @@ namespace InvoiceTax {
         txtTotal = document.getElementById("txtTotal") as HTMLInputElement;
         txtTax = document.getElementById("txtTax") as HTMLInputElement;
         txtNet = document.getElementById("txtNet") as HTMLInputElement;
+        btnsaveapi = document.getElementById("btnsaveapi") as HTMLButtonElement;
 
-
+        
 
     }
     function InitalizeEvents() {
@@ -120,6 +122,7 @@ namespace InvoiceTax {
         ddlValueTax.onchange = ddlValueTax_onchange;
         ddlDisTax.onchange = ddlDisTax_onchange;
         txtTaxPrc.onkeyup = txtTaxPrc_onchange;
+        btnsaveapi.onclick = btnsaveapi_onclick;
     }
     function txtTaxPrc_onchange() {
 
@@ -852,6 +855,24 @@ namespace InvoiceTax {
         CountGrid = 0;
         $("#Table_Data").html("");
         AddNewRow();
+    }
+    function btnsaveapi_onclick() {
+        debugger
+        var _URL = $("#GetAPIUrlCore").val();
+        var Comp: number = Number(SysSession.CurrentEnvironment.CompCode);
+        alert(_URL);
+        $.ajax({
+            type: "GET",
+            url: _URL,
+            data: { Comp: Comp, Optype: 1, InvoiceID: 1 },
+            success: (d) => {
+                debugger;
+                let result = d as string;
+                debugger
+                //alert(result);
+            }
+
+        });
     }
 }
 

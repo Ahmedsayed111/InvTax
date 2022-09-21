@@ -5,22 +5,22 @@ namespace APIETAX.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class PushController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<PushController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public PushController(ILogger<PushController> logger)
         {
             _logger = logger;
         } 
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public string Get(int Comp, int Optype, int InvoiceID)
+        [HttpGet(Name = "GetPusht")]
+        public string Get(int Comp,int InvoiceID)
         {
 
             I_ControlTax newI_ControlTax = new I_ControlTax();
@@ -28,7 +28,7 @@ namespace APIETAX.Controllers
             newI_ControlTax = HomeSendinvoce.GetControlTax(Comp);
             newI_ControlTax.access_token = ETax.CreateTokin(newI_ControlTax.ClientID, newI_ControlTax.ClientSecret);
 
-            HomeSendinvoce.sendinvoce(Optype, InvoiceID, newI_ControlTax);
+            HomeSendinvoce.Pushinvoce(InvoiceID, newI_ControlTax);
             return "";           
         }
 
