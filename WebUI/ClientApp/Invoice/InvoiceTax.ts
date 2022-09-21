@@ -27,9 +27,8 @@ namespace InvoiceTax {
     var btnAddDetails: HTMLButtonElement;
     var btnsave: HTMLButtonElement;
     var btnClean: HTMLButtonElement;
-    var btnsaveapi: HTMLButtonElement;
     var CustomerId: number = 0;
-    var btnCustSrch: HTMLButtonElement; 
+    var btnCustSrch: HTMLButtonElement;
     var invoiceID: number = 0;
     var txtDate: HTMLInputElement;
     var txtRFQ: HTMLInputElement;
@@ -37,8 +36,8 @@ namespace InvoiceTax {
     var ddlTypePay: HTMLInputElement;
     var txtCompanysales: HTMLInputElement;
     var txtCompanyname: HTMLInputElement;
-    
-    var txtRemark: HTMLInputElement; 
+
+    var txtRemark: HTMLInputElement;
 
     var txtTaxPrc: HTMLInputElement;
     var txtItemCount: HTMLInputElement;
@@ -53,14 +52,17 @@ namespace InvoiceTax {
 
     var ddlCurreny: HTMLSelectElement;
     var ddlValueTax: HTMLSelectElement;
-    var ddlTypeTax: HTMLSelectElement;
-    var ddlDisTax: HTMLSelectElement;
-    var ddlTypeDis: HTMLSelectElement;
+    var ddlTypeTax: HTMLSelectElement;  
 
     var include = "";
     var Tax;
     var TaxType;
     var include = "";
+
+
+    //------------------------------New_Ver------------------------
+    var modal = document.getElementById("myModal");
+
 
     export function InitalizeComponent() {
 
@@ -71,34 +73,32 @@ namespace InvoiceTax {
         InitalizeControls();
         InitalizeEvents();
         FillddlUom();
-        AddNewRow();
         FillddlCurreny();
         FillddlG_Codes();
         txtDate.value = GetDate();
-
         ddlCurreny.value = "4";
+
+        AddNewRow();
     }
     function InitalizeControls() {
         // ;
         btnAddDetails = document.getElementById("btnAddDetails") as HTMLButtonElement;
         btnCustSrch = document.getElementById("btnCustSrch") as HTMLButtonElement;
         btnsave = document.getElementById("btnsave") as HTMLButtonElement;
-        btnClean = document.getElementById("btnClean") as HTMLButtonElement; 
+        btnClean = document.getElementById("btnClean") as HTMLButtonElement;
         // inputs
         ddlCurreny = document.getElementById("ddlCurreny") as HTMLSelectElement;
         ddlValueTax = document.getElementById("ddlValueTax") as HTMLSelectElement;
-        ddlTypeTax = document.getElementById("ddlTypeTax") as HTMLSelectElement;
-        ddlDisTax = document.getElementById("ddlDisTax") as HTMLSelectElement;
-        ddlTypeDis = document.getElementById("ddlTypeDis") as HTMLSelectElement;
+        ddlTypeTax = document.getElementById("ddlTypeTax") as HTMLSelectElement; 
 
         txtDate = document.getElementById("txtDate") as HTMLInputElement;
         txtRFQ = document.getElementById("txtRFQ") as HTMLInputElement;
         ddlTypeInv = document.getElementById("ddlTypeInv") as HTMLInputElement;
         ddlTypePay = document.getElementById("ddlTypePay") as HTMLInputElement;
         txtCompanysales = document.getElementById("txtCompanysales") as HTMLInputElement;
-        txtCompanyname = document.getElementById("txtCompanyname") as HTMLInputElement; 
-       
-        txtRemark = document.getElementById("txtRemark") as HTMLInputElement; 
+        txtCompanyname = document.getElementById("txtCompanyname") as HTMLInputElement;
+
+        txtRemark = document.getElementById("txtRemark") as HTMLInputElement;
 
         txtTaxPrc = document.getElementById("txtTaxPrc") as HTMLInputElement;
         txtItemCount = document.getElementById("txtItemCount") as HTMLInputElement;
@@ -108,9 +108,8 @@ namespace InvoiceTax {
         txtTotal = document.getElementById("txtTotal") as HTMLInputElement;
         txtTax = document.getElementById("txtTax") as HTMLInputElement;
         txtNet = document.getElementById("txtNet") as HTMLInputElement;
-        btnsaveapi = document.getElementById("btnsaveapi") as HTMLButtonElement;
 
-        
+
 
     }
     function InitalizeEvents() {
@@ -118,11 +117,9 @@ namespace InvoiceTax {
         btnAddDetails.onclick = AddNewRow;//
         btnCustSrch.onclick = btnCustSrch_onClick;
         btnsave.onclick = btnsave_onclick;
-        btnClean.onclick = btnClean_onclick; 
-        ddlValueTax.onchange = ddlValueTax_onchange;
-        ddlDisTax.onchange = ddlDisTax_onchange;
+        btnClean.onclick = btnClean_onclick;
+        ddlValueTax.onchange = ddlValueTax_onchange; 
         txtTaxPrc.onkeyup = txtTaxPrc_onchange;
-        btnsaveapi.onclick = btnsaveapi_onclick;
     }
     function txtTaxPrc_onchange() {
 
@@ -134,20 +131,7 @@ namespace InvoiceTax {
         }
 
     }
-    function ddlDisTax_onchange() {
-
-        let DisTax = ddlDisTax.value;
-        let TaxT1 = TaxType.filter(x => x.StdCode == DisTax)
-
-        $('#ddlTypeDis').html('')
-        for (var i = 0; i < TaxT1.length; i++) {
-            $('#ddlTypeDis').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
-        }
-
-        if (ddlDisTax.value == 'null') {
-            $('#ddlTypeDis').append('<option value="null"> اختار </option>');
-        }
-    }
+    
     function ddlValueTax_onchange() {
         let ValueTax = ddlValueTax.value;
         let TaxT1 = TaxType.filter(x => x.StdCode == ValueTax)
@@ -187,21 +171,14 @@ namespace InvoiceTax {
                     Tax = G_CodesDetails.filter(x => x.CodeType == 'Taxtypes')
                     TaxType = G_CodesDetails.filter(x => x.CodeType == 'TaxSubtypes')
                     let TaxT1 = TaxType.filter(x => x.StdCode == 'T1')
-
+                    debugger
                     $('#ddlValueTax').html('')
                     $('#ddlTypeTax').html('')
 
                     for (var i = 0; i < Tax.length; i++) {
-                        $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
-                        $('#ddlDisTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+                        $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>'); 
                     }
-
-                    for (var i = 0; i < TaxType.length; i++) {
-
-                        $('#ddlTypeDis').append('<option   value="' + TaxType[i].SubCode + '">' + TaxType[i].DescA + '</option>');
-
-                    }
-
+ 
                     for (var i = 0; i < TaxT1.length; i++) {
                         $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
                     }
@@ -255,16 +232,18 @@ namespace InvoiceTax {
             '<td><input  id="txtDiscountPrc' + cnt + '" value="0" type="number" class="form-control" placeholder="الخصم%"></td>' +
             '<td><input  id="txtDiscountAmount' + cnt + '" value="0" type="number" class="form-control" placeholder="مبلغ الخصم"></td>' +
             '<td><input  id="txtNetUnitPrice' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="السعر بعد الخصم "></td>' +
+            //------------------------------------------------------------New_Ver-----------------------------------------------------------------------
+            '<td><button id="btnTaxDis' + cnt + '" class="btn btn-custon-four btn-success oo"  style="width: 90%;height:34px;background-color: #da453b;font-weight: bold;font-size: 18px;"  > ضريبة خصم </button></td>' +
             '<td><input  id="txtTotal' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="الاجمالي  "></td>' +
             '<td><input  id="txtTax_Rate' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="   نسبة الضريبه  "></td>' +
             '<td><input  id="txtTax' + cnt + '" value="0" type="number" disabled="disabled" class="form-control" placeholder="الضريبه "></td>' +
-            '<td><input  id="txtTotAfterTax' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="الصافي"></td>' +
+            '<td><input  id="txtTotAfterTax' + cnt + '" type="number" disabled="disabled" value="0" class="form-control" placeholder="الصافي" style="width: 107px;"></td>' +
             ' <input  id="txt_StatusFlag' + cnt + '" type="hidden" class="form-control"> ' +
             ' <input  id="txt_ItemID' + cnt + '" type="hidden" class="form-control"> ' +
             ' <input  id="InvoiceItemID' + cnt + '" type="hidden" class="form-control"> ' +
             '</tr>';
         $("#Table_Data").append(html);
-         
+
         for (var i = 0; i < I_D_UOMDetails.length; i++) {
 
 
@@ -294,7 +273,6 @@ namespace InvoiceTax {
                 totalRow(cnt, true);
             });
         });
-
         $("#txtPrice" + cnt).on('keyup', function (e) {
             if ($("#txt_StatusFlag" + cnt).val() != "i")
                 $("#txt_StatusFlag" + cnt).val("u");
@@ -307,8 +285,6 @@ namespace InvoiceTax {
 
             totalRow(cnt, true);
         });
-
-
         $("#txtDiscountPrc" + cnt).on('keyup', function () {
             if ($("#txt_StatusFlag" + cnt).val() != "i")
                 $("#txt_StatusFlag" + cnt).val("u");
@@ -339,16 +315,86 @@ namespace InvoiceTax {
             totalRow(cnt, false);
 
         });
-
-
-
-
         $("#btn_minus" + cnt).click(function (e) {
 
             DeleteRow(cnt);
         });
 
+        $('#btnTaxDis' + cnt).click(function (e) {
+            $('.Rows_Tax').addClass('display_none')
+            modal.style.display = "block";
+            $('#No_Row_Tax' + cnt).removeClass('display_none');
+        });
+
+        BuildTaxDis(cnt)
         return;
+    }
+    function BuildTaxDis(cnt: number) {
+        var html;
+
+        html = '<tr id= "No_Row_Tax' + cnt + '" class="Rows_Tax">' +
+
+            '<td><select id="ddlDisTax' + cnt + '" class="ddlDisTax form-control"> <option value="null"> أختر خصم الضريبه  </option></select></td>' +
+            '<td><select id="ddlTypeDis' + cnt + '" class="ddlTypeDis form-control"> <option value="null"> أختر نوع الخصم  </option></select></td>' +
+            '<td><input  id="txtPrc_Tax' + cnt + '" disabled type="number" class="form-control" placeholder="النسبه"></td>' +
+            '<td><input  id="txtTax_AmontDis' + cnt + '"disabled value="0" type="number" class="form-control" placeholder="السعر  "></td>' +
+
+            '</tr>';
+        $("#Table_Tax").append(html);
+
+        debugger
+        for (var i = 0; i < Tax.length; i++) {
+            $('#ddlDisTax' + cnt + '').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+        }
+
+
+
+
+
+        $("#ddlDisTax" + cnt).on('change', function (e) {
+            if ($("#txt_StatusFlag" + cnt).val() != "i")
+                $("#txt_StatusFlag" + cnt).val("u");
+
+            if ($("#ddlDisTax" + cnt).val() == 'null') {
+                $('#ddlTypeDis' + cnt).html('')
+                $('#ddlTypeDis' + cnt).append('<option    value="null">اختار</option>');
+                $('#txtPrc_Tax' + cnt).val('0')
+                $('#txtTax_AmontDis' + cnt).val('0')
+            }
+            else {
+
+                let DisTax = $("#ddlDisTax" + cnt).val();
+                let TaxT1 = TaxType.filter(x => x.StdCode == DisTax)
+
+                $('#ddlTypeDis' + cnt).html('')
+                for (var i = 0; i < TaxT1.length; i++) {
+                    $('#ddlTypeDis' + cnt).append('<option  Data_Rate="' + TaxT1[i].Remarks + '"  value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+                }
+
+                $('#txtPrc_Tax' + cnt).val(TaxT1[0].Remarks)
+            }
+
+            totalRow(cnt, true);
+
+        });
+
+
+        $("#ddlTypeDis" + cnt).on('change', function (e) {
+            if ($("#txt_StatusFlag" + cnt).val() != "i")
+                $("#txt_StatusFlag" + cnt).val("u");
+
+
+            let Typeuom = $("#ddlTypeDis" + cnt);
+            let rate = $('option:selected', Typeuom).attr('Data_Rate');
+
+            $('#txtPrc_Tax' + cnt).val(rate)
+            totalRow(cnt, true);
+        });
+
+
+
+
+
     }
     function totalRow(cnt: number, flagDiscountAmount: boolean) {
         debugger
@@ -387,10 +433,20 @@ namespace InvoiceTax {
 
 
         var total = Number(txtQuantityValue) * Number(txtPriceValue);
+
+        let rate = Number($("#txtPrc_Tax" + cnt).val());
+
+        var Tax_AmontDis = rate == 0 ? 0 : ((total * rate) / 100);
+        total = total - Tax_AmontDis;
+        $("#txtTax_AmontDis" + cnt).val(Tax_AmontDis);
+
+        rate == 0 ? $("#btnTaxDis" + cnt).html(' ضريبة خصم ') : $("#btnTaxDis" + cnt).html(Tax_AmontDis.toString());
+
+
         var VatPrc = $("#txtTax_Rate" + cnt).val();
         var vatAmount = Number(total) * VatPrc / 100;
         $("#txtTax" + cnt).val(vatAmount.RoundToSt(2));
-        var total = Number(txtQuantityValue) * Number(txtPriceValue);
+        //var total = Number(txtQuantityValue) * Number(txtPriceValue);
         $("#txtTotal" + cnt).val(total.RoundToSt(2));
 
         var totalAfterVat = Number(vatAmount.RoundToSt(2)) + Number(total.RoundToSt(2));
@@ -401,7 +457,7 @@ namespace InvoiceTax {
         ComputeTotals();
 
 
-    } 
+    }
     function ComputeTotals() {
         debugger
         let PackageCount = 0;
@@ -465,9 +521,9 @@ namespace InvoiceTax {
 
             if ($("#txt_ItemID" + rowcount).val() == "" || $("#txt_ItemID" + rowcount).val() == "0" || $("#txt_ItemID" + rowcount).val() == null) {
                 DisplayMassage(" برجاء ادخال الصنف", "Please enter the type", MessageType.Error);
-                Errorinput($("#btnItem" + rowcount)); 
+                Errorinput($("#btnItem" + rowcount));
                 return false
-            } 
+            }
             else if (Qty == 0) {
                 DisplayMassage(" برجاء ادخال الكمية المباعة", "Please enter the Quantity sold", MessageType.Error);
                 Errorinput($("#txtQuantity" + rowcount));
@@ -557,7 +613,7 @@ namespace InvoiceTax {
         debugger
         InvoiceModel.InvoiceID = 0;
         InvoiceModel.StoreId = 1;
-        InvoiceModel.TrDate = txtDate.value; 
+        InvoiceModel.TrDate = txtDate.value;
         InvoiceModel.CommitionAmount = 0;
         InvoiceModel.Remark = txtRemark.value;
         InvoiceModel.RefNO = txtRFQ.value;
@@ -567,7 +623,7 @@ namespace InvoiceTax {
         InvoiceModel.TaxCurrencyID = Number(ddlCurreny.value);
         InvoiceModel.InvoiceCurrenyID = Number(ddlCurreny.value);
         InvoiceModel.RoundingAmount = Number($('#txtTaxPrc').val());
-         
+
 
         //InvoiceModel.CardAmount = $('#txtCardMoney').val().trim() == '' ? 0 : $('#txtCardMoney').val();
         //InvoiceModel.CashAmount = $('#txtCashMoney').val().trim() == '' ? 0 : $('#txtCashMoney').val();
@@ -578,15 +634,15 @@ namespace InvoiceTax {
 
         InvoiceModel.TotalAmount = Number(txtTotal.value);
         InvoiceModel.NetAfterVat = Number(txtNet.value);
-        InvoiceModel.VatAmount = Number(txtTax.value); 
-        InvoiceModel.ItemDiscountTotal = Number(txtTotalDiscount.value);  
+        InvoiceModel.VatAmount = Number(txtTax.value);
+        InvoiceModel.ItemDiscountTotal = Number(txtTotalDiscount.value);
 
 
- 
+
 
         InvoiceModel.Status = 0;
 
-      
+
         // Details
         for (var i = 0; i < CountGrid; i++) {
             invoiceItemSingleModel = new Sls_InvoiceDetail();
@@ -598,12 +654,12 @@ namespace InvoiceTax {
 
 
             if (StatusFlag == "i") {
-                invoiceItemSingleModel.InvoiceItemID = 0;
+                invoiceItemSingleModel.InvoiceItemID = ((i + 1) * -1);
                 invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val();
                 invoiceItemSingleModel.Serial = $("#txtSerial" + i).val();
                 invoiceItemSingleModel.SoldQty = $('#txtQuantity' + i).val();
                 //invoiceItemSingleModel.StockSoldQty = Number($('option:selected', $("#ddlTypeUom" + i)).attr('data-onhandqty'));//
-                invoiceItemSingleModel.StockSoldQty =   Number($('#txtQuantity' + i).val());//
+                invoiceItemSingleModel.StockSoldQty = Number($('#txtQuantity' + i).val());//
                 invoiceItemSingleModel.NetUnitPrice = $("#txtNetUnitPrice" + i).val();
                 invoiceItemSingleModel.Unitprice = $("#txtPrice" + i).val();
                 invoiceItemSingleModel.UnitpriceWithVat = $("#txtPrice" + i).val();
@@ -619,13 +675,36 @@ namespace InvoiceTax {
                 invoiceItemSingleModel.DiscountVatNatID = null;
                 invoiceItemSingleModel.ChargeCode = null;
                 //-----------------------------------------------------
-                 
-                invoiceItemSingleModel.VatPrc = $("#txtTax_Rate" + i).val(); 
+
+                invoiceItemSingleModel.VatPrc = $("#txtTax_Rate" + i).val();
                 invoiceItemSingleModel.VatAmount = $("#txtTax" + i).val();
                 invoiceItemSingleModel.ItemTotal = invoiceItemSingleModel.Unitprice * invoiceItemSingleModel.SoldQty;
                 invoiceItemSingleModel.TotRetQty = $("#txtReturnQuantity" + i).val();
                 invoiceItemSingleModel.StatusFlag = StatusFlag.toString();
                 InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
+
+
+                //------------------------------------- TaxableItem-------------------------
+                //--------------------------------------------------New_Ver-----------------------------
+                TaxableSinglModel = new TaxableItem();
+                TaxableSinglModel.InvoiceID = ((i + 1) * -1)
+                TaxableSinglModel.subType = ddlTypeTax.value
+                TaxableSinglModel.taxType = ddlValueTax.value
+                TaxableSinglModel.rate = Number(txtTaxPrc.value)
+                TaxableSinglModel.amount = $("#txtTax" + i).val();
+                TaxableModel.push(TaxableSinglModel);
+
+
+                if ($("#ddlDisTax" + i).val() != 'null' && $("#ddlTypeDis" + i).val()!= 'null') {
+                    TaxableSinglModel = new TaxableItem();
+                    TaxableSinglModel.InvoiceID = ((i+1) * -1)
+                    TaxableSinglModel.subType = $("#ddlTypeDis" + i).val()
+                    TaxableSinglModel.taxType = $("#ddlDisTax" + i).val()
+                    TaxableSinglModel.rate = $("#txtPrc_Tax" + i).val()
+                    TaxableSinglModel.amount = $("#txtTax_AmontDis" + i).val()
+                    TaxableModel.push(TaxableSinglModel);
+                }
+
 
             }
             if (StatusFlag == "u") {
@@ -633,8 +712,8 @@ namespace InvoiceTax {
                 invoiceItemSingleModel.InvoiceItemID = invoiceItemId;
                 invoiceItemSingleModel.ItemID = $("#txt_ItemID" + i).val();
                 invoiceItemSingleModel.Serial = $("#txtSerial" + i).val();
-                invoiceItemSingleModel.SoldQty = $('#txtQuantity' + i).val(); 
-                invoiceItemSingleModel.StockSoldQty =   Number($('#txtQuantity' + i).val());//
+                invoiceItemSingleModel.SoldQty = $('#txtQuantity' + i).val();
+                invoiceItemSingleModel.StockSoldQty = Number($('#txtQuantity' + i).val());//
                 invoiceItemSingleModel.NetUnitPrice = $("#txtNetUnitPrice" + i).val();
                 invoiceItemSingleModel.Unitprice = $("#txtPrice" + i).val();
                 invoiceItemSingleModel.UnitpriceWithVat = $("#txtPrice" + i).val();
@@ -652,12 +731,38 @@ namespace InvoiceTax {
                 //-----------------------------------------------------
 
                 let VatNatID = Number($("#txtTax_Rate" + i).attr('data-VatNatID'));
-                invoiceItemSingleModel.VatPrc = $("#txtTax_Rate" + i).val(); 
+                invoiceItemSingleModel.VatPrc = $("#txtTax_Rate" + i).val();
                 invoiceItemSingleModel.VatAmount = $("#txtTax" + i).val();
                 invoiceItemSingleModel.ItemTotal = invoiceItemSingleModel.Unitprice * invoiceItemSingleModel.SoldQty;
                 invoiceItemSingleModel.TotRetQty = $("#txtReturnQuantity" + i).val();
                 invoiceItemSingleModel.StatusFlag = StatusFlag.toString();
                 InvoiceItemsDetailsModel.push(invoiceItemSingleModel);
+
+
+
+                //------------------------------------- TaxableItem-------------------------
+                //--------------------------------------------------New_Ver-----------------------------
+                TaxableSinglModel = new TaxableItem();
+                TaxableSinglModel.InvoiceID = invoiceItemId
+                TaxableSinglModel.subType = ddlTypeTax.value
+                TaxableSinglModel.taxType = ddlValueTax.value
+                TaxableSinglModel.rate = Number(txtTaxPrc.value)
+                TaxableSinglModel.amount = $("#txtTax" + i).val();
+                TaxableModel.push(TaxableSinglModel);
+
+
+                if ($("#ddlDisTax" + i).val() != 'null' && $("#ddlTypeDis" + i).val() != 'null') {
+                    TaxableSinglModel = new TaxableItem();
+                    TaxableSinglModel.InvoiceID = invoiceItemId
+                    TaxableSinglModel.subType = $("#ddlTypeDis" + i).val()
+                    TaxableSinglModel.taxType = $("#ddlDisTax" + i).val()
+                    TaxableSinglModel.rate = $("#txtPrc_Tax" + i).val()
+                    TaxableSinglModel.amount = $("#txtTax_AmontDis" + i).val()
+                    TaxableModel.push(TaxableSinglModel);
+                }
+
+
+
             }
             if (StatusFlag == "d") {
                 if ($("#InvoiceItemID" + i).val() != "") {
@@ -670,20 +775,7 @@ namespace InvoiceTax {
         }
 
         debugger
-          TaxableSinglModel = new TaxableItem();
-        TaxableSinglModel.InvoiceID = 0
-        TaxableSinglModel.subType = ddlTypeTax.value
-        TaxableSinglModel.taxType = ddlValueTax.value
-        TaxableModel.push(TaxableSinglModel);
-
-
-        if (ddlDisTax.value != 'null' && ddlTypeDis.value != 'null') {
-            TaxableSinglModel = new TaxableItem();
-            TaxableSinglModel.InvoiceID = 0
-            TaxableSinglModel.subType = ddlTypeDis.value
-            TaxableSinglModel.taxType = ddlDisTax.value
-            TaxableModel.push(TaxableSinglModel);
-        }
+        
 
 
         MasterDetailsModel.Sls_Ivoice = InvoiceModel;
@@ -691,10 +783,10 @@ namespace InvoiceTax {
         MasterDetailsModel.TaxableItem = TaxableModel;
 
     }
-     
+
     function insert() {
         if (!validation()) return;
-         
+
         Assign();
         Ajax.Callsync({
             type: "POST",
@@ -720,15 +812,15 @@ namespace InvoiceTax {
 
     }
     function success_insert() {
-        btnClean_onclick(); 
+        btnClean_onclick();
         txtDate.value = GetDate();
         CountGrid = 0;
         CustomerId = 0;
         invoiceID = 0;
         txtRFQ.value = "";
         txtCompanysales.value = "";
-        txtCompanyname.value = ""; 
-        txtRemark.value = "";  
+        txtCompanyname.value = "";
+        txtRemark.value = "";
 
         txtItemCount.value = "";
         txtPackageCount.value = "";
@@ -746,15 +838,10 @@ namespace InvoiceTax {
         $('#ddlTypeTax').html('')
 
         for (var i = 0; i < Tax.length; i++) {
-            $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
-            $('#ddlDisTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
+            $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>'); 
         }
 
-        for (var i = 0; i < TaxType.length; i++) {
-
-            $('#ddlTypeDis').append('<option   value="' + TaxType[i].SubCode + '">' + TaxType[i].DescA + '</option>');
-
-        }
+      
 
         for (var i = 0; i < TaxT1.length; i++) {
             $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
@@ -765,11 +852,7 @@ namespace InvoiceTax {
         $('#ddlValueTax').val('T1')
         $('#ddlTypeTax').val('V009')
 
-
-
-         ddlDisTax.value = 'null';  
-        $('#ddlTypeDis').html('') 
-        $('#ddlTypeDis').append('<option value="null"> اختار </option>');
+         
 
 
         $("#Table_Data").html("");
@@ -805,7 +888,7 @@ namespace InvoiceTax {
             DisplayMassage('  برجاء ادخال اسم البائع', ' RFQ must be entered', MessageType.Error);
             return false;
         }
-         
+
         if (count == 0) {
             Errorinput(btnAddDetails);
             DisplayMassage('يجب ادخال  بينات الفاتوره', 'يجب ادخال  بينات الفاتوره', MessageType.Error);
@@ -836,7 +919,7 @@ namespace InvoiceTax {
     function btnsave_onclick() {
 
         if (!validation()) return
-         
+
         let CanAdd: boolean = true;
         if (CountGrid > 0) {
             for (var i = 0; i < CountGrid; i++) {
@@ -856,24 +939,7 @@ namespace InvoiceTax {
         $("#Table_Data").html("");
         AddNewRow();
     }
-    function btnsaveapi_onclick() {
-        debugger
-        var _URL = $("#GetAPIUrlCore").val();
-        var Comp: number = Number(SysSession.CurrentEnvironment.CompCode);
-        alert(_URL);
-        $.ajax({
-            type: "GET",
-            url: _URL,
-            data: { Comp: Comp, Optype: 1, InvoiceID: 1 },
-            success: (d) => {
-                debugger;
-                let result = d as string;
-                debugger
-                //alert(result);
-            }
 
-        });
-    }
 }
 
 

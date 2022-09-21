@@ -46,10 +46,149 @@
     th {
         text-align: right !important;
     }
+    /*-----------------------------------------------------New_Ver---------------------------*/
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
 
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .modal-contentE {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .closeExpens {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .closeExpens:hover,
+        .closeExpens:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
 </style>
 <body class="materialdesign">
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content animated zoomInRight">
+            <span class="close">&times;</span>
+
+
+            <div class="sparkline8-graph">
+
+                <div class="datatable-dashv1-list custom-datatable-overright">
+                    <table id="table" data-toggle="table" data-pagination="true" data-resizable="true" data-cookie="true" data-cookie-id-table="saveId" data-show-export="false" data-click-to-select="true" data-toolbar="#toolbar" style="direction: rtl;">
+                        <thead class="Heder">
+                            <tr>
+                               
+                                <th class=" " style="text-align: right; width:2%;">خصم تحت حساب الضريبه</th>
+                                <th class=" " style="text-align: right; width: 40%;" data-field="description" data-editable="true"> نوع الخصم</th>
+                                <th style="text-align: right; width: 8%;" class="Price" data-editable="true"> النسبه</th> 
+                                <th style="text-align: right; width: 5%;" data-editable="true">مبلغ الخصم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="Table_Tax">
+                        </tbody>
+
+
+                    </table>
+                    <br />
+
+                    <div class="datatable-dashv1-list custom-datatable-overright">
+                        <div class="col-lg-12">
+                        </div>
+
+                    </div>
+
+                    <br />
+                    <br />
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+         
+
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                ModalExpens.style.display = "none";
+            }
+        }
+
+         
+
+    </script>
+
+    @*------------------------------------------------------------------------New_Ver---------------------------------------------*@
+
+
     <div class="content-inner-all">
 
 
@@ -237,38 +376,26 @@
                                                                     <div class="row">
 
 
-                                                                        <div class="col-lg-1">
-                                                                            <div class="input-mark-inner mg-b-22 ">
-                                                                                <button id="btnsaveapi" type="button" class="btn btn-custon-four btn-success"><i class="fa fa-save"></i>test</button>
+                                                                        <div class="col-lg-3">
+                                                                            <div class="input-mark-inner mg-b-22">
+                                                                                
                                                                             </div>
                                                                         </div>
 
+                                                                        <div class="col-lg-1">
+                                                                            <div class="input-mask-title"> 
+                                                                            </div>
+                                                                        </div>
 
                                                                         <div class="col-lg-3">
-                                                                            <div class="input-mark-inner mg-b-22">
-                                                                                <select id="ddlTypeDis" class="form-control">
-                                                                                    <option value="null"> اختار   </option>
-                                                                                </select>
+                                                                            <div class="input-mark-inner mg-b-22  ">
+                                                                                <input id="txtTaxPrc" value="14" type="text" class="form-control" placeholder=" الضريبة %" style="text-align:center;font-weight: bold;font-size: 20px;">
                                                                             </div>
                                                                         </div>
 
                                                                         <div class="col-lg-1">
                                                                             <div class="input-mask-title">
-                                                                                <b>نوع الخصم</b>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-lg-3">
-                                                                            <div class="input-mark-inner mg-b-22">
-                                                                                <select id="ddlDisTax" class="form-control">
-                                                                                    <option value="null"> اختار  </option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-lg-1">
-                                                                            <div class="input-mask-title">
-                                                                                <b>خصم تحت حساب الضريبه</b>
+                                                                                <b class=" ">   الضريبة %</b>
                                                                             </div>
                                                                         </div>
 
@@ -291,27 +418,13 @@
                                                                     </div>
 
 
-                                                                    <div class="row">
-
-                                                                        <div class="col-lg-4">
-                                                                        </div>
-                                                                        <div class="col-lg-3">
-                                                                            <div class="input-mark-inner mg-b-22  ">
-                                                                                <input id="txtTaxPrc"  value="14" type="text" class="form-control" placeholder=" الضريبة %" style="text-align:center;font-weight: bold;font-size: 20px;">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-lg-1">
-                                                                            <div class="input-mask-title">
-                                                                                <b class=" ">   الضريبة %</b>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                  
                                                                 </div>
                                                                 <div class="sparkline8-graph" style="margin-left:2%!important;">
                                                                     <div class="datatable-dashv1-list custom-datatable-overright">
                                                                         <div class="button-ap-list responsive-btn">
                                                                             <button id="btnprint" type="button" class="btn btn-custon-four btn-primary display_none"><i class="fa fa-print"></i>print</button>
-                                                                            <button id="btnsave" type="button" class="btn btn-custon-four btn-success"style="font-weight: bold;font-size: 18px;"><i class="fa fa-save"></i>&nbsp; حفظ</button>
+                                                                            <button id="btnsave" type="button" class="btn btn-custon-four btn-success" style="font-weight: bold;font-size: 18px;"><i class="fa fa-save"></i>&nbsp; حفظ</button>
                                                                             <button id="btnClean" type="button" class="btn btn-custon-four btn-danger" style="font-weight: bold;font-size: 18px;"><i class="fa fa-empty"></i>مسح الجدول  </button>
                                                                         </div>
                                                                         <div id="DivMassage" class="col-lg-12  margingred  borderred display_none">
@@ -332,6 +445,8 @@
                                                                                             <th data-field="number" class="Zero" data-editable="true">نسبة الخصم</th>
                                                                                             <th data-field="number" class="des" data-editable="true">الخصم  </th>
                                                                                             <th data-field="number" class="px-3" data-editable="true">   السعر بعد الخصم </th>
+                                                                                            @*----------------------------------------------------New_Ver---------------------*@
+                                                                                            <th data-field="number" class="Price" data-editable="true"> ضريبة الخصم </th>
                                                                                             <th data-field="number" class="Price" data-editable="true"> الاجمالي  </th>
                                                                                             <th data-field="number" class="Tax px-3" data-editable="true">  نسبة الضريبة %   </th>
                                                                                             <th data-field="number" class="des" data-editable="true">  الضريبة     </th>
