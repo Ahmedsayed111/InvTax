@@ -1,4 +1,8 @@
 ﻿using Inv.WebUI.Filter;
+using Inv.WebUI.Models;
+using System;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Inv.WebUI.Controllers
@@ -95,9 +99,60 @@ namespace Inv.WebUI.Controllers
             return PartialView("");
 
         }
+         
+        public void UplodFiles(HttpPostedFileBase myFileUpload)
+        {
+
+
+
+            if (myFileUpload == null)
+            {
+                ModelState.AddModelError("file", "Please select file to upload.");
+            }
+            else
+            {
+                var pathToSave = Server.MapPath("~/MyUploads/") + myFileUpload.FileName;
+                myFileUpload.SaveAs(pathToSave); 
+            }
+
+             
+        }
+
+        public JsonResult uploadFile()
+        {
+            // check if the user selected a file to upload
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    HttpFileCollectionBase files = Request.Files;
+
+                    HttpPostedFileBase file = files[0];
+                    string fileName = file.FileName;
+
+                    // create the uploads folder if it doesn't exist
+                    Directory.CreateDirectory(Server.MapPath("~/uploads/"));
+                    string path = Path.Combine(Server.MapPath("~/uploads/"), fileName);
+
+                    // save the file
+                    file.SaveAs(path);
+                    return Json("File uploaded successfully");
+                }
+
+                catch (Exception e)
+                {
+                    return Json("error" + e.Message);
+                }
+            }
+
+            return Json("no files were selected !");
+        }
+
+
 
         #region Open Pages 
- 
+
+
         public ActionResult QuotationIndex()
         {
             return View("~/Views/Invoice/InvoiceTax.cshtml");
