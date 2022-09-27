@@ -996,6 +996,7 @@
     <Compile Include="Models\CustomModels\SessionManager.cs" />
     <Compile Include="Models\CustomModels\SessionRecord.cs" />
     <Compile Include="Models\CustomModels\UserPrivilege.cs" />
+    <Compile Include="Models\Products.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\Forms\ClassPrint.cs" />
     <Compile Include="Reports\Forms\ReportsDetails.cs" />

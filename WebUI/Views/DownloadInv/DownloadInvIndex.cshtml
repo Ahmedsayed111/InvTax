@@ -1,4 +1,4 @@
-﻿@using Inv.WebUI.Resources
+﻿@model Inv.WebUI.Models.Products
 @{
 
     Layout = "~/Views/Shared/Layout.cshtml";
@@ -64,7 +64,7 @@
 
 
                                             <!-- Breadcome start-->
-                                        
+
 
                                             <div class="admin-dashone-data-table-area mg-b-15">
                                                 <div class="container-fluid">
@@ -252,9 +252,9 @@
                                                                     </div>
 
                                                                     <div class="row">
-                                                                        <br /> 
+                                                                        <br />
                                                                         <div class="col-lg-6">
-                                                                        </div> 
+                                                                        </div>
                                                                         <div class="col-lg-1">
                                                                             <div class="input-mask-title">
                                                                                 <button class=" btn btn-success " id="btnDownload" style="margin-left: -76%;margin-top: 5%;width: 140%;font-weight: bold;font-size: 22px;"> تنزيل</button>
@@ -263,7 +263,7 @@
                                                                     </div>
 
 
- 
+
 
 
                                                                     <script src="~/ClientApp/DownloadInv/Downloadinv.js"></script>
@@ -315,7 +315,7 @@
                                                                     </div>
                                                                     <div class="col-lg-3">
                                                                         <div class="input-mark-inner mg-b-22">
-                                                                            <input id="uploadDetail" class="btn btn-success   btnAjax float_left" type=file name="files[]">
+                                                                            <input id="uploadDetail" class="btn btn-success   btnAjax float_left Eslam" type=file name="myFileUpload">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-1">
@@ -328,7 +328,7 @@
 
                                                                     <div class="col-lg-3">
                                                                         <div class="input-mark-inner mg-b-22">
-                                                                            <input id="uploadMaster" class="btn btn-success   btnAjax float_left" type=file name="files[]">
+                                                                            <input id="uploadMaster" class="btn btn-success   btnAjax float_left" type=file name="myFileUpload">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-1">
@@ -339,6 +339,83 @@
 
                                                                     <br />
                                                                 </div>
+                                                                 
+                                                                <input id="Path_Master" value="" type="hidden" />
+                                                                <input id="Path_Detail" value="" type="hidden" />
+
+                                                                <script>
+
+                                                                    $("#uploadDetail").change(function () {
+
+                                                                                      if (window.FormData == undefined)
+                                                                                          alert("Error: FormData is undefined");
+
+                                                                                      else {
+                                                                                          var fileUpload = $("#uploadDetail").get(0);
+                                                                                          var files = fileUpload.files;
+
+                                                                                          var fileData = new FormData();
+
+                                                                                          files[0].name = "Detail";
+                                                                                          
+
+                                                                                          fileData.append(files[0].name, files[0],"Detail.xlsx");
+
+                                                                                          $.ajax({
+                                                                                                                                                                           url:'@Url.Action("UplodFiles", "Home")',
+                                                                                              url:'@Url.Action("uploadFile", "Home")',
+                                                                                              type: 'post',
+                                                                                              datatype: 'json',
+                                                                                              contentType: false,
+                                                                                              processData: false,
+                                                                                              async: false,
+                                                                                              data: fileData,
+                                                                                              success: function (response) {
+                                                                                                   
+                                                                                                  $("#Path_Detail").val(response);
+
+                                                                                              }
+                                                                                          });
+                                                                                      }
+
+                                                                    });
+
+
+
+                                                                    $("#uploadMaster").change(function () {
+
+                                                                                      if (window.FormData == undefined)
+                                                                                          alert("Error: FormData is undefined");
+
+                                                                                      else {
+                                                                                          var fileUpload = $("#uploadMaster").get(0);
+                                                                                          var files = fileUpload.files;
+
+                                                                                          var fileData = new FormData();
+                                                                                          files[0].name = "Master";
+
+                                                                                          fileData.append(files[0].name, files[0], "Master.xlsx");
+
+                                                                                          $.ajax({
+                                                                                                                                                                           url:'@Url.Action("UplodFiles", "Home")',
+                                                                                              url:'@Url.Action("uploadFile", "Home")',
+                                                                                              type: 'post',
+                                                                                              datatype: 'json',
+                                                                                              contentType: false,
+                                                                                              processData: false,
+                                                                                              async: false,
+                                                                                              data: fileData,
+                                                                                              success: function (response) {
+
+                                                                                                  $("#Path_Master").val(response);
+                                                                                                   
+                                                                                              }
+                                                                                          });
+                                                                                      }
+
+                                                                    });
+
+                                                                </script>
 
                                                                 <div class="row">
                                                                     <br />
@@ -418,7 +495,7 @@
                                                                 </div>
                                                             </div>
 
-                                                             
+
 
                                                             <script src="~/ClientApp/UploadInv/UploadInv.js"></script>
 
@@ -433,7 +510,7 @@
 
 
                                                         </div>
-                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -447,5 +524,4 @@
             </div>
         </div>
     </div>
-</body>
-<script src="~/ClientApp/USERS/Users.js"></script>
+</body> 

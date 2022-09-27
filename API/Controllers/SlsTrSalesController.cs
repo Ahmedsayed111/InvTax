@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Inv.API.Controllers;
 using System.Data.SqlClient;
-using Inv.API.Models.CustomModel; 
+using Inv.API.Models.CustomModel;
 
 namespace Inv.API.Controllers
 {
@@ -54,20 +54,29 @@ namespace Inv.API.Controllers
                     for (int i = 0; i < obj.Sls_InvoiceDetail.Count; i++)
                     {
                         obj.Sls_InvoiceDetail[i].InvoiceID = Sls_TR_Invoice.InvoiceID;
+
+                        var tax = obj.taxableItem.Where(x => x.InvoiceID == obj.Sls_InvoiceDetail[i].InvoiceItemID).ToList();
+
+                        var detail = SlsInvoiceItemsService.Insert(obj.Sls_InvoiceDetail[i]);
+
+
+                         
+                        for (int u = 0; u < tax.Count; u++)
+                        {
+                            tax[u].InvoiceID = detail.InvoiceItemID;
+
+                            string query = "insert into [dbo].[taxableItems] values('" + tax[u].taxType + "','" + tax[u].amount + "','" + tax[u].subType + "','" + tax[u].rate + "'," + tax[u].InvoiceID + ")";
+                            db.Database.ExecuteSqlCommand(query);
+
+                        }
+
                     }
-                    SlsInvoiceItemsService.InsertLst(obj.Sls_InvoiceDetail);
+                    //SlsInvoiceItemsService.InsertLst(obj.Sls_InvoiceDetail);
 
-                    for (int i = 0; i < obj.taxableItem.Count; i++)
-                    {
-                        obj.taxableItem[i].InvoiceID = Sls_TR_Invoice.InvoiceID;
 
-                        string query = "insert into [dbo].[taxableItems] values('"+ obj.taxableItem[i].taxType + "',0,'"+ obj.taxableItem[i].subType + "',0,"+ obj.taxableItem[i].InvoiceID + ")";
-                        db.Database.ExecuteSqlCommand(query);
-
-                    }
                     // call process trans 
 
-                    ResponseResult res =  Shared.TransactionProcess(Convert.ToInt32(obj.Sls_Ivoice.CompCode), Convert.ToInt32(obj.Sls_Ivoice.BranchCode), Sls_TR_Invoice.InvoiceID, "Quotation", "Add", db);
+                    ResponseResult res = Shared.TransactionProcess(Convert.ToInt32(obj.Sls_Ivoice.CompCode), Convert.ToInt32(obj.Sls_Ivoice.BranchCode), Sls_TR_Invoice.InvoiceID, "Quotation", "Add", db);
                     if (res.ResponseState == true)
                     {
                         obj.Sls_Ivoice.TrNo = int.Parse(res.ResponseData.ToString());
@@ -97,7 +106,7 @@ namespace Inv.API.Controllers
                 try
                 {
 
-                 
+
 
                     //update Master
                     var Sls_TR_Invoice = SlsTrSalesService.Update(updatedObj.Sls_Ivoice);
@@ -168,9 +177,9 @@ namespace Inv.API.Controllers
 
         }
         [HttpGet, AllowAnonymous]
-        public IHttpActionResult GetAllSlsInvoice(int CompCode, int BranchCode, string TypeInv , string Status , int CustomerId , string RFQFilter , string StartDate, string EndDate)
+        public IHttpActionResult GetAllSlsInvoice(int CompCode, int BranchCode, string TypeInv, string Status, int CustomerId, string RFQFilter, string StartDate, string EndDate)
         {
-              
+
             string s = @"SELECT  * FROM  Sls_Ivoice where   ";
 
             string condition = "";
@@ -179,29 +188,29 @@ namespace Inv.API.Controllers
             string Statu = "";
 
             if (CustomerId != 0 && CustomerId != null)
-                Customer = " and CustomerId =" + CustomerId+" ";
+                Customer = " and CustomerId =" + CustomerId + " ";
             if (RFQFilter != "" && RFQFilter != null)
-                RFQ =  " and RefNO ='" + RFQFilter +"' "; 
+                RFQ = " and RefNO ='" + RFQFilter + "' ";
             if (Status != "" && Status != null)
-                Statu = " and Status ='" + Status + "' "; 
+                Statu = " and Status ='" + Status + "' ";
 
 
-            condition = " ( CompCode = " + CompCode + " and BranchCode = " + BranchCode + " and DocType = '" + TypeInv + "' and  TrDate >='" + StartDate + "' and TrDate <= '" + EndDate + "'  " + Customer +" "+ RFQ + " "+ Statu + " )";
-            
+            condition = " ( CompCode = " + CompCode + " and BranchCode = " + BranchCode + " and DocType = '" + TypeInv + "' and  TrDate >='" + StartDate + "' and TrDate <= '" + EndDate + "'  " + Customer + " " + RFQ + " " + Statu + " )";
 
-         string query = s + condition + " ORDER BY TrNo DESC;";  
+
+            string query = s + condition + " ORDER BY TrNo DESC;";
 
             var res = db.Database.SqlQuery<Sls_Ivoice>(query).ToList();
             return Ok(new BaseResponse(res));
         }
         [HttpGet, AllowAnonymous]
-        public IHttpActionResult UpdateInvoice(int InvoiceID,string InvDate)
+        public IHttpActionResult UpdateInvoice(int InvoiceID, string InvDate)
         {
 
             //InvDate = DateTime.Now.ToString();
-            string query = "update [dbo].[Sls_Ivoice] set TrType = 1 , DeliveryEndDate = '"+InvDate+"' where InvoiceID = " + InvoiceID + "";
+            string query = "update [dbo].[Sls_Ivoice] set TrType = 1 , DeliveryEndDate = '" + InvDate + "' where InvoiceID = " + InvoiceID + "";
             var res = db.Database.ExecuteSqlCommand(query);
-             ResponseResult res1 = Shared.TransactionProcess(Convert.ToInt32(1), Convert.ToInt32(1), InvoiceID, "INV", "ADD", db);
+            ResponseResult res1 = Shared.TransactionProcess(Convert.ToInt32(1), Convert.ToInt32(1), InvoiceID, "INV", "ADD", db);
 
             return Ok(new BaseResponse(100));
         }
@@ -220,7 +229,7 @@ namespace Inv.API.Controllers
         }
 
         [HttpGet, AllowAnonymous]
-        public IHttpActionResult UpdatePurNo(int InvoiceID , string PurNo)
+        public IHttpActionResult UpdatePurNo(int InvoiceID, string PurNo)
         {
             string query = "update [dbo].[Sls_Ivoice] set TaxNotes = '" + PurNo + "' where InvoiceID = " + InvoiceID + "";
 
@@ -236,7 +245,7 @@ namespace Inv.API.Controllers
             var res = db.Database.SqlQuery<I_D_UOM>(query).ToList();
             return Ok(new BaseResponse(res));
         }
-           
+
         [HttpGet, AllowAnonymous]
         public IHttpActionResult GetAllG_Codes()
         {
@@ -244,9 +253,9 @@ namespace Inv.API.Controllers
 
             var res = db.Database.SqlQuery<G_Codes>(query).ToList();
             return Ok(new BaseResponse(res));
-        } 
-        
-        
+        }
+
+
         [HttpGet, AllowAnonymous]
         public IHttpActionResult GetAllCurreny()
         {
@@ -297,8 +306,8 @@ namespace Inv.API.Controllers
         [HttpGet, AllowAnonymous]
         public IHttpActionResult GetSlsInvoiceItem(int invoiceID)
         {
-             
-            string query1 = "Select * from IQ_Sls_InvoiceDetail_Tax where InvoiceID = "+ invoiceID;
+
+            string query1 = "Select * from IQ_Sls_InvoiceDetail_Tax where InvoiceID = " + invoiceID;
 
             var res1 = db.Database.SqlQuery<IQ_Sls_InvoiceDetail_Tax>(query1).ToList();
 
@@ -311,16 +320,16 @@ namespace Inv.API.Controllers
             DetailsAndTaxabl Model = new DetailsAndTaxabl();
 
             Model.IQ_Sls_InvoiceDetail_Tax = res1;
-            Model.taxableItem = res2; 
+            Model.taxableItem = res2;
 
 
             return Ok(new BaseResponse(Model));
         }
-         
+
         [HttpPost, AllowAnonymous]
         public IHttpActionResult AddUsers([FromBody] SlsInvoiceMasterDetails updatedObj)
         {
-           string CreatedAt = DateTime.Now.ToString();
+            string CreatedAt = DateTime.Now.ToString();
             var QUERY = "";
             var res = db.Database.ExecuteSqlCommand(QUERY);
             return Ok(new BaseResponse(res));
