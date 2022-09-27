@@ -129,6 +129,7 @@ namespace Inv.WebUI.Controllers
 
                     HttpPostedFileBase file = files[0];
                     string fileName = file.FileName;
+                 
 
                     // create the uploads folder if it doesn't exist
                     Directory.CreateDirectory(Server.MapPath("~/uploads/"));
@@ -136,7 +137,7 @@ namespace Inv.WebUI.Controllers
 
                     // save the file
                     file.SaveAs(path);
-                    return Json("File uploaded successfully");
+                    return Json(path);
                 }
 
                 catch (Exception e)

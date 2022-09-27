@@ -340,6 +340,8 @@
                                                                     <br />
                                                                 </div>
                                                                  
+                                                                <input id="Path_Master" value="" type="hidden" />
+                                                                <input id="Path_Detail" value="" type="hidden" />
 
                                                                 <script>
 
@@ -354,7 +356,10 @@
 
                                                                                           var fileData = new FormData();
 
-                                                                                          fileData.append(files[0].name, files[0]);
+                                                                                          files[0].name = "Detail";
+                                                                                          
+
+                                                                                          fileData.append(files[0].name, files[0],"Detail.xlsx");
 
                                                                                           $.ajax({
                                                                                                                                                                            url:'@Url.Action("UplodFiles", "Home")',
@@ -366,8 +371,9 @@
                                                                                               async: false,
                                                                                               data: fileData,
                                                                                               success: function (response) {
+                                                                                                   
+                                                                                                  $("#Path_Detail").val(response);
 
-                                                                                                  alert(response);
                                                                                               }
                                                                                           });
                                                                                       }
@@ -386,8 +392,9 @@
                                                                                           var files = fileUpload.files;
 
                                                                                           var fileData = new FormData();
+                                                                                          files[0].name = "Master";
 
-                                                                                          fileData.append(files[0].name, files[0]);
+                                                                                          fileData.append(files[0].name, files[0], "Master.xlsx");
 
                                                                                           $.ajax({
                                                                                                                                                                            url:'@Url.Action("UplodFiles", "Home")',
@@ -400,7 +407,8 @@
                                                                                               data: fileData,
                                                                                               success: function (response) {
 
-                                                                                                  alert(response);
+                                                                                                  $("#Path_Master").val(response);
+                                                                                                   
                                                                                               }
                                                                                           });
                                                                                       }
