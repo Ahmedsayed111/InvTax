@@ -185,6 +185,7 @@
     <Compile Include="Controllers\Shared\G_USERSController.cs" />
     <Compile Include="Controllers\Shared\DatabaseChangeController.cs" />
     <Compile Include="Controllers\Shared\I_VW__GetCompStatusController.cs" />
+    <Compile Include="Controllers\Shared\QRGenerator.cs" />
     <Compile Include="Controllers\Shared\SystemToolsController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\SlsTrSalesController.cs" />
