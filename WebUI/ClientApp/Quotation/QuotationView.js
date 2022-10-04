@@ -87,9 +87,11 @@ var QuotationView;
     function txtCompanynameFilter_ochange() {
         txtCompanynameFilter.value = "";
         CustomerId = 0;
+        $('#txtCustomerIdFilter').val('');
     }
     function btnRefrash_onclick() {
         CustomerId = 0;
+        $('#txtCustomerIdFilter').val('');
         txtCompanynameFilter.value = '';
         txtRFQFilter.value = '';
         ddlStatasFilter.value = 'null';
@@ -106,13 +108,17 @@ var QuotationView;
         RFQFilter = txtRFQFilter.value;
         FromDat = FromDate.value;
         ToDat = ToDate.value;
+        var Custid = 0;
+        if (txtCompanynameFilter.value.trim() != '') {
+            Custid = Number($('#txtCustomerIdFilter').val());
+        }
         var Status = ddlStatasFilter.value == 'null' ? '' : ddlStatasFilter.value;
         $("#ReportGrid").jsGrid("option", "pageIndex", 1);
         $('#sendmail').attr('class', '');
         Ajax.Callsync({
             type: "GET",
             url: sys.apiUrl("SlsTrSales", "GetAllSlsInvoice"),
-            data: { CompCode: compcode, BranchCode: BranchCode, TypeInv: TypeInv, Status: Status, CustomerId: CustomerId, RFQFilter: RFQFilter, StartDate: FromDat, EndDate: ToDat },
+            data: { CompCode: compcode, BranchCode: BranchCode, TypeInv: TypeInv, Status: Status, CustomerId: Custid, RFQFilter: RFQFilter, StartDate: FromDat, EndDate: ToDat },
             success: function (d) {
                 debugger;
                 var result = d;
@@ -161,7 +167,7 @@ var QuotationView;
                     $('#txtTotalAmount').val("");
                     $('#txtTotalQty').val("");
                     for (var i = 0; i < Invoice.length; i++) {
-                        TotalAmount += Invoice[i].TotalAmount;
+                        TotalAmount += Invoice[i].NetAfterVat;
                         $('#txtTotalAmount').val(TotalAmount);
                         TotalQty++;
                     }
@@ -542,6 +548,7 @@ var QuotationView;
         txtCompanysales.value = Selected_Data[0].CustomerName;
         txtRemark.value = Selected_Data[0].Remark;
         GetCustomer();
+        debugger;
         ddlCurreny.value = setVal(Selected_Data[0].InvoiceCurrenyID.toString());
         ddlTypePay.value = Selected_Data[0].IsCash == false ? '0' : '1';
         ddlStatas.value = setVal(Selected_Data[0].Status);
@@ -560,12 +567,14 @@ var QuotationView;
                 var result = d;
                 if (result.IsSuccess) {
                     DisplayDetailsAndTaxabl = result.Response;
+                    debugger;
                     InvItemsDetailsModel = DisplayDetailsAndTaxabl.IQ_Sls_InvoiceDetail_Tax;
                     CountGrid = 0;
                     $("#Table_Data").html("");
+                    $("#Table_Tax").html("");
                     for (var i_1 = 0; i_1 < InvItemsDetailsModel.length; i_1++) {
                         BuildControls(i_1);
-                        //BuildTaxDis(i)
+                        BuildTaxDis(i_1);
                         Display_GridConrtol(i_1);
                         CountGrid++;
                     }
@@ -617,6 +626,27 @@ var QuotationView;
         $("#txtTax_Rate" + cnt).prop("value", InvItemsDetailsModel[cnt].VatPrc);
         $("#txtTax_Rate" + cnt).prop("value", InvItemsDetailsModel[cnt].VatPrc);
         $("#txtTax" + cnt).prop("value", InvItemsDetailsModel[cnt].VatAmount);
+        //--------------------------------------tax_Ver----------------------------
+        debugger;
+        var taxable = DisplayDetailsAndTaxabl.taxableItem.filter(function (x) { return x.subType != "V009" && x.InvoiceID == InvItemsDetailsModel[cnt].InvoiceItemID; });
+        if (taxable.length > 0) {
+            $("#ddlDisTax" + cnt).prop("value", taxable[0].taxType);
+            var DisTax_1 = $("#ddlDisTax" + cnt).val();
+            var TaxT1 = TaxType.filter(function (x) { return x.StdCode == DisTax_1; });
+            $('#ddlTypeDis' + cnt).html('');
+            for (var i = 0; i < TaxT1.length; i++) {
+                $('#ddlTypeDis' + cnt).append('<option  Data_Rate="' + TaxT1[i].Remarks + '"  value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+            }
+            $("#ddlTypeDis" + cnt).prop("value", taxable[0].subType);
+            $("#txtPrc_Tax" + cnt).prop("value", taxable[0].rate);
+            $("#txtTax_AmontDis" + cnt).prop("value", taxable[0].amount);
+        }
+        else {
+            $("#ddlDisTax" + cnt).prop("value", "null");
+            $("#ddlTypeDis" + cnt).prop("value", "null");
+            $("#txtPrc_Tax" + cnt).prop("value", "0");
+            $("#txtTax_AmontDis" + cnt).prop("value", "0");
+        }
         totalRow(cnt, true);
     }
     function GetCustomer() {
@@ -629,6 +659,7 @@ var QuotationView;
                 if (result.IsSuccess) {
                     CustomerDetailnew = result.Response;
                     txtCompanyname.value = CustomerDetailnew[0].name;
+                    $('#txtCustomerIdFilter').val(CustomerDetailnew[0].id);
                     $('#btnCustSrch').attr('disabled', 'disabled');
                     $('#txtCompanyname').attr('disabled', 'disabled');
                 }
@@ -824,7 +855,7 @@ var QuotationView;
         InitalizeControlsInvoice();
         InitalizeEventsInvoice();
         FillddlUom();
-        AddNewRow();
+        //AddNewRow();
         FillddlCurreny();
         FillddlG_Codes();
         txtDate.value = GetDate();
@@ -1045,8 +1076,8 @@ var QuotationView;
                 $('#txtTax_AmontDis' + cnt).val('0');
             }
             else {
-                var DisTax_1 = $("#ddlDisTax" + cnt).val();
-                var TaxT1 = TaxType.filter(function (x) { return x.StdCode == DisTax_1; });
+                var DisTax_2 = $("#ddlDisTax" + cnt).val();
+                var TaxT1 = TaxType.filter(function (x) { return x.StdCode == DisTax_2; });
                 $('#ddlTypeDis' + cnt).html('');
                 for (var i = 0; i < TaxT1.length; i++) {
                     $('#ddlTypeDis' + cnt).append('<option  Data_Rate="' + TaxT1[i].Remarks + '"  value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');

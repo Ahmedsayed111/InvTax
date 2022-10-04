@@ -60,7 +60,7 @@ namespace Inv.API.Controllers
                         var detail = SlsInvoiceItemsService.Insert(obj.Sls_InvoiceDetail[i]);
 
 
-                         
+
                         for (int u = 0; u < tax.Count; u++)
                         {
                             tax[u].InvoiceID = detail.InvoiceItemID;
@@ -68,6 +68,11 @@ namespace Inv.API.Controllers
                             string query = "insert into [dbo].[taxableItems] values('" + tax[u].taxType + "','" + tax[u].amount + "','" + tax[u].subType + "','" + tax[u].rate + "'," + tax[u].InvoiceID + ")";
                             db.Database.ExecuteSqlCommand(query);
 
+                        }
+
+                        if (tax.Count > 1)
+                        {
+                            db.Database.ExecuteSqlCommand("update [dbo].[Sls_InvoiceDetail] set AllowAmount = " + tax[1].amount + " where InvoiceItemID = " + detail.InvoiceItemID + "");
                         }
 
                     }
@@ -120,14 +125,52 @@ namespace Inv.API.Controllers
                     foreach (var item in insertedInvoiceItems)
                     {
                         item.InvoiceID = updatedObj.Sls_Ivoice.InvoiceID;
+
+                        var tax = updatedObj.taxableItem.Where(x => x.InvoiceID == item.InvoiceItemID).ToList();
+
                         var InsertedRec = SlsInvoiceItemsService.Insert(item);
+
+
+                        for (int u = 0; u < tax.Count; u++)
+                        {
+                            tax[u].InvoiceID = InsertedRec.InvoiceItemID;
+
+                            string query = "insert into [dbo].[taxableItems] values('" + tax[u].taxType + "','" + tax[u].amount + "','" + tax[u].subType + "','" + tax[u].rate + "'," + tax[u].InvoiceID + ")";
+                            db.Database.ExecuteSqlCommand(query);
+
+                        }
+                        if (tax.Count > 1)
+                        {
+                            db.Database.ExecuteSqlCommand("update [dbo].[Sls_InvoiceDetail] set AllowAmount = " + tax[1].amount + " where InvoiceItemID = " + item.InvoiceItemID + "");
+                        }
+
                     }
 
                     //loop Update  
                     foreach (var item in updatedInvoiceItems)
                     {
                         item.InvoiceID = updatedObj.Sls_Ivoice.InvoiceID;
+
+                        var tax = updatedObj.taxableItem.Where(x => x.InvoiceID == item.InvoiceItemID).ToList();
+
                         var updatedRec = SlsInvoiceItemsService.Update(item);
+
+                        string query11 = "delete [dbo].[taxableItems] where InvoiceID = " + item.InvoiceItemID + "";
+                        db.Database.ExecuteSqlCommand(query11);
+
+                        for (int u = 0; u < tax.Count; u++)
+                        {
+                            tax[u].InvoiceID = item.InvoiceItemID;
+
+                            string query = "insert into [dbo].[taxableItems] values('" + tax[u].taxType + "','" + tax[u].amount + "','" + tax[u].subType + "','" + tax[u].rate + "'," + tax[u].InvoiceID + ")";
+                            db.Database.ExecuteSqlCommand(query);
+
+                        }
+
+                        if (tax.Count > 1)
+                        {
+                            db.Database.ExecuteSqlCommand("update [dbo].[Sls_InvoiceDetail] set AllowAmount = " + tax[1].amount + " where InvoiceItemID = " + item.InvoiceItemID + "");
+                        }
                     }
 
                     //loop Delete  
@@ -139,20 +182,23 @@ namespace Inv.API.Controllers
                         string query = "delete [dbo].[Sls_InvoiceDetail] where InvoiceItemID = " + deletedId + "";
                         db.Database.ExecuteSqlCommand(query);
 
-                    }
-
-                    string query11 = "delete [dbo].[taxableItems] where InvoiceID = " + Sls_TR_Invoice.InvoiceID + "";
-                    db.Database.ExecuteSqlCommand(query11);
-
-
-                    for (int i = 0; i < updatedObj.taxableItem.Count; i++)
-                    {
-                        updatedObj.taxableItem[i].InvoiceID = Sls_TR_Invoice.InvoiceID;
-
-                        string query = "insert into [dbo].[taxableItems] values('" + updatedObj.taxableItem[i].taxType + "',0,'" + updatedObj.taxableItem[i].subType + "',0," + updatedObj.taxableItem[i].InvoiceID + ")";
-                        db.Database.ExecuteSqlCommand(query);
+                        string query11 = "delete [dbo].[taxableItems] where InvoiceID = " + item.InvoiceItemID + "";
+                        db.Database.ExecuteSqlCommand(query11);
 
                     }
+
+                    //string query11 = "delete [dbo].[taxableItems] where InvoiceID = " + Sls_TR_Invoice.InvoiceID + "";
+                    //db.Database.ExecuteSqlCommand(query11);
+
+
+                    //for (int i = 0; i < updatedObj.taxableItem.Count; i++)
+                    //{
+                    //    updatedObj.taxableItem[i].InvoiceID = Sls_TR_Invoice.InvoiceID;
+
+                    //    string query = "insert into [dbo].[taxableItems] values('" + updatedObj.taxableItem[i].taxType + "',0,'" + updatedObj.taxableItem[i].subType + "',0," + updatedObj.taxableItem[i].InvoiceID + ")";
+                    //    db.Database.ExecuteSqlCommand(query);
+
+                    //}
                     // call process trans 
 
                     ResponseResult res = Shared.TransactionProcess(Convert.ToInt32(updatedObj.Sls_Ivoice.CompCode), Convert.ToInt32(updatedObj.Sls_Ivoice.BranchCode), Sls_TR_Invoice.InvoiceID, "Quotation", "Update", db);
@@ -180,7 +226,7 @@ namespace Inv.API.Controllers
         public IHttpActionResult GetAllSlsInvoice(int CompCode, int BranchCode, string TypeInv, string Status, int CustomerId, string RFQFilter, string StartDate, string EndDate)
         {
 
-            string s = @"SELECT  * FROM  Sls_Ivoice where   ";
+            string s = @"SELECT  * FROM  IQ_Display_Sls_Invoice where   ";
 
             string condition = "";
             string Customer = "";
@@ -307,12 +353,13 @@ namespace Inv.API.Controllers
         public IHttpActionResult GetSlsInvoiceItem(int invoiceID)
         {
 
-            string query1 = "Select * from IQ_Sls_InvoiceDetail_Tax where InvoiceID = " + invoiceID;
+            string query1 = "Select * from IQ_Sls_InvoiceDetail_Tax where InvoiceID = " + invoiceID + " ORDER BY InvoiceItemID ASC ";
 
             var res1 = db.Database.SqlQuery<IQ_Sls_InvoiceDetail_Tax>(query1).ToList();
 
 
-            string query2 = "Select * from taxableItems where InvoiceID = " + invoiceID;
+            string query2 = @"Select Tax.* from [dbo].[Sls_InvoiceDetail] InvD inner join [dbo].[taxableItems] Tax
+                                on InvD.InvoiceItemID = Tax.InvoiceID where InvD.InvoiceID  = " + invoiceID + " ORDER BY InvD.InvoiceItemID ASC ";
 
             var res2 = db.Database.SqlQuery<taxableItem>(query2).ToList();
 

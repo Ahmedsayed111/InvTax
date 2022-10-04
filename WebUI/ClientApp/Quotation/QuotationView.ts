@@ -97,9 +97,11 @@ namespace QuotationView {
     function txtCompanynameFilter_ochange() {
         txtCompanynameFilter.value = "";
         CustomerId = 0;
+        $('#txtCustomerIdFilter').val('')
     }
     function btnRefrash_onclick() {
         CustomerId = 0;
+        $('#txtCustomerIdFilter').val('')
         txtCompanynameFilter.value = '';
         txtRFQFilter.value = '';
         ddlStatasFilter.value = 'null'
@@ -118,7 +120,7 @@ namespace QuotationView {
     function Display(TypeInv: string) {
 
         Txt_Search.value = '';
-         
+
         $('#sendmail').addClass('active in');
 
 
@@ -127,14 +129,20 @@ namespace QuotationView {
         FromDat = FromDate.value;
         ToDat = ToDate.value;
 
-        let Status = ddlStatasFilter.value == 'null' ? '' : ddlStatasFilter.value ;
+        let Custid = 0;
+        if (txtCompanynameFilter.value.trim() != '') {
+            Custid = Number($('#txtCustomerIdFilter').val());
+        }
+
+
+        let Status = ddlStatasFilter.value == 'null' ? '' : ddlStatasFilter.value;
 
         $("#ReportGrid").jsGrid("option", "pageIndex", 1);
         $('#sendmail').attr('class', '');
         Ajax.Callsync({
             type: "GET",
             url: sys.apiUrl("SlsTrSales", "GetAllSlsInvoice"),
-            data: { CompCode: compcode, BranchCode: BranchCode, TypeInv: TypeInv, Status: Status, CustomerId: CustomerId, RFQFilter: RFQFilter, StartDate: FromDat, EndDate: ToDat },
+            data: { CompCode: compcode, BranchCode: BranchCode, TypeInv: TypeInv, Status: Status, CustomerId: Custid, RFQFilter: RFQFilter, StartDate: FromDat, EndDate: ToDat },
             success: (d) => {
                 debugger;
                 let result = d as BaseResponse;
@@ -163,10 +171,10 @@ namespace QuotationView {
                         ReportGridRet.Bind();
                         $('#Title_Inv').html('عـرض فواتير المرتجعات')
 
-                        $('#btnAdd').removeClass('active'); 
+                        $('#btnAdd').removeClass('active');
                         $('#btnReturn').addClass('active');
                         $('#btnInvoice').removeClass('active');
-                        $('#btnPur').removeClass('active'); 
+                        $('#btnPur').removeClass('active');
 
 
                     }
@@ -206,7 +214,7 @@ namespace QuotationView {
                     $('#txtTotalAmount').val("");
                     $('#txtTotalQty').val("");
                     for (var i = 0; i < Invoice.length; i++) {
-                        TotalAmount += Invoice[i].TotalAmount;
+                        TotalAmount += Invoice[i].NetAfterVat;
                         $('#txtTotalAmount').val(TotalAmount);
                         TotalQty++;
                     }
@@ -385,7 +393,7 @@ namespace QuotationView {
                     }
 
                     txt.onclick = (e) => {
-                        ReturnORAddInvoice(item.InvoiceID,'C');
+                        ReturnORAddInvoice(item.InvoiceID, 'C');
                     };
                     return txt;
                 }
@@ -406,7 +414,7 @@ namespace QuotationView {
                     }
 
                     txt.onclick = (e) => {
-                        ReturnORAddInvoice(item.InvoiceID,'D');
+                        ReturnORAddInvoice(item.InvoiceID, 'D');
                     };
                     return txt;
                 }
@@ -565,7 +573,7 @@ namespace QuotationView {
         ];
         ReportGridRet.Bind();
     }
-    
+
     function InitializeGridPur() {
 
 
@@ -621,7 +629,7 @@ namespace QuotationView {
 
                     return txt;
                 }
-            }, 
+            },
             {
                 title: "عـرض",
                 width: "5%",
@@ -641,7 +649,7 @@ namespace QuotationView {
                 }
             },
 
-       
+
 
 
         ];
@@ -677,6 +685,7 @@ namespace QuotationView {
         txtCompanysales.value = Selected_Data[0].CustomerName;
         txtRemark.value = Selected_Data[0].Remark;
         GetCustomer();
+        debugger
         ddlCurreny.value = setVal(Selected_Data[0].InvoiceCurrenyID.toString());
         ddlTypePay.value = Selected_Data[0].IsCash == false ? '0' : '1';
         ddlStatas.value = setVal(Selected_Data[0].Status);
@@ -700,13 +709,14 @@ namespace QuotationView {
                 let result = d as BaseResponse;
                 if (result.IsSuccess) {
                     DisplayDetailsAndTaxabl = result.Response as DetailsAndTaxabl;
-
+                    debugger
                     InvItemsDetailsModel = DisplayDetailsAndTaxabl.IQ_Sls_InvoiceDetail_Tax;
                     CountGrid = 0;
                     $("#Table_Data").html("");
+                    $("#Table_Tax").html("");
                     for (let i = 0; i < InvItemsDetailsModel.length; i++) {
                         BuildControls(i);
-                        //BuildTaxDis(i)
+                        BuildTaxDis(i)
                         Display_GridConrtol(i);
                         CountGrid++;
                     }
@@ -783,6 +793,36 @@ namespace QuotationView {
         $("#txtTax_Rate" + cnt).prop("value", InvItemsDetailsModel[cnt].VatPrc);
         $("#txtTax_Rate" + cnt).prop("value", InvItemsDetailsModel[cnt].VatPrc);
         $("#txtTax" + cnt).prop("value", InvItemsDetailsModel[cnt].VatAmount);
+
+        //--------------------------------------tax_Ver----------------------------
+        debugger
+        var taxable = DisplayDetailsAndTaxabl.taxableItem.filter(x => x.subType != "V009" && x.InvoiceID == InvItemsDetailsModel[cnt].InvoiceItemID);
+        if (taxable.length > 0) {
+
+            $("#ddlDisTax" + cnt).prop("value", taxable[0].taxType);
+
+            let DisTax = $("#ddlDisTax" + cnt).val();
+            let TaxT1 = TaxType.filter(x => x.StdCode == DisTax)
+
+            $('#ddlTypeDis' + cnt).html('')
+            for (var i = 0; i < TaxT1.length; i++) {
+                $('#ddlTypeDis' + cnt).append('<option  Data_Rate="' + TaxT1[i].Remarks + '"  value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
+            }
+
+            $("#ddlTypeDis" + cnt).prop("value", taxable[0].subType);
+            $("#txtPrc_Tax" + cnt).prop("value", taxable[0].rate);
+            $("#txtTax_AmontDis" + cnt).prop("value", taxable[0].amount);
+
+        }
+        else {
+            $("#ddlDisTax" + cnt).prop("value", "null");
+            $("#ddlTypeDis" + cnt).prop("value", "null");
+            $("#txtPrc_Tax" + cnt).prop("value", "0");
+            $("#txtTax_AmontDis" + cnt).prop("value", "0");
+        }
+
+
+
         totalRow(cnt, true);
     }
     function GetCustomer() {
@@ -795,6 +835,7 @@ namespace QuotationView {
                 if (result.IsSuccess) {
                     CustomerDetailnew = result.Response as Array<receiver>;
                     txtCompanyname.value = CustomerDetailnew[0].name;
+                    $('#txtCustomerIdFilter').val(CustomerDetailnew[0].id);
                     $('#btnCustSrch').attr('disabled', 'disabled');
                     $('#txtCompanyname').attr('disabled', 'disabled');
                 }
@@ -830,7 +871,7 @@ namespace QuotationView {
         ddlTypeInv.value = Typ;
 
         ddlStatas.value = "0";
-        
+
     }
     function EidtInvoice(btnId: number) {
 
@@ -937,9 +978,9 @@ namespace QuotationView {
               /*  || x.CustomerCODE.toString().search(search) >= 0  || x.CreditLimit.toString().search(search) >= 0 || x.Emp_NameA.toString().search(search) >= 0
                 || x.ContactMobile.toString().search(search) >= 0 /*|| x.DueAmount.toString().search(search) >= 0 *//*|| x.DaysDiff.toString().search(search) >= 0*/);
 
-             
+
         } else {
-            SearchDetails = InvoiceDisplay; 
+            SearchDetails = InvoiceDisplay;
         }
 
 
@@ -990,7 +1031,7 @@ namespace QuotationView {
         });
     }
 
-   
+
     /*@* ---------------------------------------Eidt Invoice------------------------------------------*@*/
 
     var InvoiceItemsDetailsModel: Array<Sls_InvoiceDetail> = new Array<Sls_InvoiceDetail>();
@@ -1037,7 +1078,7 @@ namespace QuotationView {
     var ddlStatas: HTMLSelectElement;
     var ddlCurreny: HTMLSelectElement;
     var ddlValueTax: HTMLSelectElement;
-    var ddlTypeTax: HTMLSelectElement;  
+    var ddlTypeTax: HTMLSelectElement;
 
     var include = "";
     var Tax;
@@ -1057,7 +1098,7 @@ namespace QuotationView {
         InitalizeControlsInvoice();
         InitalizeEventsInvoice();
         FillddlUom();
-        AddNewRow();
+        //AddNewRow();
         FillddlCurreny();
         FillddlG_Codes();
         txtDate.value = GetDate();
@@ -1074,7 +1115,7 @@ namespace QuotationView {
         ddlStatas = document.getElementById("ddlStatas") as HTMLSelectElement;
         ddlCurreny = document.getElementById("ddlCurreny") as HTMLSelectElement;
         ddlValueTax = document.getElementById("ddlValueTax") as HTMLSelectElement;
-        ddlTypeTax = document.getElementById("ddlTypeTax") as HTMLSelectElement;  
+        ddlTypeTax = document.getElementById("ddlTypeTax") as HTMLSelectElement;
 
         txtDate = document.getElementById("txtDate") as HTMLInputElement;
         txtRFQ = document.getElementById("txtRFQ") as HTMLInputElement;
@@ -1103,7 +1144,7 @@ namespace QuotationView {
         btnCustSrch.onclick = btnCustSrch_onClick;
         btnsave.onclick = btnsave_onclick;
         btnClean.onclick = btnClean_onclick;
-        ddlValueTax.onchange = ddlValueTax_onchange; 
+        ddlValueTax.onchange = ddlValueTax_onchange;
         txtTaxPrc.onkeyup = txtTaxPrc_onchange;
     }
     function txtTaxPrc_onchange() {
@@ -1115,7 +1156,7 @@ namespace QuotationView {
             }
         }
 
-    } 
+    }
     function ddlValueTax_onchange() {
         let ValueTax = ddlValueTax.value;
         let TaxT1 = TaxType.filter(x => x.StdCode == ValueTax)
@@ -1160,10 +1201,10 @@ namespace QuotationView {
                     $('#ddlTypeTax').html('')
 
                     for (var i = 0; i < Tax.length; i++) {
-                        $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>'); 
+                        $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
                     }
 
-                   
+
 
                     for (var i = 0; i < TaxT1.length; i++) {
                         $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
@@ -1304,7 +1345,7 @@ namespace QuotationView {
             totalRow(cnt, false);
 
         });
-         
+
         $("#btn_minus" + cnt).click(function (e) {
 
             DeleteRow(cnt);
@@ -1318,7 +1359,7 @@ namespace QuotationView {
             $('#No_Row_Tax' + cnt).removeClass('display_none');
         });
 
-     
+
 
         return;
     }
@@ -1637,7 +1678,7 @@ namespace QuotationView {
 
         InvoiceModel.Status = 0;
 
-         
+
         // Details
         for (var i = 0; i < CountGrid; i++) {
             invoiceItemSingleModel = new Sls_InvoiceDetail();
@@ -1862,10 +1903,10 @@ namespace QuotationView {
         $('#ddlTypeTax').html('')
 
         for (var i = 0; i < Tax.length; i++) {
-            $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>'); 
+            $('#ddlValueTax').append('<option  value="' + Tax[i].StdCode + '">' + Tax[i].DescA + '</option>');
         }
 
-       
+
 
         for (var i = 0; i < TaxT1.length; i++) {
             $('#ddlTypeTax').append('<option   value="' + TaxT1[i].SubCode + '">' + TaxT1[i].DescA + '</option>');
@@ -1877,7 +1918,7 @@ namespace QuotationView {
         $('#ddlTypeTax').val('V009')
 
 
-          
+
 
 
         $("#Table_Data").html("");
@@ -2031,13 +2072,13 @@ namespace QuotationView {
 
 
         debugger
-        var _URL = $("#GetAPIUrlCore").val() +"Push/";
+        var _URL = $("#GetAPIUrlCore").val() + "Push/";
         var Comp: number = Number(SysSession.CurrentEnvironment.CompCode);
         alert(_URL);
         $.ajax({
             type: "GET",
             url: _URL,
-            data: { Comp: Comp,InvoiceID: btnId },
+            data: { Comp: Comp, InvoiceID: btnId },
             success: (d) => {
                 debugger;
                 let result = d as string;
