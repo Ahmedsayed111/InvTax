@@ -565,6 +565,7 @@ var QuotationView;
                     $("#Table_Data").html("");
                     for (var i_1 = 0; i_1 < InvItemsDetailsModel.length; i_1++) {
                         BuildControls(i_1);
+                        //BuildTaxDis(i)
                         Display_GridConrtol(i_1);
                         CountGrid++;
                     }
@@ -1019,7 +1020,6 @@ var QuotationView;
             modal.style.display = "block";
             $('#No_Row_Tax' + cnt).removeClass('display_none');
         });
-        BuildTaxDis(cnt);
         return;
     }
     function BuildTaxDis(cnt) {
@@ -1136,6 +1136,7 @@ var QuotationView;
         $('paginationSwitch').addClass("display_none");
         $('.no-records-found').addClass("display_none");
         BuildControls(CountGrid);
+        BuildTaxDis(CountGrid);
         $("#txt_StatusFlag" + CountGrid).val("i"); //In Insert mode 
         CountGrid++;
         Insert_Serial();

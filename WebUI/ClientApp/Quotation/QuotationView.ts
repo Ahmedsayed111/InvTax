@@ -706,6 +706,7 @@ namespace QuotationView {
                     $("#Table_Data").html("");
                     for (let i = 0; i < InvItemsDetailsModel.length; i++) {
                         BuildControls(i);
+                        //BuildTaxDis(i)
                         Display_GridConrtol(i);
                         CountGrid++;
                     }
@@ -1317,7 +1318,7 @@ namespace QuotationView {
             $('#No_Row_Tax' + cnt).removeClass('display_none');
         });
 
-        BuildTaxDis(cnt)
+     
 
         return;
     }
@@ -1497,6 +1498,7 @@ namespace QuotationView {
 
 
         BuildControls(CountGrid);
+        BuildTaxDis(CountGrid);
         $("#txt_StatusFlag" + CountGrid).val("i"); //In Insert mode 
         CountGrid++;
         Insert_Serial();
