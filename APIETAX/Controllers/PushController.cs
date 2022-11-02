@@ -1,5 +1,6 @@
 using APIETAX.CustomModel;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace APIETAX.Controllers
 {
@@ -21,7 +22,9 @@ namespace APIETAX.Controllers
 
             I_ControlTax newI_ControlTax = new I_ControlTax();
             newI_ControlTax = HomeSendinvoce.GetControlTax(Comp);
-            newI_ControlTax.access_token = ETax.CreateTokin(newI_ControlTax.ClientID, newI_ControlTax.ClientSecret);
+            var Contenttokin = JsonConvert.DeserializeObject<TkenModelView>(ETax.CreateTokin(newI_ControlTax.ClientID, newI_ControlTax.ClientSecret));
+
+            newI_ControlTax.access_token = Contenttokin.access_token;
             HomeSendinvoce.Pushinvoce(InvoiceID, newI_ControlTax);
             return "";           
         }

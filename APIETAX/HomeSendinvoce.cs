@@ -1020,9 +1020,21 @@ namespace APIETAX
 
                 Header = GetInvoiceHeader(InvoiceID);   // get all invoices issues or to cancel 
                 lstInvItems = GetInvoiceItems(InvoiceID);
-                taxableItems_ = GetTaxableItem(InvoiceID);
+                for (int i = 0; i < lstInvItems.Count; i++)
+                {
+                    List<taxableItems> taxableItems_new = new List<taxableItems>();
 
+                    taxableItems_new = GetTaxableItem(lstInvItems[i].InvoiceItemID);
 
+                    for (int x = 0; x < taxableItems_new.Count; x++)
+                    {
+                        taxableItems_.Add(taxableItems_new[x]);
+
+                    }
+
+                }
+
+                   
 
                 if (Header.Count > 0)
                 {
@@ -1130,7 +1142,7 @@ namespace APIETAX
                     //cust invoiceLines to InvoiceLineTblInvoiceLine
                     lstInvoiceLine.Add(new InvoiceLine
                     {
-                        description = item.DescA,
+                        description = item.description,
                         itemType = item.codeType,
                         itemCode = item.itemCode,
                         unitType = item.UomCode,
@@ -1143,7 +1155,7 @@ namespace APIETAX
                         netTotal = Convert.ToDouble(item.ItemTotal),
                         itemsDiscount = Convert.ToDouble(0),
                         discount = new Discount { amount = Convert.ToDouble(item.DiscountAmount), rate = Convert.ToDouble(0) },
-                        // unitValue = new UnitValue { amountSold = Convert.ToDouble(item.Unitprice * item.currencyExchangeRate), amountEGP = Convert.ToDouble(item.Unitprice), currencyExchangeRate = Convert.ToDouble(item.currencyExchangeRate), currencySold = Header.CurrencyCode },
+                        unitValue = new UnitValue { amountEGP = Convert.ToDouble(item.Unitprice), currencySold ="EGP" },
                         taxableItems = txLst
 
                     }); ;
@@ -1153,7 +1165,7 @@ namespace APIETAX
 
                 DateTime _getDate = string.IsNullOrWhiteSpace(Header.TrDate.ToString()) ? DateTime.Now : DateTime.Parse(Header.TrDate.ToString()).AddHours(+2);
                 string _date = _getDate.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                Header.name_iss = SecuritySystem.Decrypt(Header.name_iss);
+                Header.name_iss =  Header.name_iss ;
                 string Receiver_ID;
                 if (Header.type_rec == "P" && Header.id_rec == "" || Header.id_rec == null)
                 {
@@ -1212,7 +1224,7 @@ namespace APIETAX
                     documentType =Header.DocType ,
                     documentTypeVersion = Header.TypeVersion,// _DocumentTypeVersion,
                     dateTimeIssued = _date,
-                    taxpayerActivityCode = Header.ActivityCode,
+                    taxpayerActivityCode ="6201",// ""Header.ActivityCode,
                     internalID = Header.TrNo.ToString(),
 
                     payment = new Payment
@@ -1255,7 +1267,8 @@ namespace APIETAX
                 Root RootObj = new Root();
                 RootObj = Root;
                 RestClient client = new RestClient();
-                client = new RestClient("");
+                client = new RestClient("https://api.preprod.invoicing.eta.gov.eg/api/v1/documentsubmissions");
+                client.Timeout = -1;
                 var requestApi = new RestRequest();
                 string json = JsonConvert.SerializeObject(RootObj);
                 Newtonsoft.Json.Linq.JObject request2 = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(json);
@@ -1329,8 +1342,7 @@ namespace APIETAX
                                 InvItems.StockUnitCost = Convert.ToInt32(dt.Rows[i]["StockUnitCost"]);
                                 InvItems.VatApplied = Convert.ToInt32(dt.Rows[i]["VatApplied"]);
                                 InvItems.TotRetQty = Convert.ToInt32(dt.Rows[i]["TotRetQty"]);
-                                InvItems.Serial = Convert.ToInt32(dt.Rows[i]["Serial"]);
-                                InvItems.AllowAmount = Convert.ToInt32(dt.Rows[i]["AllowAmount"]);
+                                 InvItems.AllowAmount = Convert.ToInt32(dt.Rows[i]["AllowAmount"]);
                                 InvItems.AllowancePrc = Convert.ToInt32(dt.Rows[i]["AllowancePrc"]);
                                 InvItems.AllowanceBase = Convert.ToInt32(dt.Rows[i]["AllowanceBase"]);
                                 InvItems.AllowReason = dt.Rows[i]["AllowReason"].ToString();
@@ -1346,8 +1358,7 @@ namespace APIETAX
                                 InvItems.ItemNetAmount = Convert.ToInt32(dt.Rows[i]["ItemNetAmount"]);
                                 InvItems.ChargeAmount = Convert.ToInt32(dt.Rows[i]["ChargeAmount"]);
                                 InvItems.ChargePrc = Convert.ToInt32(dt.Rows[i]["ChargePrc"]);
-                                InvItems.ChargeBase = Convert.ToInt32(dt.Rows[i]["ChargeBase"]);
-                                InvItems.ChargeVatNatID = Convert.ToInt32(dt.Rows[i]["ChargeVatNatID"]);
+                                InvItems.ChargeBase = Convert.ToInt32(dt.Rows[i]["ChargeBase"]); 
                                 InvItems.ChargeVatPrc = Convert.ToInt32(dt.Rows[i]["ChargeVatPrc"]);
                                 InvItems.ChargeAfterVat = Convert.ToInt32(dt.Rows[i]["ChargeAfterVat"]);
                                 InvItems.ChargeReason = dt.Rows[i]["ChargeReason"].ToString();
@@ -1439,6 +1450,8 @@ namespace APIETAX
                                 InvHeader.InvoiceID = Convert.ToInt32(dt.Rows[i]["InvoiceID"]);
                                 InvHeader.TrNo = Convert.ToInt32(dt.Rows[i]["TrNo"]);
                                 InvHeader.DocType = dt.Rows[i]["DocType"].ToString();
+                                InvHeader.TypeVersion = dt.Rows[i]["TypeVersion"].ToString();
+                                InvHeader.ActivityCode = dt.Rows[i]["ActivityCode"].ToString();
                                 InvHeader.TrDate = Convert.ToDateTime(dt.Rows[i]["TrDate"]);
                                 InvHeader.VatAmount = Convert.ToDecimal(dt.Rows[i]["VatAmount"]);
 
@@ -1740,7 +1753,7 @@ namespace APIETAX
                             netTotal = Convert.ToDouble(item.ItemTotal),
                             itemsDiscount = Convert.ToDouble(0),
                             discount = new Discount { amount = Convert.ToDouble(item.DiscountAmount), rate = Convert.ToDouble(0) },
-                            // unitValue = new UnitValue { amountSold = Convert.ToDouble(item.Unitprice * item.currencyExchangeRate), amountEGP = Convert.ToDouble(item.Unitprice), currencyExchangeRate = Convert.ToDouble(item.currencyExchangeRate), currencySold = Header.CurrencyCode },
+                            unitValue = new UnitValue { amountSold = Convert.ToDouble(item.Unitprice * 1), amountEGP = Convert.ToDouble(item.Unitprice), currencyExchangeRate = Convert.ToDouble(1), currencySold = "EGP" },
                             taxableItems = txLst
 
                         }); ;
