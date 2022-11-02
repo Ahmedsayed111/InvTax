@@ -31,6 +31,8 @@ var UploadInv;
     var Disount = 0;
     var totalaftarall = 0;
     var totaloutall = 0;
+    var BranchCode = Number(sys.SysSession.CurrentEnvironment.BranchCode);
+    var CompCode = Number(sys.SysSession.CurrentEnvironment.CompCode);
     function InitalizeComponent() {
         InitalizeControls();
         InitializeEvents();
@@ -207,7 +209,24 @@ var UploadInv;
         Model_root.documents.push(InvoiceModel);
     }
     function btnPush_onclick() {
-        insert();
+        debugger;
+        var MasterPath = $('#Path_Master').val();
+        var DetailPath = $('#Path_Detail').val();
+        var ExtraField = "";
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("SlsTrSales", "insertExcell"),
+            data: {
+                CompCode: CompCode, BranchCode: BranchCode, MasterPath: MasterPath, DetailPath: DetailPath, ExtraField: ExtraField
+            },
+            success: function (d) {
+                var result = d;
+                if (result.IsSuccess) {
+                    alert("تم الرفع");
+                }
+            }
+        });
+        // insert()
     }
     function ComputeTotals(Model_Detail) {
         PackageCount = 0;

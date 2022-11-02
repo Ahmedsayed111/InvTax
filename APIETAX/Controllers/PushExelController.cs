@@ -5,24 +5,24 @@ namespace APIETAX.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PushController : ControllerBase
+    public class PushExelController : ControllerBase
     {
        
-        private readonly ILogger<PushController> _logger;
+        private readonly ILogger<PushExelController> _logger;
 
-        public PushController(ILogger<PushController> logger)
+        public PushExelController(ILogger<PushExelController> logger)
         {
             _logger = logger;
         } 
 
-        [HttpGet(Name = "GetPusht")]
-        public string Get(int Comp,int InvoiceID)
+        [HttpGet(Name = "PushExel")]
+        public string PushExel(int Comp,string type)
         {
 
             I_ControlTax newI_ControlTax = new I_ControlTax();
             newI_ControlTax = HomeSendinvoce.GetControlTax(Comp);
             newI_ControlTax.access_token = ETax.CreateTokin(newI_ControlTax.ClientID, newI_ControlTax.ClientSecret);
-            HomeSendinvoce.Pushinvoce(InvoiceID, newI_ControlTax);
+            HomeSendinvoce.PushExel("x", newI_ControlTax);
             return "";           
         }
 

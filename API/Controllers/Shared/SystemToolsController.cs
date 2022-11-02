@@ -1036,7 +1036,9 @@ namespace Inv.API.Controllers
                 using (MemoryStream ms = new MemoryStream())
                 {
                     bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    byte[] byteimage = ms.ToArray();
+                    byte[] byteimage = ms.ToArray(); 
+                     File.WriteAllBytes("~/", byteimage); 
+                   
                     QRcode = Convert.ToBase64String(byteimage);
 
                 }

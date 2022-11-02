@@ -1506,17 +1506,17 @@ var QuotationView;
         var _URL = $("#GetAPIUrlCore").val() + "Push/";
         var Comp = Number(SysSession.CurrentEnvironment.CompCode);
         alert(_URL);
-        $.ajax({
-            type: "GET",
-            url: _URL,
-            data: { Comp: Comp, InvoiceID: btnId },
-            success: function (d) {
-                debugger;
-                var result = d;
-                debugger;
-                //alert(result);
-            }
-        });
+        //$.ajax({
+        //    type: "GET",
+        //    url: _URL,
+        //    data: { Comp: Comp,InvoiceID: btnId },
+        //    success: (d) => {
+        //        debugger;
+        //        let result = d as string;
+        //        debugger
+        //        //alert(result);
+        //    }
+        //});
     }
 })(QuotationView || (QuotationView = {}));
 //# sourceMappingURL=QuotationView.js.map

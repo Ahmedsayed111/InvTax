@@ -12,6 +12,8 @@ using System.Web.Http;
 using Inv.API.Controllers;
 using System.Data.SqlClient;
 using Inv.API.Models.CustomModel;
+using System.Net.Http.Headers;
+using RestSharp;
 
 namespace Inv.API.Controllers
 {
@@ -343,6 +345,32 @@ namespace Inv.API.Controllers
             var QUERY = "select * from Items where CompCode = " + CompCode + "";
             var res = db.Database.ExecuteSqlCommand(QUERY);
             return Ok(new BaseResponse(res));
+        } 
+        [HttpGet, AllowAnonymous]
+        public IHttpActionResult insertExcell(int CompCode,int BranchCode, string MasterPath,string DetailPath,string ExtraField)
+        {
+            string CreatedAt = DateTime.Now.ToString();
+            var QUERY = "Exec insert_Excell "+CompCode+ "," + BranchCode + ",'"+ MasterPath + "','"+ DetailPath + "','"+ExtraField+"'";
+            var res = db.Database.ExecuteSqlCommand(QUERY);
+
+            var client = new RestClient("http://localhost:5279/Push/?Comp="+ CompCode + "&InvoiceID="+0+"");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.GET);
+            IRestResponse response = client.Execute(request);
+            return Ok(new BaseResponse(res));
         }
+
+       [HttpGet, AllowAnonymous]
+        public IHttpActionResult GenerateQRCode()
+        {
+             
+          var QRGenerator = QRGeneratorController.GenerateQRCode("محمد رجب ", "310122393500003", 1000, 150, "2022-04-25T15:30:00Z", "D:/New folder");
+
+            return Ok(new BaseResponse(QRGenerator));
+        }
+
+
+
     }
+    
 }

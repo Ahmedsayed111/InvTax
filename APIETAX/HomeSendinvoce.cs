@@ -1143,7 +1143,7 @@ namespace APIETAX
                         netTotal = Convert.ToDouble(item.ItemTotal),
                         itemsDiscount = Convert.ToDouble(0),
                         discount = new Discount { amount = Convert.ToDouble(item.DiscountAmount), rate = Convert.ToDouble(0) },
-                       // unitValue = new UnitValue { amountSold = Convert.ToDouble(item.Unitprice * item.currencyExchangeRate), amountEGP = Convert.ToDouble(item.Unitprice), currencyExchangeRate = Convert.ToDouble(item.currencyExchangeRate), currencySold = Header.CurrencyCode },
+                        // unitValue = new UnitValue { amountSold = Convert.ToDouble(item.Unitprice * item.currencyExchangeRate), amountEGP = Convert.ToDouble(item.Unitprice), currencyExchangeRate = Convert.ToDouble(item.currencyExchangeRate), currencySold = Header.CurrencyCode },
                         taxableItems = txLst
 
                     }); ;
@@ -1361,8 +1361,8 @@ namespace APIETAX
                                 InvItems.UnitCode = dt.Rows[i]["UnitCode"].ToString();
                                 InvItems.codeNameAr = dt.Rows[i]["codeNameAr"].ToString();
                                 InvItems.codeName = dt.Rows[i]["codeName"].ToString();
-                                InvItems.codeType = dt.Rows[i]["Discount"].ToString();
-                                InvItems.UomCode = dt.Rows[i]["Discount"].ToString();
+                                InvItems.codeType = dt.Rows[i]["codeType"].ToString();
+                                InvItems.UomCode = dt.Rows[i]["UomCode"].ToString();
 
                                 InvItemsList.Add(InvItems);
                             }
@@ -1489,6 +1489,407 @@ namespace APIETAX
             }
 
             return TaxableItemList.ToList();
+
+        }
+
+        internal static string PushExel(string type, I_ControlTax I_ControlTax)
+        {
+
+            string UUid = "";
+            try
+            {
+                List<IQ_InvoiceHedar_Tax> Header = new List<IQ_InvoiceHedar_Tax>();
+                List<IQ_InvoiceHedar_Tax> Header2 = new List<IQ_InvoiceHedar_Tax>();
+                List<IQ_InvoiceHedar_Tax> Header3 = new List<IQ_InvoiceHedar_Tax>();
+                List<IQ_Sls_InvoiceDetail_Tax> lstInvItems = new List<IQ_Sls_InvoiceDetail_Tax>();
+                List<taxableItems> taxableItems_ = new List<taxableItems>();
+
+                Header = GetInvoiceHeaderExel(type);
+                for (int i = 0; i < Header.Count; i++)
+                {
+                    List<IQ_Sls_InvoiceDetail_Tax> lstInvItems_ = new List<IQ_Sls_InvoiceDetail_Tax>();
+                    List<taxableItems> taxableItems_2 = new List<taxableItems>();
+
+                    lstInvItems_ = GetInvoiceItems(Header[i].InvoiceID);
+                    taxableItems_2 = GetTaxableItem(Header[i].InvoiceID);
+
+                    if (lstInvItems_.Count > 0)
+                    {
+                        for (int x = 0; x < lstInvItems_.Count; x++)
+                        {
+                            lstInvItems.Add(lstInvItems_[x]);
+
+                        }
+                    }
+                  
+                    if (taxableItems_2.Count > 0)
+                    {
+                        for (int y = 0; y < taxableItems_2.Count; y++)
+                        {
+                            taxableItems_.Add(taxableItems_2[y]);
+
+                        }
+                    }
+                    
+
+
+                }
+
+
+
+
+
+                if (Header.Count > 0)
+                {
+
+
+                    DateTime TaxUploadDate = DateTime.Now;
+                    string DATAA = TaxUploadDate.Year.ToString() + "-" + TaxUploadDate.Day + "-" + TaxUploadDate.Month;
+                    IQ_InvoiceHedar_Tax HeaderSend = new IQ_InvoiceHedar_Tax();
+                    List<IQ_Sls_InvoiceDetail_Tax> lstInvItemsSend = new List<IQ_Sls_InvoiceDetail_Tax>();
+                    //lstInvItemsSend = lstInvItems.Where(xx => xx.InvoiceID == HeaderSend.InvoiceID).ToList();
+                    UUid = GetDocumentsSendExel(Header, lstInvItems, taxableItems_, I_ControlTax);
+
+                    if (UUid != "" || UUid != null)
+                    {
+                        //System.Data.Common and System.Data.SqlClient.
+
+
+                        string sql = @"UPDATE [I_Sls_TR_Invoice]   SET DocUUID = @UUid ,Status = @Status,TaxUploadDate = @TaxUploadDate WHERE InvoiceID = @InvoiceID";
+                        using (var con = new System.Data.SqlClient.SqlConnection(connectionString))
+                        {
+                            con.Open();
+                            //DONE: IDisposable (SqlCommand) should be wrapped into using
+                            using (var cmd = new System.Data.SqlClient.SqlCommand(sql, con))
+                            {
+                                //TODO: AddWithValue is often a bad choice; change to Add 
+                                cmd.Parameters.AddWithValue("@UUid", UUid);
+                                cmd.Parameters.AddWithValue("@Status", 2);
+                                cmd.Parameters.AddWithValue("@TaxUploadDate", DATAA);
+                                cmd.Parameters.AddWithValue("@InvoiceID", HeaderSend.InvoiceID);
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            string QueryTaxLoge = "INSERT INTO [dbo].[G_TaxLog]([TRNO],[OldStates],[NewStates],[Update_Date],[TypeAction] ) VALUES(@TrNo,@oldeStatus,@newstates,@UpdateDate,@TypeAction)";
+
+                            using (var cmd2 = new System.Data.SqlClient.SqlCommand(QueryTaxLoge, con))
+                            {
+                                cmd2.Parameters.AddWithValue("@TrNo", HeaderSend.TrNo);
+                                cmd2.Parameters.AddWithValue("@oldeStatus", HeaderSend.Status);
+                                cmd2.Parameters.AddWithValue("@newstates", 2);
+                                cmd2.Parameters.AddWithValue("@UpdateDate", DATAA);
+                                cmd2.Parameters.AddWithValue("@TypeAction", "Upload");
+                                cmd2.ExecuteNonQuery();
+                            }
+                        }
+
+                        DownloadPDF(UUid, I_ControlTax);
+
+                    }
+                    else
+                    {
+
+                    }
+
+
+                }
+
+
+                return Header.Count.ToString();
+            }
+            catch (Exception EX)
+            {
+                EX.InnerException.ToString();
+                EX.Message.ToString();
+                return EX.Message.ToString();
+            }
+        }
+
+        internal static List<IQ_InvoiceHedar_Tax> GetInvoiceHeaderExel(string Type)
+        {
+            List<IQ_InvoiceHedar_Tax> InvHeaderList = new List<IQ_InvoiceHedar_Tax>();
+
+            using (System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(connectionString))
+            {
+
+                string condetion = " select * from [IQ_InvoiceHedar_Tax] Where ChargeReason ='" + Type + "'";
+
+
+                using (System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand(condetion, con))
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    using (System.Data.SqlClient.SqlDataAdapter sda = new System.Data.SqlClient.SqlDataAdapter(cmd))
+                    {
+                        using (System.Data.DataTable dt = new System.Data.DataTable())
+                        {
+
+
+                            sda.Fill(dt);
+
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                IQ_InvoiceHedar_Tax InvHeader = new IQ_InvoiceHedar_Tax();
+                                InvHeader.branchID_iss = Convert.ToInt32(dt.Rows[i]["branchID_iss"]);
+                                InvHeader.name_iss = dt.Rows[i]["name_iss"].ToString();
+                                InvHeader.country_iss = dt.Rows[i]["country_iss"].ToString();
+                                InvHeader.governate_iss = dt.Rows[i]["governate_iss"].ToString();
+                                InvHeader.regionCity_iss = dt.Rows[i]["regionCity_iss"].ToString();
+                                InvHeader.street_iss = dt.Rows[i]["street_iss"].ToString();
+                                InvHeader.buildingNumber_iss = dt.Rows[i]["buildingNumber_iss"].ToString();
+                                InvHeader.postalCode_iss = dt.Rows[i]["postalCode_iss"].ToString();
+                                InvHeader.floor_iss = dt.Rows[i]["floor_iss"].ToString();
+                                InvHeader.room_iss = dt.Rows[i]["room_iss"].ToString();
+                                InvHeader.landmark_iss = dt.Rows[i]["landmark_iss"].ToString();
+                                InvHeader.additionalInformation_iss = dt.Rows[i]["additionalInformation_iss"].ToString();
+                                InvHeader.type_iss = dt.Rows[i]["type_iss"].ToString();
+                                InvHeader.id_iss = dt.Rows[i]["id_iss"].ToString();
+                                InvHeader.name_iss = dt.Rows[i]["name_iss"].ToString();
+                                InvHeader.country_rec = dt.Rows[i]["country_rec"].ToString();
+                                InvHeader.governate_rec = dt.Rows[i]["governate_rec"].ToString();
+                                InvHeader.regionCity_rec = dt.Rows[i]["regionCity_rec"].ToString();
+                                InvHeader.street_rec = dt.Rows[i]["street_rec"].ToString();
+                                InvHeader.buildingNumber_rec = dt.Rows[i]["buildingNumber_rec"].ToString();
+                                InvHeader.postalCode_rec = dt.Rows[i]["postalCode_rec"].ToString();
+                                InvHeader.floor_rec = dt.Rows[i]["floor_rec"].ToString();
+                                InvHeader.room_rec = dt.Rows[i]["room_rec"].ToString();
+                                InvHeader.landmark_rec = dt.Rows[i]["landmark_rec"].ToString();
+                                InvHeader.additionalInformation_rec = dt.Rows[i]["additionalInformation_rec"].ToString();
+                                InvHeader.id_rec = dt.Rows[i]["id_rec"].ToString();
+                                InvHeader.name_rec = dt.Rows[i]["name_rec"].ToString();
+                                InvHeader.type_rec = dt.Rows[i]["type_rec"].ToString();
+                                InvHeader.DiscountAmount = Convert.ToDecimal(dt.Rows[i]["DiscountAmount"]);
+                                InvHeader.ItemAllowTotal = Convert.ToDecimal(dt.Rows[i]["ItemAllowTotal"]);
+                                InvHeader.ItemDiscountTotal = Convert.ToDecimal(dt.Rows[i]["ItemDiscountTotal"]);
+                                InvHeader.ItemTotal = Convert.ToDecimal(dt.Rows[i]["ItemTotal"]);
+                                InvHeader.TotalAmount = Convert.ToDecimal(dt.Rows[i]["TotalAmount"]);
+                                InvHeader.VatAmount = Convert.ToDecimal(dt.Rows[i]["VatAmount"]);
+                                InvHeader.VatType = Convert.ToInt32(dt.Rows[i]["VatType"]);
+                                InvHeader.TotalAmount = Convert.ToDecimal(dt.Rows[i]["TotalAmount"]);
+                                InvHeader.RoundingAmount = Convert.ToDecimal(dt.Rows[i]["RoundingAmount"]);
+                                InvHeader.InvoiceID = Convert.ToInt32(dt.Rows[i]["InvoiceID"]);
+                                InvHeader.TrNo = Convert.ToInt32(dt.Rows[i]["TrNo"]);
+                                InvHeader.DocType = dt.Rows[i]["DocType"].ToString();
+                                InvHeader.TrDate = Convert.ToDateTime(dt.Rows[i]["TrDate"]);
+                                InvHeader.VatAmount = Convert.ToDecimal(dt.Rows[i]["VatAmount"]);
+
+                                InvHeaderList.Add(InvHeader);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return InvHeaderList.ToList();
+
+        }
+        private static string GetDocumentsSendExel(List<IQ_InvoiceHedar_Tax> Header, List<IQ_Sls_InvoiceDetail_Tax> lstInvItems, List<taxableItems> taxableItems, I_ControlTax I_ControlTax)
+        {
+             
+            List<Root> RootE = new List<Root>();
+            List<Document> documents = new List<Document>();
+            for (int z = 0; z < Header.Count; z++)
+            {
+                List<IQ_Sls_InvoiceDetail_Tax> lstInvItemsSend = new List<IQ_Sls_InvoiceDetail_Tax>();
+                lstInvItemsSend = lstInvItems.Where(xx => xx.InvoiceID == Header[z].InvoiceID).ToList();
+
+                try
+                {
+                    List<CustomModel.IQ_EGTaxInvHeader> Header2 = new List<CustomModel.IQ_EGTaxInvHeader>();
+
+                    List<TaxTotal> lstTaxTotal = new List<TaxTotal>();
+                    List<TaxableItem> LstTaxableItem = new List<TaxableItem>();
+                    List<InvoiceLine> lstInvoiceLine = new List<InvoiceLine>();
+                    List<Signature> lstSignature = new List<Signature>();
+
+                    double? itemTotalTax = 0;
+                    string itemTaxType = "";
+                    foreach (var item in lstInvItemsSend)
+                    {
+                        //cust TaxableItem to TblTaxableItem
+                        List<TaxableItem> txLst = new List<TaxableItem>();
+
+                        for (int i = 0; i < taxableItems.Count; i++)
+                        {
+                            TaxableItem txLst2 = new TaxableItem();
+                            txLst2.taxType = taxableItems[i].taxType;
+                            txLst2.subType = taxableItems[i].subType;
+                            txLst2.amount = taxableItems[i].amount;
+                            txLst2.rate = taxableItems[i].rate;
+                            txLst.Add(txLst2);
+
+                            lstTaxTotal.Add(new TaxTotal
+                            {
+                                amount = Convert.ToDouble(taxableItems[i].amount),
+                                taxType = taxableItems[i].taxType
+                            });
+                        }
+
+                        //cust invoiceLines to InvoiceLineTblInvoiceLine
+                        lstInvoiceLine.Add(new InvoiceLine
+                        {
+                            description = item.DescA,
+                            itemType = item.codeType,
+                            itemCode = item.itemCode,
+                            unitType = item.UomCode,
+                            quantity = Convert.ToDouble(item.SoldQty),
+                            internalCode = item.itemCode.ToString(),
+                            salesTotal = Convert.ToDouble(item.Unitprice * item.SoldQty),
+                            total = Convert.ToDouble(item.NetAfterVat),
+                            valueDifference = Convert.ToDouble(0),
+                            totalTaxableFees = Convert.ToDouble(0),
+                            netTotal = Convert.ToDouble(item.ItemTotal),
+                            itemsDiscount = Convert.ToDouble(0),
+                            discount = new Discount { amount = Convert.ToDouble(item.DiscountAmount), rate = Convert.ToDouble(0) },
+                            // unitValue = new UnitValue { amountSold = Convert.ToDouble(item.Unitprice * item.currencyExchangeRate), amountEGP = Convert.ToDouble(item.Unitprice), currencyExchangeRate = Convert.ToDouble(item.currencyExchangeRate), currencySold = Header.CurrencyCode },
+                            taxableItems = txLst
+
+                        }); ;
+
+                    }
+
+
+                    DateTime _getDate = string.IsNullOrWhiteSpace(Header[z].TrDate.ToString()) ? DateTime.Now : DateTime.Parse(Header[z].TrDate.ToString()).AddHours(+2);
+                    string _date = _getDate.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                    ///Header[z].name_iss = SecuritySystem.Decrypt(Header[z].name_iss);
+                    string Receiver_ID;
+                    if (Header[z].type_rec == "P" && Header[z].id_rec == "" || Header[z].id_rec == null)
+                    {
+                        Receiver_ID = "";// Header.cus_IDNo;
+                    }
+                    else
+                    {
+                        Receiver_ID = Header[z].id_rec;
+                    }
+                   var Root = new Root
+                    {
+                        documents = new List<Document>
+                        {
+                            new Document
+                            {
+                                issuer = new Issuer
+                                {
+                                    address = new Address
+                                    {
+                                        branchID = Header[z].branchID_iss.ToString(),
+                                        country = Header[z].country_iss,
+                                        governate = Header[z].governate_iss,
+                                        regionCity = Header[z].regionCity_iss,
+                                        street = Header[z].street_iss,
+                                        buildingNumber = Header[z].buildingNumber_iss,
+                                        postalCode = Header[z].postalCode_iss,
+                                        floor = Header[z].floor_iss,
+                                        room = Header[z].room_iss,
+                                        landmark = Header[z].landmark_iss,
+                                        additionalInformation = Header[z].additionalInformation_iss
+                                    },
+                                    type = Header[z].type_iss,
+                                    id = Header[z].id_iss,
+                                    name = Header[z].name_iss
+                                },
+                                receiver = new Receiver
+                                {
+                                    address = new Address
+                                    {
+                                        branchID = Header[z].branchID_rec.ToString(),// "0",
+                                        country = Header[z].country_rec,
+                                        governate = Header[z].governate_iss,
+                                        regionCity = Header[z].regionCity_rec,
+                                        street = Header[z].street_rec,
+                                        buildingNumber = Header[z].buildingNumber_rec,
+                                        postalCode = Header[z].postalCode_rec,
+                                        floor = Header[z].floor_rec,
+                                        room = Header[z].room_rec,
+                                        landmark = Header[z].landmark_rec,
+                                        additionalInformation = Header[z].additionalInformation_rec,
+                                    },
+                                    type = Header[z].type_rec,
+                                    id = Receiver_ID,
+                                    name = Header[z].name_rec,
+                                },
+                                documentType = Header[z].DocType,
+                                documentTypeVersion = Header[z].TypeVersion,// _DocumentTypeVersion,
+                                dateTimeIssued = _date,
+                                taxpayerActivityCode = Header[z].ActivityCode,
+                                internalID = Header[z].TrNo.ToString(),
+
+                                payment = new Payment
+                                {
+                                },
+                                delivery = new Delivery
+                                {
+                                },
+                                invoiceLines = lstInvoiceLine,
+                                totalDiscountAmount = Convert.ToDouble(Header[z].ItemDiscountTotal),
+                                totalSalesAmount = Convert.ToDouble(Header[z].TotalAmount),
+                                netAmount = Convert.ToDouble(Header[z].ItemTotal),
+                                taxTotals = lstTaxTotal,
+                                totalAmount = Convert.ToDouble(Header[z].TotalAmount),
+                                extraDiscountAmount = Convert.ToDouble(Header[z].DiscountAmount),
+                                totalItemsDiscountAmount = Convert.ToDouble(Header[z].ItemDiscountTotal),
+                                signatures = new List<Signature>(),
+                            }
+                        }
+                    };
+
+                    string replacejson = JsonConvert.SerializeObject(Root);
+                    replacejson = replacejson.Replace(",\"signatures\":[]", "");
+                    JObject request = JsonConvert.DeserializeObject<JObject>(replacejson);
+
+                    var SerializeJson = Ex.Serialize(request);
+                    SerializeJson = SerializeJson.Remove(0, 22);
+
+                    byte[] byteData = Encoding.UTF8.GetBytes(SerializeJson);
+
+                    string SignToken = SignFromToken.SignWithCMS(byteData, I_ControlTax.TokenPinCode);
+
+                    lstSignature.Add(new Signature
+                    {
+                        signatureType = "I",
+                        value = SignToken
+                    });
+                    Root.documents[0].signatures = lstSignature;
+
+                    //Document documentsE = new Document();
+                    //string json_ = JsonConvert.SerializeObject(Root.documents[0]);
+                    //documentsE = JsonConvert.DeserializeObject<Document>(json_);
+
+                    RootE.Add(Root);
+
+                }
+                catch (Exception ex)
+                {
+
+                    return ""; //ex.Message.ToString();
+                }
+            }
+
+            Root RootObj = new Root();
+            RootObj = RootE[0];
+            RestClient client = new RestClient();
+            client = new RestClient("");
+            var requestApi = new RestRequest();
+            string json = JsonConvert.SerializeObject(RootObj);
+            Newtonsoft.Json.Linq.JObject request2 = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(json);
+            string body = JsonConvert.SerializeObject(RootObj);
+            requestApi.Method = Method.POST;
+            requestApi.Timeout = -1;
+            requestApi.AddHeader("Content-Type", "application/json");
+            requestApi.AddHeader("Authorization", "Bearer " + I_ControlTax.access_token + "");
+
+            requestApi.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(requestApi);
+            Rootcontent Rootcontent = new Rootcontent();
+
+            if (response.IsSuccessful != false)
+            {
+                Rootcontent = JsonConvert.DeserializeObject<Rootcontent>(response.Content);
+
+
+            }
+            else
+            {
+            }
+            return "";
 
         }
 

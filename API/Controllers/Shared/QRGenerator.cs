@@ -1,22 +1,9 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Collections.Specialized;
-using System.Reflection;
-using System.Xml;
-using System.Web;
-using System.Threading.Tasks;
+using System.Collections.Generic; 
 using System.Text;
 using System.IO;
-using System.Drawing;
-using Microsoft.VisualBasic;
+using System.Drawing; 
 using QRCoder;
 
 namespace Inv.API.Controllers
@@ -129,7 +116,7 @@ namespace Inv.API.Controllers
             return obj.ToString();
         }
 
-        public static string GenerateQRCode(string CompName, string VatNo, int TotalAmount, int VatAmount, string TrDate)
+        public static string GenerateQRCode(string CompName, string VatNo, int TotalAmount, int VatAmount, string TrDate, string Path)
         {
  
 
@@ -152,8 +139,39 @@ namespace Inv.API.Controllers
             string st = GenerateGuid();
             string DocUUID = st;
             string QRCode = QrCode;
+            string qr = QRCode;
+            QRCodeGenerator qRCodeGenerator = new QRCodeGenerator();
+            QRCodeData qRCodeData = qRCodeGenerator.CreateQrCode(qr, QRCoder.QRCodeGenerator.ECCLevel.Q);
+            QRCoder.QRCode qRCode = new QRCoder.QRCode(qRCodeData);
+            var QRcode = "";
+            var myUniqueFileName = "";
+            using (Bitmap bitmap = qRCode.GetGraphic(2))
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteimage = ms.ToArray();
 
-            return QRCode;
+                    try
+                    {
+                        myUniqueFileName = string.Format(@"{0}.Png", Guid.NewGuid());
+
+                        File.WriteAllBytes(""+ Path + "/"+ myUniqueFileName + "", byteimage);
+
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        myUniqueFileName = "no";
+                    }
+                  
+
+                    
+                    QRcode = Convert.ToBase64String(byteimage);
+
+                }
+            }
+            return myUniqueFileName;
         }
 
     }

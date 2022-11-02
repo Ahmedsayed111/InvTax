@@ -34,6 +34,8 @@ namespace UploadInv {
     var Disount = 0;
     var totalaftarall = 0;
     var totaloutall = 0;
+    var BranchCode: number = Number(sys.SysSession.CurrentEnvironment.BranchCode);
+    var CompCode: number = Number(sys.SysSession.CurrentEnvironment.CompCode);
     export function InitalizeComponent() {
         InitalizeControls();
         InitializeEvents();
@@ -241,7 +243,33 @@ namespace UploadInv {
     }
 
     function btnPush_onclick() {
-        insert()
+        debugger
+        let MasterPath: string =$('#Path_Master').val();
+        let DetailPath: string =$('#Path_Detail').val();
+        let ExtraField: string ="";
+        Ajax.Callsync({
+            type: "Get",
+            url: sys.apiUrl("SlsTrSales", "insertExcell"),
+            data: { 
+                CompCode: CompCode, BranchCode: BranchCode, MasterPath: MasterPath, DetailPath: DetailPath, ExtraField: ExtraField
+                   
+            },
+            success: (d) => {
+                let result = d as BaseResponse;
+                if (result.IsSuccess) {
+                    alert("تم الرفع")
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+       // insert()
     }
 
     function ComputeTotals(Model_Detail: any) {
