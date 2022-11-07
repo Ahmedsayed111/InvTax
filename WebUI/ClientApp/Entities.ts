@@ -117,6 +117,9 @@ class SlsInvoiceMasterDetails extends SecurityClass {
     public TaxableItem: Array<TaxableItem>;
 }          
 
+
+
+
 abstract class EntityContext {
     public RowIndex: number;
 }
